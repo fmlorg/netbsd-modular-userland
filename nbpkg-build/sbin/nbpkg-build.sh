@@ -1,4 +1,23 @@
 #!/bin/sh
+#
+# Copyright (C) 2018 Ken'ichi Fukamachi
+#   All rights reserved. This program is free software; you can
+#   redistribute it and/or modify it under 2-Clause BSD License.
+#   https://opensource.org/licenses/BSD-2-Clause
+#
+# mailto: fukachan@fml.org
+#    web: http://www.fml.org/
+#
+# $FML$
+# $Revision$
+#        NAME: nbpkg-build.sh
+# DESCRIPTION:
+# CODINGSTYLE: POSIX compliant (checked by running "bash --posix" this script)
+#
+
+############################################################
+####################   CONFIGURATIONS   ####################
+############################################################
 
 url_base_stable=http://nycdn.netbsd.org/pub/NetBSD-daily/netbsd-7/
 url_base_current=http://nycdn.netbsd.org/pub/NetBSD-daily/HEAD/
@@ -11,10 +30,12 @@ rels_dir=/var/nbpkg/work/rels.$$
 junk_xxx=/var/tmp/nbpkg-build-junk
 done_xxx=/var/tmp/nbpkg-build-done
 
-
 # nginx
 www_dir=/var/tmp/www
 
+############################################################
+####################      FUNCTIONS     ####################
+############################################################
 
 #
 # misc
@@ -50,7 +71,7 @@ dir_init () {
     rels_dir=$base_dir/reldir.$arch
     junk_dir=$base_dir/tmpdir.$arch
     done_dir=$done_xxx/$d
-    
+
     for _dir in $base_dir $dest_dir $dist_dir $rels_dir $junk_dir $done_dir
     do
 	test -d $_dir || is_require_download_and_extract=1
@@ -84,7 +105,7 @@ www_get_list () {
 
 tnftp_www_get_list () {
     local url=$1
-    
+
     /usr/bin/ftp -o - -V $url					|
 	grep href= 						|
 	awk -F \" '{print $2}'					|
@@ -93,7 +114,7 @@ tnftp_www_get_list () {
 
 curl_www_get_list () {
     local url=$1
-    
+
     curl -s $url						|
 	grep href= 						|
 	awk -F \" '{print $2}'					|
@@ -108,7 +129,7 @@ www_get_latest_entry () {
 
 tnftp_www_get_latest_entry () {
     local url=$1
-    
+
     /usr/bin/ftp -o - -V $url					|
 	grep href= 						|
 	awk -F \" '{print $2}'					|
@@ -118,7 +139,7 @@ tnftp_www_get_latest_entry () {
 
 curl_www_get_latest_entry () {
     local url=$1
-    
+
     curl -s $url						|
 	grep href= 						|
 	awk -F \" '{print $2}'					|
@@ -138,7 +159,7 @@ nbdist_download () {
     local arch=$1
     local url=$2
     local t_start t_end tdiff
-    
+
     if [ "X$is_require_download_and_extract" != "X" ];then
 	echo "===> DEBUG: download (first time)"
     else
@@ -158,12 +179,12 @@ nbdist_download () {
 nbdist_checksum () {
     local arch=$1
     local cksum1 cksum2
-    
+
     cksum1=$junk_dir/nbpkg.cksum1.$arch.$$
     cksum2=$junk_dir/nbpkg.cksum2.$arch.$$
-    
+
     cd $dist_dir || exit 1
-    
+
     /usr/bin/cksum -a sha512 *tgz | sort > $cksum1
     sort SHA512 > $cksum2
     cmp $cksum1 $cksum2
@@ -232,13 +253,13 @@ wget_nbdist_download () {
 
 
 #
-# 
+#
 #
 nbdist_extract () {
     local arch=$1
     local t_start t_end tdiff
     local _x
-    
+
     if [ "X$is_require_download_and_extract" != "X" ];then
 	echo "===> DEBUG: require extraction (first time)"
     else
@@ -267,9 +288,9 @@ nbpkg_build_run_basepkg () {
     local arch=$1
     local prog
     local t_start t_end tdiff
-    
+
     vers_date=$(echo $version | awk '{print substr($1, 0, 8)}')
-    
+
     prog="basepkg.sh"
     opt1="--obj $base_dir --releasedir=$rels_dir --machine=$arch"
     opt2="--buildmaster --buildmasterdate $vers_date"
@@ -330,7 +351,7 @@ nbpkg_rename_basepkg_packages () {
     # e.g $vers_nbpkg (7.1_STABLE) -> $date (20180615)
     vers_nbpkg=$(nbpkg_basepkg_version)
     vers_date=$(echo $version | awk '{print substr($1, 0, 8)}')
-	
+
     # do it.
     pkg_dir=$(nbpkg_src_dir $arch $vers_nbpkg)
     cd $pkg_dir || exit 1
@@ -343,7 +364,7 @@ nbpkg_rename_basepkg_packages () {
 
 nbpkg_release_basepkg_packages () {
     local arch=$1
-    
+
     vers_nbpkg=$(nbpkg_basepkg_version)
     pkg_dir=$(nbpkg_src_dir $arch $vers_nbpkg)
     www_dir=$(nbpkg_dst_dir $arch $vers_nbpkg)
@@ -352,16 +373,17 @@ nbpkg_release_basepkg_packages () {
 
     /usr/bin/cksum -a sha512 *tgz | sort > SHA512
     mv SHA512 *tgz $www_dir/
-    
+
     # fix links
     nbpkg_dst_symlink $arch $vers_nbpkg
     logit "released $arch to $www_dir/"
 }
 
 
-#
-# MAIN
-#
+############################################################
+####################        MAIN        ####################
+############################################################
+
 set -u
 is_debug=${DEBUG:-""}
 is_require_download_and_extract=""
@@ -372,32 +394,32 @@ case $type in
     current) url_base=$url_base_current;;
 esac
 version=$(www_get_latest_entry $url_base)
-list_all=$(www_get_list $url_base$version/	|
-		tr ' ' '\n'			|
-		grep '^[a-z]'			)
+list_all=$(www_get_list $url_base$version/				|
+		tr ' ' '\n'						|
+		grep '^[a-z]'						)
 
 for arch in ${list:-$list_all}
 do
     dir_init $arch
-    
+
     (
 	logit "session: start $arch $version"
 	t_start=$(unixtime)
-	
+
 	# 1. prepare
 	nbdist_download $arch $url_base$version/$arch/binary/sets/
 	nbdist_extract  $arch
-	
+
 	# 2. go
 	nbpkg_build_run_basepkg        $arch
 	nbpkg_rename_basepkg_packages  $arch
 	nbpkg_release_basepkg_packages $arch
-	
+
 	t_end=$(unixtime)
 	t_diff=$(($t_end - $t_start))
 	logit "session: end $arch $version total: $t_diff sec."
     )
-    
+
     if [ $? != 0 ];then
 	dir_clean 1
     	logit "session: ***error*** arch=$arch ended abnormally."

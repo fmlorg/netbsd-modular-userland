@@ -19,7 +19,8 @@
 ####################   CONFIGURATIONS   ####################
 ############################################################
 
-url_base_stable=http://nycdn.netbsd.org/pub/NetBSD-daily/netbsd-7/
+url_base_stable0=http://nycdn.netbsd.org/pub/NetBSD-daily/netbsd-7/
+url_base_stable1=http://nycdn.netbsd.org/pub/NetBSD-daily/netbsd-6/
 url_base_current=http://nycdn.netbsd.org/pub/NetBSD-daily/HEAD/
 
 # global variables (initialized with a dummy value)
@@ -29,6 +30,9 @@ dest_dir=/var/nbpkg/work/dest.$$
 rels_dir=/var/nbpkg/work/rels.$$
 junk_xxx=/var/tmp/nbpkg-build-junk
 done_xxx=/var/tmp/nbpkg-build-done
+
+# queue
+queue_dir=/var/nbpkg/queue
 
 # nginx
 www_dir=/var/tmp/www
@@ -93,6 +97,36 @@ dir_clean () {
 	    logit dir_clean: moved to $done_dir/errr.$name.$time
 	fi
     fi
+
+    (
+	cd $done_dir || exit 1
+	for x in done* errr*
+	do
+	    logit "dir_clean: rm -fr $x"
+	    rm -fr $x
+	done
+    )
+}
+
+
+#
+# queue
+#
+queue_add () {
+    local name=$1
+    local vers=$2
+    local type=$3
+    local arch=$4
+
+}
+
+queue_del () {
+    local name=$1
+    local vers=$2
+    local type=$3
+    local arch=$4
+
+
 }
 
 
@@ -191,7 +225,7 @@ nbdist_checksum () {
     if [ $? != 0 ];then
 	logit "checksum: failed arch=$arch"
 	diff -ub $cksum1 $cksum2
-	queue_insert $arch
+	queue_add retry $vers_date $type $arch
 	exit 1
     else
 	logit "checksum: ok arch=$arch"
@@ -288,8 +322,6 @@ nbpkg_build_run_basepkg () {
     local arch=$1
     local prog
     local t_start t_end tdiff
-
-    vers_date=$(echo $version | awk '{print substr($1, 0, 8)}')
 
     prog="basepkg.sh"
     opt1="--obj $base_dir --releasedir=$rels_dir --machine=$arch"
@@ -391,10 +423,14 @@ is_require_download_and_extract=""
 type=${1:-stable}
 list=${2:-}
 case $type in
-    stable ) url_base=$url_base_stable;;
-    current) url_base=$url_base_current;;
+    stable  ) url_base=$url_base_stable0;;
+    stable0 ) url_base=$url_base_stable0;;
+    legacy  ) url_base=$url_base_stable1;;
+    stable1 ) url_base=$url_base_stable1;;
+    current ) url_base=$url_base_current;;
 esac
 version=$(www_get_latest_entry $url_base)
+vers_date=$(echo $version | awk '{print substr($1, 0, 8)}')
 list_all=$(www_get_list $url_base$version/				|
 		tr ' ' '\n'						|
 		grep '^[a-z]'						)
@@ -402,7 +438,6 @@ list_all=$(www_get_list $url_base$version/				|
 for arch in ${list:-$list_all}
 do
     dir_init $arch
-
     (
 	logit "session: start $type $arch $version"
 	t_start=$(unixtime)
@@ -421,6 +456,7 @@ do
     )
 
     if [ $? != 0 ];then
+	queue_add retry $vers_date $type $arch
 	dir_clean 1
     	logit "session: ***error*** arch=$arch ended abnormally."
     else

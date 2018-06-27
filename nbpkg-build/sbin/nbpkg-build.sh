@@ -34,6 +34,9 @@ done_xxx=/var/tmp/nbpkg-build-done
 # queue
 queue_dir=/var/nbpkg/queue
 
+# log
+log_base_dir=/var/nbpkg/log
+
 # nginx
 www_dir=/var/tmp/www
 
@@ -45,8 +48,12 @@ www_dir=/var/tmp/www
 # misc
 #
 logit () {
-    echo "$*"
+    local logf=$log_dir/$type.$arch
+    
+    echo   "$*"
+    echo   "nbpkg-build: $*" >> $logf
     logger "nbpkg-build: $*"
+    
 }
 
 random_number () {
@@ -75,8 +82,10 @@ dir_init () {
     rels_dir=$base_dir/reldir.$arch
     junk_dir=$base_dir/tmpdir.$arch
     done_dir=$done_xxx/$d
+    log_dir=$log_base_dir/${vers_date}
 
-    for _dir in $base_dir $dest_dir $dist_dir $rels_dir $junk_dir $done_dir
+    for _dir in $base_dir $dest_dir $dist_dir $rels_dir $junk_dir $done_dir \
+			  $log_dir
     do
 	test -d $_dir || is_require_download_and_extract=1
 	test -d $_dir || mkdir -p $_dir

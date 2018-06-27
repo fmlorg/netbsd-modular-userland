@@ -329,9 +329,10 @@ nbpkg_dst_dir () {
 nbpkg_dst_symlink () {
     local arch=$1
     local vers_nbpkg=$2
+    local vers_major=$3
     local machine_w_arch=$(nbpkg_src_arch $1 $2)
     (
-	cd /pub/www/pub/NetBSD/basepkg/$vers_nbpkg/ || exit 1
+	cd /pub/www/pub/NetBSD/basepkg/$vers_major/ || exit 1
 	if [ -d $arch -a ! -h $machine_w_arch ];then
 	    ln -s $arch $machine_w_arch
 	    logit "symlnk $arch == $machine_w_arch"
@@ -344,39 +345,35 @@ nbpkg_basepkg_version () {
     ls $rels_dir/packages
 }
 
-nbpkg_rename_basepkg_packages () {
-    local arch=$1
-    local vers_nbpkg vers_date pkg_dir
+nbpkg_basepkg_major_version () {
+    local v=$(ls $rels_dir/packages)
 
-    # e.g $vers_nbpkg (7.1_STABLE) -> $date (20180615)
-    vers_nbpkg=$(nbpkg_basepkg_version)
-    vers_date=$(echo $version | awk '{print substr($1, 0, 8)}')
-
-    # do it.
-    pkg_dir=$(nbpkg_src_dir $arch $vers_nbpkg)
-    cd $pkg_dir || exit 1
-    find . -type f -name '*.tgz' |
-	awk -v SRC=$vers_nbpkg -v DST=$vers_date \
-	    '{src=$1; dst=src; gsub(SRC, DST, dst);\
-	    printf("mv %s %s\n", src, dst)}'			|
-	sh
+    c=$(expr $v : '\([0-9]*\.99\)')
+    if [ "X$c" != "X" ];then
+	echo $c                    # 8.99 (current)
+    else
+	echo $v | cut -c 1-3       # 8.0  (release, stable)
+    fi
 }
+
 
 nbpkg_release_basepkg_packages () {
     local arch=$1
 
-    vers_nbpkg=$(nbpkg_basepkg_version)
-    pkg_dir=$(nbpkg_src_dir $arch $vers_nbpkg)
-    www_dir=$(nbpkg_dst_dir $arch $vers_nbpkg)
-
+    vers_nbpkg=$(nbpkg_basepkg_version)        # 7.1_STABLE
+    vers_major=$(nbpkg_basepkg_major_version)  # 7
+    pkg_dir=$(nbpkg_src_dir $arch $vers_nbpkg) # basepkg/.../7.1_STABLE/i386
+    www_dir=$(nbpkg_dst_dir $arch $vers_major) # pub/NetBSD/.../7/i386
     test -d $www_dir || mkdir -p $www_dir
 
+    logit "release: $pkg_dir -> $www_dir"
+    cd $pkg_dir || exit 1
     /usr/bin/cksum -a sha512 *tgz | sort > SHA512
     mv SHA512 *tgz $www_dir/
-
-    # fix links
-    nbpkg_dst_symlink $arch $vers_nbpkg
     logit "released $arch to $www_dir/"
+    
+    # fix symlinks if needed.
+    nbpkg_dst_symlink $arch $vers_nbpkg $vers_major
 }
 
 
@@ -416,7 +413,6 @@ do
 
 	# 2. go
 	nbpkg_build_run_basepkg        $arch
-	nbpkg_rename_basepkg_packages  $arch
 	nbpkg_release_basepkg_packages $arch
 
 	t_end=$(unixtime)

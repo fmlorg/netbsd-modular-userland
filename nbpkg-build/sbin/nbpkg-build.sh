@@ -118,6 +118,8 @@ queue_add () {
     local type=$3
     local arch=$4
 
+    logit "queue_add: $* (dummy)"
+
 }
 
 queue_del () {
@@ -126,7 +128,7 @@ queue_del () {
     local type=$3
     local arch=$4
 
-
+    logit "queue_del: $* (dummy)"
 }
 
 

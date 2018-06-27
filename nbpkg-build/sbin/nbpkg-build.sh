@@ -87,7 +87,7 @@ dir_init () {
     log_dir=$log_base_dir/${vers_date}
 
     for _dir in $base_dir $dest_dir $dist_dir $rels_dir $junk_dir $done_dir \
-			  $log_dir
+			  $log_dir $queue_dir
     do
 	test -d $_dir || is_require_download_and_extract=1
 	test -d $_dir || mkdir -p $_dir
@@ -129,8 +129,8 @@ queue_add () {
     local type=$3
     local arch=$4
 
-    logit "queue_add: $* (dummy)"
-
+    mkdir -p $queue_dir/$name/$vers/$type/$arch
+    logit "queue_add: $*"
 }
 
 queue_del () {
@@ -139,7 +139,23 @@ queue_del () {
     local type=$3
     local arch=$4
 
-    logit "queue_del: $* (dummy)"
+    if [ -d $queue_dir/$name/$vers/$type/$arch ];then
+	rmdir $queue_dir/$name/$vers/$type/$arch
+    fi
+    logit "queue_del: $*"
+}
+
+queue_find () {
+    local name=$1
+    local vers=$2
+    local type=$3
+    local arch=$4
+
+    if [ -d $queue_dir/$name/$vers/$type/$arch ];then
+	echo 1
+    else
+	echo 0
+    fi
 }
 
 
@@ -454,21 +470,31 @@ do
     (
 	logit "session: start $type $arch $version"
 	t_start=$(unixtime)
+	queue_add active $vers_date $type $arch
 
 	# 1. prepare
 	nbdist_download $arch $url_base$version/$arch/binary/sets/
 	nbdist_extract  $arch
 
-	# 2. go
+	# 2. go if not already done 
+	is_already_done=$(queue_find done $vers_date $type $arch)
+	if [ ${is_already_done} -eq 1 ];then
+	    logit "session: skip $type $arch $version"
+	else
+	    logit "session: run $type $arch $version"
 	nbpkg_build_run_basepkg        $arch
 	nbpkg_release_basepkg_packages $arch
+	    queue_add done $vers_date $type $arch
+	fi
 
+	queue_del active $vers_date $type $arch	
 	t_end=$(unixtime)
 	t_diff=$(($t_end - $t_start))
 	logit "session: end $type $arch $version total: $t_diff sec."
     )
 
     if [ $? != 0 ];then
+	queue_del active $vers_date $type $arch
 	queue_add retry $vers_date $type $arch
 	dir_clean 1
     	logit "session: ***error*** arch=$arch ended abnormally."

@@ -385,6 +385,10 @@ nbpkg_release_basepkg_packages () {
 ############################################################
 
 set -u
+
+PATH=/usr/sbin:/usr/bin:/sbin:/bin
+export PATH
+
 is_debug=${DEBUG:-""}
 is_require_download_and_extract=""
 type=${1:-stable}

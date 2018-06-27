@@ -167,7 +167,7 @@ nbdist_download () {
 	return
     fi
 
-    logit "download $arch $url"
+    logit "download: $arch $url"
     t_start=$(unixtime)
     tnftp_nbdist_download $arch $url
     nbdist_checksum $arch
@@ -189,12 +189,12 @@ nbdist_checksum () {
     sort SHA512 > $cksum2
     cmp $cksum1 $cksum2
     if [ $? != 0 ];then
-	logit "checksum failed: arch=$arch"
+	logit "checksum: failed arch=$arch"
 	diff -ub $cksum1 $cksum2
 	queue_insert $arch
 	exit 1
     else
-	logit "checksum ok arch=$arch"
+	logit "checksum: ok arch=$arch"
     fi
 }
 
@@ -208,7 +208,7 @@ tnftp_nbdist_download () {
     # 1. verify
     /usr/bin/ftp -V -o SHA512 $url/SHA512
     if [ $? != 0 ];then
-	logit "invalid arch=$arch (no SHA512)"
+	logit "download: invalid arch=$arch (no SHA512)"
 	exit 1
     fi
 
@@ -233,7 +233,7 @@ curl_nbdist_download () {
     # 1. verify
     curl --fail -s -o SHA512 $url/SHA512
     if [ $? != 0 ];then
-	logit "invalid arch=$arch (no SHA512)"
+	logit "download: invalid arch=$arch (no SHA512)"
 	exit 1
     fi
 
@@ -269,7 +269,7 @@ nbdist_extract () {
 
 
     logit "extract: arch=$arch"
-    logit "tar -C $dest_dir -zxpf $dist_dir/{base,...}"
+    logit "extract: tar -C $dest_dir -zxpf $dist_dir/{base,...}"
     t_start=$(unixtime)
     for _x in $dist_dir/[a-jl-z]*tgz $dist_dir/kern-GENERIC.tgz
     do
@@ -294,7 +294,7 @@ nbpkg_build_run_basepkg () {
     prog="basepkg.sh"
     opt1="--obj $base_dir --releasedir=$rels_dir --machine=$arch"
     opt2="--buildmaster --buildmasterdate $vers_date"
-    logit $prog
+    logit "run_basepkg: $prog"
     t_start=$(unixtime)
     (
 	cd /var/nbpkg/basepkg || exit 1
@@ -303,7 +303,7 @@ nbpkg_build_run_basepkg () {
     )
     t_end=$(unixtime)
     t_diff=$(($t_end - $t_start))
-    logit "basepkg: $t_diff sec. arch=$arch"
+    logit "run_basepkg: $t_diff sec. arch=$arch"
 }
 
 
@@ -335,7 +335,7 @@ nbpkg_dst_symlink () {
 	cd /pub/www/pub/NetBSD/basepkg/$vers_major/ || exit 1
 	if [ -d $arch -a ! -h $machine_w_arch ];then
 	    ln -s $arch $machine_w_arch
-	    logit "symlnk $arch == $machine_w_arch"
+	    logit "symlink: $arch == $machine_w_arch"
 	fi
     )
 }
@@ -370,7 +370,7 @@ nbpkg_release_basepkg_packages () {
     cd $pkg_dir || exit 1
     /usr/bin/cksum -a sha512 *tgz | sort > SHA512
     mv SHA512 *tgz $www_dir/
-    logit "released $arch to $www_dir/"
+    logit "release: arch=$arch at $www_dir/"
     
     # fix symlinks if needed.
     nbpkg_dst_symlink $arch $vers_nbpkg $vers_major

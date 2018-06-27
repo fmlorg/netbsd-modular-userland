@@ -23,6 +23,8 @@ url_base_stable0=http://nycdn.netbsd.org/pub/NetBSD-daily/netbsd-7/
 url_base_stable1=http://nycdn.netbsd.org/pub/NetBSD-daily/netbsd-6/
 url_base_current=http://nycdn.netbsd.org/pub/NetBSD-daily/HEAD/
 
+prog_basepkg_dir=/var/nbpkg/dist/basepkg
+
 # global variables (initialized with a dummy value)
 base_dir=/var/nbpkg/work/base.$$
 dist_dir=/var/nbpkg/work/dist.$$
@@ -340,7 +342,7 @@ nbpkg_build_run_basepkg () {
     logit "run_basepkg: $prog"
     t_start=$(unixtime)
     (
-	cd /var/nbpkg/basepkg || exit 1
+	cd $prog_basepkg_dir || exit 1
 	pwd
 	/bin/sh $prog $opt1 $opt2  pkg
     )

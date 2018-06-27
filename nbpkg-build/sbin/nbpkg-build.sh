@@ -404,7 +404,7 @@ do
     dir_init $arch
 
     (
-	logit "session: start $arch $version"
+	logit "session: start $type $arch $version"
 	t_start=$(unixtime)
 
 	# 1. prepare
@@ -417,7 +417,7 @@ do
 
 	t_end=$(unixtime)
 	t_diff=$(($t_end - $t_start))
-	logit "session: end $arch $version total: $t_diff sec."
+	logit "session: end $type $arch $version total: $t_diff sec."
     )
 
     if [ $? != 0 ];then

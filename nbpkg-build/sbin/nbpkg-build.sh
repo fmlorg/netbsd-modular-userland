@@ -318,6 +318,19 @@ wget_nbdist_download () {
 #
 #
 #
+nbdist_check_ignore () {
+    local arch=$1
+
+    case $arch in
+	images ) echo 1;exit 0;;
+	shared ) echo 1;exit 0;;
+	source ) echo 1;exit 0;;
+    esac
+    
+    echo 0
+}
+
+
 nbdist_extract () {
     local arch=$1
     local t_start t_end tdiff
@@ -466,6 +479,9 @@ list_all=$(www_get_list $url_base$version/				|
 
 for arch in ${list:-$list_all}
 do
+    is_ignore=$(nbdist_check_ignore $arch)
+    if [ $is_ignore = 1 ];then continue;fi
+    
     dir_init $arch
     (
 	logit "session: start $type $arch $version"

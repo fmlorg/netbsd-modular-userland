@@ -58,6 +58,11 @@ logit () {
     
 }
 
+fatal () {
+    logit $*
+    exit 1
+}
+
 random_number () {
     echo $(od -An -N 2 -t u2 /dev/urandom)
 }
@@ -442,8 +447,14 @@ nbpkg_release_basepkg_packages () {
 
     logit "release: $pkg_dir -> $www_dir"
     cd $pkg_dir || exit 1
-    /usr/bin/cksum -a sha512 *tgz | sort > SHA512
-    mv SHA512 *tgz $www_dir/
+
+    # https://wiki.netbsd.org/pkgsrc/intro_to_packaging/
+    pkg_info -X              *tgz | gzip -9 > pkg_summary.gz
+    /usr/bin/cksum -a sha512 *tgz | sort    > SHA512
+    mv *tgz                   $www_dir/
+    mv SHA512 pkg_summary.gz  $www_dir/    # update info after all *.tgz are moved.
+    if [ ! -s pkg_summary.gz ];then fatal "release: empty pkg_summary.gz";fi
+    if [ ! -s SHA512         ];then fatal "release: empty SHA512"        ;fi
     logit "release: arch=$arch at $www_dir/"
     
     # fix symlinks if needed.

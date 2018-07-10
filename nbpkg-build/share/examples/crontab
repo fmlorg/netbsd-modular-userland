@@ -1,0 +1,17 @@
+MAILTO=""
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+
+PROG=/var/nbpkg/dist/nbpkg/sbin/nbpkg-build.sh
+CLNR=/var/nbpkg/dist/nbpkg/sbin/nbpkg-clean.sh
+LOG=/var/tmp/nbpkg.log
+LOCKS=/tmp/nbpkg.lock.stable
+LOCKC=/tmp/nbpkg.lock.current
+
+0  0 * * * env -i flock $LOCKS $PROG stable  > $LOG.stable.$date  2>&1
+0 12 * * * env -i flock $LOCKS $PROG stable  > $LOG.stable.$date  2>&1
+0  6 * * * env -i flock $LOCKC $PROG current > $LOG.current.$date 2>&1
+0 18 * * * env -i flock $LOCKC $PROG current > $LOG.current.$date 2>&1
+
+# clean up
+0  3 * * * $CLNR > $LOG.clean.$date 2>&1
+0 15 * * * $CLNR > $LOG.clean.$date 2>&1

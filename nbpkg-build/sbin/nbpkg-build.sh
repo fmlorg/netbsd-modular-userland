@@ -38,6 +38,8 @@ queue_dir=/var/nbpkg/queue
 
 # log
 log_base_dir=/var/nbpkg/log
+log_dir=/var/tmp                 # dummy
+logf=/var/tmp/log.nbpkg-build    # dummy
 
 # nginx
 www_dir=/var/tmp/www
@@ -50,16 +52,19 @@ www_dir=/var/tmp/www
 # misc
 #
 logit () {
-    local logf=$log_dir/$type.$arch
+    local msg="$*"
+    local logf
     
-    echo   "$*"
-    echo   "nbpkg-build: $*" >> $logf
-    logger "nbpkg-build: $*"
+    echo   "$msg"
+    if [ -w $logf ];then
+	echo   "nbpkg-build: $msg" >> $logf
+    fi
+    logger "nbpkg-build: $msg"
     
 }
 
 fatal () {
-    logit $*
+    logit "***fatal: $*"
     exit 1
 }
 
@@ -70,6 +75,12 @@ random_number () {
 # XXX NOT-POSIX
 unixtime () {
     echo $(date +%s)
+}
+
+log_init () {
+    local arch=$1
+    
+    logf=$log_dir/$type.$arch
 }
 
 dir_init () {
@@ -122,6 +133,24 @@ dir_clean () {
 	    rm -fr $x
 	done
     )
+}
+
+
+#
+# assertion
+#
+nbpkg_build_assert () {
+    local id
+
+    id=$(id -u)
+
+    if [ $id != 0 ];then
+	fatal "run this program by root"
+    fi
+
+    if [ ! -f $prog_basepkg_dir/basepkg.sh ];then
+	fatal "no basepkg.sh ($prog_basepkg_dir/basepkg.sh)"
+    fi
 }
 
 
@@ -471,6 +500,8 @@ set -u
 PATH=/usr/sbin:/usr/bin:/sbin:/bin
 export PATH
 
+nbpkg_build_assert
+
 is_debug=${DEBUG:-""}
 is_require_download_and_extract=""
 type=${1:-stable}
@@ -494,6 +525,7 @@ do
     if [ $is_ignore = 1 ];then continue;fi
     
     dir_init $arch
+    log_init $arch
     (
 	logit "session: start $type $arch $version"
 	t_start=$(unixtime)

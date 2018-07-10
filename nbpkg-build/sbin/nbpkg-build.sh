@@ -478,12 +478,14 @@ nbpkg_release_basepkg_packages () {
     cd $pkg_dir || exit 1
 
     # https://wiki.netbsd.org/pkgsrc/intro_to_packaging/
-    pkg_info -X              *tgz | gzip -9 > pkg_summary.gz
+    pkg_info -X              *tgz | gzip -9 > pkg_summary.gz.new
+    if [ -s pkg_summary.gz.new ];then mv pkg_summary.gz.new pkg_summary.gz;fi
+    if [ ! -s pkg_summary.gz ];then fatal "release: empty pkg_summary.gz";fi
+
     /usr/bin/cksum -a sha512 *tgz | sort    > SHA512
+    if [ ! -s SHA512         ];then fatal "release: empty SHA512"        ;fi
     mv *tgz                   $www_dir/
     mv SHA512 pkg_summary.gz  $www_dir/    # update info after all *.tgz are moved.
-    if [ ! -s pkg_summary.gz ];then fatal "release: empty pkg_summary.gz";fi
-    if [ ! -s SHA512         ];then fatal "release: empty SHA512"        ;fi
     logit "release: arch=$arch at $www_dir/"
     
     # fix symlinks if needed.

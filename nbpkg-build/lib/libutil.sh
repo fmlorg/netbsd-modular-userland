@@ -6,17 +6,12 @@
 
 logit () {
     local msg="$*"
-    local logf
-    local name
-
-    echo   "$msg"
+    local name=$(basename $0)
 
     if [ -w $logf ];then
 	echo   "${name}: $msg" >> $logf
     fi
-
-    name=$(basename $0)    
-    logger "${name}: $msg"
+    logger -t $name "$msg"
 }
 
 

@@ -1,3 +1,8 @@
+#
+# $Id$
+# $FML$
+#
+
 log_init () {
     local arch=$1
     
@@ -368,19 +373,29 @@ nbpkg_dst_symlink () {
 }
 
 nbpkg_dst_clean () {
-    local=$dir
-    local num	
+    local dir=$1
+    local num
+    local list
 
     cd $dir || exit 1;
-    dir=$(pwd)
-    numpkg=$(ls base-sys-root*tgz | wc -l | tr -d ' ')
+    numpkg=$(ls base-sys-root*tgz 2>/dev/null | wc -l | tr -d ' ')
 
     if [ $numpkg -gt 1 ];then
-	logit "clean-up $dir (num=${numpkg})"
-	find $dir -mtime +7 -name '*tgz' | awk '{if (NR%47==0){print "clean", $0}}'
+	list=/var/tmp/list.nbpkg.$$
+	find $dir -mtime +7 -name '*tgz' > $list
+	num=$(cat $list | wc -l | tr -d ' ')
+	if [ $num -gt 0 ];then
+	    logit "clean-up $dir ($num old files)"
+	    cat $list | xargs rm
+	else
+	    logit "ignored $dir (no old files)"	
+	fi
     else
-	logit "ignored $dir (num<=1)"
-    fi	
+	logit "ignored $dir (only one revision)"
+    fi
+
+    echo ":"	# trick to ignore the function eval after return
+    exit 0
 }
 
 nbpkg_dst_dir_list_version () {

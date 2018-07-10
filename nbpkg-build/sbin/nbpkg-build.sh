@@ -19,30 +19,7 @@
 ####################   CONFIGURATIONS   ####################
 ############################################################
 
-url_base_stable7=http://nycdn.netbsd.org/pub/NetBSD-daily/netbsd-7/
-url_base_stable6=http://nycdn.netbsd.org/pub/NetBSD-daily/netbsd-6/
-url_base_current=http://nycdn.netbsd.org/pub/NetBSD-daily/HEAD/
-
-prog_basepkg_dir=/var/nbpkg/dist/basepkg
-
-# global variables (initialized with a dummy value)
-base_dir=/var/nbpkg/work/base.$$
-dist_dir=/var/nbpkg/work/dist.$$
-dest_dir=/var/nbpkg/work/dest.$$
-rels_dir=/var/nbpkg/work/rels.$$
-junk_xxx=/var/tmp/nbpkg-build-junk
-done_xxx=/var/tmp/nbpkg-build-done
-
-# queue
-queue_dir=/var/nbpkg/queue
-
-# log
-log_base_dir=/var/nbpkg/log
-log_dir=/var/tmp                 # dummy
-logf=/var/tmp/log.nbpkg-build    # dummy
-
-# nginx
-www_dir=/var/tmp/www
+. $(dirname $0)/../etc/config.sh
 
 ############################################################
 ####################      FUNCTIONS     ####################

@@ -19,8 +19,8 @@
 ####################   CONFIGURATIONS   ####################
 ############################################################
 
-url_base_stable0=http://nycdn.netbsd.org/pub/NetBSD-daily/netbsd-7/
-url_base_stable1=http://nycdn.netbsd.org/pub/NetBSD-daily/netbsd-6/
+url_base_stable7=http://nycdn.netbsd.org/pub/NetBSD-daily/netbsd-7/
+url_base_stable6=http://nycdn.netbsd.org/pub/NetBSD-daily/netbsd-6/
 url_base_current=http://nycdn.netbsd.org/pub/NetBSD-daily/HEAD/
 
 prog_basepkg_dir=/var/nbpkg/dist/basepkg
@@ -509,10 +509,10 @@ is_require_download_and_extract=""
 type=${1:-stable}
 list=${2:-}
 case $type in
-    stable  ) url_base=$url_base_stable0;;
-    stable0 ) url_base=$url_base_stable0;;
-    legacy  ) url_base=$url_base_stable1;;
-    stable1 ) url_base=$url_base_stable1;;
+    stable  ) url_base=$url_base_stable7;;
+    stable7 ) url_base=$url_base_stable7;;
+    legacy  ) url_base=$url_base_stable6;;
+    stable6 ) url_base=$url_base_stable6;;
     current ) url_base=$url_base_current;;
 esac
 version=$(www_get_latest_entry $url_base)

@@ -81,7 +81,8 @@ do
 	    logit "session: run $type $arch $version"
 	    nbpkg_build_run_basepkg         $arch
 	    nbpkg_release_basepkg_packages  $arch
-	    queue_add done $vers_date $type $arch
+	    queue_add done  $vers_date $type $arch
+	    queue_del retry $vers_date $type $arch  # clear flag if exists
 	fi
 
 	queue_del active $vers_date $type $arch	

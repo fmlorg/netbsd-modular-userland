@@ -543,8 +543,8 @@ do
 	    logit "session: skip $type $arch $version"
 	else
 	    logit "session: run $type $arch $version"
-	nbpkg_build_run_basepkg        $arch
-	nbpkg_release_basepkg_packages $arch
+	    nbpkg_build_run_basepkg         $arch
+	    nbpkg_release_basepkg_packages  $arch
 	    queue_add done $vers_date $type $arch
 	fi
 

@@ -42,8 +42,8 @@ netbsd_resolve_machine_and_arch () {
 }
 
 do_pkgin () {
-    echo env PKG_REPOS=$REPOS_PATH pkgin $*
-         env PKG_REPOS=$REPOS_PATH pkgin $*
+    echo pkgin $*
+         pkgin $*
 }
 
 do_install () {
@@ -110,13 +110,13 @@ rel=$(netbsd_resolve_version)
 arch=$(netbsd_resolve_machine_and_arch)
 host=basepkg.netbsd.fml.org
 PKG_PATH=http://$host/pub/NetBSD/basepkg/$rel/$arch
-REPOS_PATH=http://basepkg.netbsd.fml.org/pub/NetBSD/basepkg/$rel/$arch
+PKG_REPOS=http://basepkg.netbsd.fml.org/pub/NetBSD/basepkg/$rel/$arch
 export PKG_PATH
-export REPOS_PATH
+export PKG_REPOS
 
 # debug
 echo PKG_PATH   $PKG_PATH    
-echo REPOS_PATH $REPOS_PATH
+echo PKG_REPOS $PKG_REPOS
 
 if [ $# -eq 0 ]; then usage; exit 1;fi
 case $1 in

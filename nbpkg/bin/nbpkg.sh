@@ -26,7 +26,7 @@ usage () {
 }
 
 netbsd_resolve_version () {
-    /usr/bin/uname -r
+    /usr/bin/uname -r | cut -c 1-3
 }    
 
 netbsd_resolve_machine_and_arch () {

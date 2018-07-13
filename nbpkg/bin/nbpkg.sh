@@ -133,8 +133,10 @@ NBPKG_ADVISORY=$NBPKG_DB/nbpkg-advisory.txt
 NBPKG_ADVISORY_URL=http://$host/pub/NetBSD/nbpkg/$rel/$arch/nbpkg-advisory.txt
 
 # debug
-echo PKG_PATH   $PKG_PATH    
-echo PKG_REPOS $PKG_REPOS
+echo ""
+echo "debug: PKG_PATH  = $PKG_PATH"
+echo "debug: PKG_REPOS = $PKG_REPOS"
+echo ""
 
 do_init
 

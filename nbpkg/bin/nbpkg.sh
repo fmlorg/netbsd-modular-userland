@@ -66,6 +66,9 @@ do_remove () {
 
 # XXX update (1) nbpkg-advisory (2) pkg_summary.gz
 do_update () {
+    # nbpkg advisory format is such as "base-secsh-bin>7.1.20180706 REASON URL".
+    ftp -o $NBPKG_ADVISORY $NBPKG_ADVISORY_URL
+
     if [ -x /usr/pkg/bin/pkgin ];then
 	do_pkgin update
     else
@@ -78,19 +81,26 @@ do_update () {
 
 # XXX update (del and add) based on nbpkg-advisory not run "pkgin upgrade"
 do_upgrade () {
-    if [ -x /usr/pkg/bin/pkgin ];then
-	do_pkgin upgrade
-    else
-	for p in $*
+    cat $NBPKG_ADVISORY               |
+	while read rule reason url
 	do
-	    pkg_del $p
-	    pkg_add $p
+	    echo "debug>>> $rule"
+	    pkg_info -E "$rule" >/dev/null
+	    if [ $? -ne 0 ];then
+		do_pkgin -n install "$rule"
+	    else
+		echo "   already installed, so ignored"
+	    fi
+	    echo ""
 	done
-    fi
 }
 
 do_init () {
-    pkg_add pkgin
+    test -d $NBPKG_DB || mkdir -p $NBPKG_DB
+
+    if [ ! -x /usr/pkg/bin/pkgin ];then
+	pkg_add pkgin
+    fi
 }
 
 do_direct_pkgin () {
@@ -117,9 +127,16 @@ PKG_REPOS=$PKG_PATH
 export PKG_PATH
 export PKG_REPOS
 
+# nbpkg advisory format is such as "base-secsh-bin>7.1.20180706 REASON URL".
+NBPKG_DB=/var/db/nbpkg
+NBPKG_ADVISORY=$NBPKG_DB/nbpkg-advisory.txt
+NBPKG_ADVISORY_URL=http://$host/pub/NetBSD/nbpkg/$rel/$arch/nbpkg-advisory.txt
+
 # debug
 echo PKG_PATH   $PKG_PATH    
 echo PKG_REPOS $PKG_REPOS
+
+do_init
 
 if [ $# -eq 0 ]; then usage; exit 1;fi
 case $1 in

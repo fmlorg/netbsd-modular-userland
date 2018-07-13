@@ -113,7 +113,7 @@ rel=$(netbsd_resolve_version)
 arch=$(netbsd_resolve_machine_and_arch)
 host=basepkg.netbsd.fml.org
 PKG_PATH=http://$host/pub/NetBSD/basepkg/$rel/$arch
-PKG_REPOS=http://basepkg.netbsd.fml.org/pub/NetBSD/basepkg/$rel/$arch
+PKG_REPOS=$PKG_PATH
 export PKG_PATH
 export PKG_REPOS
 

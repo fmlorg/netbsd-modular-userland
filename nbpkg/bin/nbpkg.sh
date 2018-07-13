@@ -12,7 +12,7 @@
 # $Revision$
 #        NAME: nbpkg.sh
 # DESCRIPTION: a reference implementation of the user utiilty for 
-#              the granular update for NetBSD base system.
+#              NetBSD modular userland to provide the granular update.
 # CODINGSTYLE: POSIX compliant (checked by running "bash --posix" this script)
 #
 
@@ -22,9 +22,10 @@
 ############################################################
 
 usage () {
-    echo "USAGE: $0 [-h] ..."
+    echo "USAGE: $0 [-h] command ..."
 }
 
+# return the NetBSD version such as 7.0 7.1 8.0 ... without _STABLE et.al.
 netbsd_resolve_version () {
     /usr/bin/uname -r | cut -c 1-3
 }    
@@ -63,6 +64,7 @@ do_remove () {
     fi
 }
 
+# XXX update (1) nbpkg-advisory (2) pkg_summary.gz
 do_update () {
     if [ -x /usr/pkg/bin/pkgin ];then
 	do_pkgin update
@@ -74,6 +76,7 @@ do_update () {
     fi
 }
 
+# XXX update (del and add) based on nbpkg-advisory not run "pkgin upgrade"
 do_upgrade () {
     if [ -x /usr/pkg/bin/pkgin ];then
 	do_pkgin upgrade

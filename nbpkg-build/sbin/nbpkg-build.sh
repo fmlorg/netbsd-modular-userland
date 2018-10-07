@@ -64,8 +64,8 @@ do
     is_ignore=$(nbdist_check_ignore $arch)
     if [ $is_ignore = 1 ];then continue;fi
     
-    dir_init $arch
-    log_init $arch
+    nbpkg_dir_init $arch
+    nbpkg_log_init $arch
     (
 	logit "session: start $type $arch $version"
 	t_start=$(unixtime)
@@ -96,10 +96,10 @@ do
     if [ $? != 0 ];then
 	queue_del active $vers_date $type $arch
 	queue_add retry $vers_date $type $arch
-	dir_clean 1
+	nbpkg_dir_clean 1
     	logit "session: ***error*** arch=$arch ended abnormally."
     else
-	dir_clean 0
+	nbpkg_dir_clean 0
     fi
 done
 

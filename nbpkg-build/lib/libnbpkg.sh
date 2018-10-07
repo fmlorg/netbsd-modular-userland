@@ -3,13 +3,13 @@
 # $FML$
 #
 
-log_init () {
+nbpkg_log_init () {
     local arch=$1
     
     logf=$log_dir/$type.$arch
 }
 
-dir_init () {
+nbpkg_dir_init () {
     local arch=$1
     local r=$(random_number)
     local d=$(date +%Y%m%d)
@@ -36,7 +36,7 @@ dir_init () {
     done
 }
 
-dir_clean () {
+nbpkg_dir_clean () {
     local status=$1
     local name=$(basename $base_dir)
     local time=$(unixtime)
@@ -44,10 +44,10 @@ dir_clean () {
     if [ -d $base_dir ];then
 	if [ $status = 0 ];then
 	    mv $base_dir $done_dir/done.$name.$time
-	    logit dir_clean: moved to $done_dir/done.$name.$time
+	    logit nbpkg_dir_clean: moved to $done_dir/done.$name.$time
 	else
 	    mv $base_dir $done_dir/errr.$name.$time
-	    logit dir_clean: moved to $done_dir/errr.$name.$time
+	    logit nbpkg_dir_clean: moved to $done_dir/errr.$name.$time
 	fi
     fi
 
@@ -55,7 +55,7 @@ dir_clean () {
 	cd $done_dir || exit 1
 	for x in done* errr*
 	do
-	    logit "dir_clean: rm -fr $x"
+	    logit "nbpkg_dir_clean: rm -fr $x"
 	    rm -fr $x
 	done
     )

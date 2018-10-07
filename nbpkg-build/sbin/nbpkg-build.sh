@@ -45,7 +45,8 @@ is_require_download_and_extract=""
 type=${1:-stable}
 list=${2:-}
 case $type in
-    stable  ) url_base=$url_base_stable7;;
+    stable8 ) url_base=$url_base_stable8;;
+    stable  ) url_base=$url_base_stable8;;
     stable7 ) url_base=$url_base_stable7;;
     legacy  ) url_base=$url_base_stable6;;
     stable6 ) url_base=$url_base_stable6;;

@@ -3,6 +3,7 @@
 #
 
 # fundamental URL
+url_base_stable8=http://nycdn.netbsd.org/pub/NetBSD-daily/netbsd-8/
 url_base_stable7=http://nycdn.netbsd.org/pub/NetBSD-daily/netbsd-7/
 url_base_stable6=http://nycdn.netbsd.org/pub/NetBSD-daily/netbsd-6/
 url_base_current=http://nycdn.netbsd.org/pub/NetBSD-daily/HEAD/

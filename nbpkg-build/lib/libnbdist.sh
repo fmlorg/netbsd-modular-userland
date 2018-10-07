@@ -24,10 +24,10 @@ nbdist_check_ignore () {
 # utility functions to get the list to download and check the current version.
 #
 nbdist_get_list () {
-    tnftp_nbdist_get_list $1
+    _tnftp_nbdist_get_list $1
 }
 
-tnftp_nbdist_get_list () {
+_tnftp_nbdist_get_list () {
     local url=$1
 
     /usr/bin/ftp -o - -V $url					|
@@ -36,7 +36,7 @@ tnftp_nbdist_get_list () {
 	sed 's@/$@@'
 }
 
-curl_nbdist_get_list () {
+_curl_nbdist_get_list () {
     local url=$1
 
     curl -s $url						|
@@ -48,10 +48,10 @@ curl_nbdist_get_list () {
 
 
 nbdist_get_latest_entry () {
-    tnftp_nbdist_get_latest_entry $1
+    _tnftp_nbdist_get_latest_entry $1
 }
 
-tnftp_nbdist_get_latest_entry () {
+_tnftp_nbdist_get_latest_entry () {
     local url=$1
 
     /usr/bin/ftp -o - -V $url					|
@@ -61,7 +61,7 @@ tnftp_nbdist_get_latest_entry () {
 	tail -1
 }
 
-curl_nbdist_get_latest_entry () {
+_curl_nbdist_get_latest_entry () {
     local url=$1
 
     curl -s $url						|
@@ -71,7 +71,7 @@ curl_nbdist_get_latest_entry () {
 	tail -1
 }
 
-wget_nbdist_get_latest_entry () {
+_wget_nbdist_get_latest_entry () {
     :
 }
 
@@ -93,7 +93,7 @@ nbdist_download () {
 
     logit "download: $arch $url"
     t_start=$(unixtime)
-    tnftp_nbdist_download $arch $url
+    _tnftp_nbdist_download $arch $url
     nbdist_checksum $arch
     t_end=$(unixtime)
     t_diff=$(($t_end - $t_start))
@@ -101,7 +101,7 @@ nbdist_download () {
 }
 
 
-tnftp_nbdist_download () {
+_tnftp_nbdist_download () {
     local arch=$1
     local url=$2
     local _x _list
@@ -126,7 +126,7 @@ tnftp_nbdist_download () {
 }
 
 
-curl_nbdist_download () {
+_curl_nbdist_download () {
     local arch=$1
     local url=$2
     local _x _list
@@ -150,7 +150,7 @@ curl_nbdist_download () {
     done
 }
 
-wget_nbdist_download () {
+_wget_nbdist_download () {
     :
 }
 

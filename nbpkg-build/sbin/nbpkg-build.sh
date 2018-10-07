@@ -26,6 +26,7 @@
 ############################################################
 
 . $(dirname $0)/../lib/libutil.sh
+. $(dirname $0)/../lib/libqueue.sh
 . $(dirname $0)/../lib/libnbpkg.sh
 . $(dirname $0)/../lib/libnbdist.sh
 

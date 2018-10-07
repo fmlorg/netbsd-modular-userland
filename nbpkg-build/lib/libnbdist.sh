@@ -23,11 +23,11 @@ nbdist_check_ignore () {
 #
 # utility functions to get the list to download and check the current version.
 #
-www_get_list () {
-    tnftp_www_get_list $1
+nbdist_get_list () {
+    tnftp_nbdist_get_list $1
 }
 
-tnftp_www_get_list () {
+tnftp_nbdist_get_list () {
     local url=$1
 
     /usr/bin/ftp -o - -V $url					|
@@ -36,7 +36,7 @@ tnftp_www_get_list () {
 	sed 's@/$@@'
 }
 
-curl_www_get_list () {
+curl_nbdist_get_list () {
     local url=$1
 
     curl -s $url						|
@@ -47,11 +47,11 @@ curl_www_get_list () {
 
 
 
-www_get_latest_entry () {
-    tnftp_www_get_latest_entry $1
+nbdist_get_latest_entry () {
+    tnftp_nbdist_get_latest_entry $1
 }
 
-tnftp_www_get_latest_entry () {
+tnftp_nbdist_get_latest_entry () {
     local url=$1
 
     /usr/bin/ftp -o - -V $url					|
@@ -61,7 +61,7 @@ tnftp_www_get_latest_entry () {
 	tail -1
 }
 
-curl_www_get_latest_entry () {
+curl_nbdist_get_latest_entry () {
     local url=$1
 
     curl -s $url						|
@@ -71,7 +71,7 @@ curl_www_get_latest_entry () {
 	tail -1
 }
 
-wget_www_get_latest_entry () {
+wget_nbdist_get_latest_entry () {
     :
 }
 
@@ -116,7 +116,7 @@ tnftp_nbdist_download () {
     fi
 
     # 2. download all entries
-    _list=$(www_get_list $url					|
+    _list=$(nbdist_get_list $url					|
 		tr ' ' '\n'					|
 		grep '^[a-z]'					)
     for _x in $_list
@@ -141,7 +141,7 @@ curl_nbdist_download () {
     fi
 
     # 2. download all entries
-    _list=$(www_get_list $url					|
+    _list=$(nbdist_get_list $url					|
 		tr ' ' '\n'					|
 		grep '^[a-z]'					)
     for _x in $_list

@@ -52,9 +52,9 @@ case $type in
     stable6 ) url_base=$url_base_stable6;;
     current ) url_base=$url_base_current;;
 esac
-version=$(www_get_latest_entry $url_base)
+version=$(nbdist_get_latest_entry $url_base)
 vers_date=$(echo $version | awk '{print substr($1, 0, 8)}')
-list_all=$(www_get_list $url_base$version/				|
+list_all=$(nbdist_get_list $url_base$version/				|
 		tr ' ' '\n'						|
 		grep '^[a-z]'						)
 

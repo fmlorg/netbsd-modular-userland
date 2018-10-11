@@ -69,33 +69,33 @@ do
     (
 	logit "session: start $type $arch $version"
 	t_start=$(unixtime)
-	queue_add active $vers_date $type $arch
+	queue_add active $arch $type $vers_date
 
 	# 1. prepare
 	nbdist_download $arch $url_base$version/$arch/binary/sets/
 	nbdist_extract  $arch
 
 	# 2. go if not already done 
-	is_already_done=$(queue_find done $vers_date $type $arch)
+	is_already_done=$(queue_find done $arch $type $vers_date)
 	if [ ${is_already_done} -eq 1 ];then
 	    logit "session: skip $type $arch $version"
 	else
 	    logit "session: run $type $arch $version"
 	    nbpkg_build_run_basepkg         $arch
 	    nbpkg_release_basepkg_packages  $arch
-	    queue_add done  $vers_date $type $arch
-	    queue_del retry $vers_date $type $arch  # clear flag if exists
+	    queue_add done  $arch $type $vers_date
+	    queue_del retry $arch $type $vers_date  # clear flag if exists
 	fi
 
-	queue_del active $vers_date $type $arch	
+	queue_del active $arch $type $vers_date	
 	t_end=$(unixtime)
 	t_diff=$(($t_end - $t_start))
 	logit "session: end $type $arch $version total: $t_diff sec."
     )
 
     if [ $? != 0 ];then
-	queue_del active $vers_date $type $arch
-	queue_add retry $vers_date $type $arch
+	queue_del active $arch $type $vers_date
+	queue_add retry $arch $type $vers_date
 	nbpkg_dir_clean 1
     	logit "session: ***error*** arch=$arch ended abnormally."
     else

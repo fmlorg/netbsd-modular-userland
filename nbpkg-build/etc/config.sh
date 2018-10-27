@@ -21,7 +21,7 @@ base_dir=$nbpkg_base_dir/work/base.$$
 dist_dir=$nbpkg_base_dir/work/dist.$$
 dest_dir=$nbpkg_base_dir/work/dest.$$
 rels_dir=$nbpkg_base_dir/work/rels.$$
-junk_xxx=/var/tmp/nbpkg-build-junk
+junk_dir=$nbpkg_base_dir/work/junk.$$
 done_xxx=/var/tmp/nbpkg-build-done
 
 # database

@@ -17,11 +17,11 @@ prog_basepkg_dir=/var/nbpkg/dist/basepkg
 nbpkg_base_dir=/var/nbpkg
 
 # working directory
-base_dir=$nbpkg_base_dir/work/base.$$
-dist_dir=$nbpkg_base_dir/work/dist.$$
-dest_dir=$nbpkg_base_dir/work/dest.$$
-rels_dir=$nbpkg_base_dir/work/rels.$$
-junk_dir=$nbpkg_base_dir/work/junk.$$
+base_dir=$nbpkg_base_dir/work/base.$$	# dummy
+dist_dir=$nbpkg_base_dir/work/dist.$$	# dummy
+dest_dir=$nbpkg_base_dir/work/dest.$$	# dummy
+rels_dir=$nbpkg_base_dir/work/rels.$$	# dummy
+junk_dir=$nbpkg_base_dir/work/junk.$$	# dummy
 done_xxx=/var/tmp/nbpkg-build-done
 
 # database

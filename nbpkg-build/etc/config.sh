@@ -24,6 +24,9 @@ rels_dir=$nbpkg_base_dir/work/rels.$$
 junk_xxx=/var/tmp/nbpkg-build-junk
 done_xxx=/var/tmp/nbpkg-build-done
 
+# database
+ident_dir=$nbpkg_base_dir/db/ident
+
 # queue
 queue_dir=$nbpkg_base_dir/queue
 

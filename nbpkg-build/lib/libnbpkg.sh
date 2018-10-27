@@ -29,7 +29,7 @@ nbpkg_dir_init () {
     log_dir=$log_base_dir/${vers_date}
 
     for _dir in $base_dir $dest_dir $dist_dir $rels_dir $junk_dir $done_dir \
-			  $log_dir $queue_dir
+			  $log_dir $queue_dir $ident_dir
     do
 	test -d $_dir || is_require_download_and_extract=1
 	test -d $_dir || mkdir -p $_dir

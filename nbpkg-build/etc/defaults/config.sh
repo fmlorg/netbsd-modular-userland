@@ -23,9 +23,9 @@ url_base_stable7=http://nycdn.netbsd.org/pub/NetBSD-daily/netbsd-7/
 url_base_stable6=http://nycdn.netbsd.org/pub/NetBSD-daily/netbsd-6/
 url_base_current=http://nycdn.netbsd.org/pub/NetBSD-daily/HEAD/
 
-url_base_release6=http://ftp.iij.ad.jp/pub/NetBSD/NetBSD-6.0/
-url_base_release7=http://ftp.iij.ad.jp/pub/NetBSD/NetBSD-7.0/
-url_base_release8=http://ftp.iij.ad.jp/pub/NetBSD/NetBSD-8.0/
+url_base_release6=http://ftp.netbsd.org/pub/NetBSD/NetBSD-6.0/
+url_base_release7=http://ftp.netbsd.org/pub/NetBSD/NetBSD-7.0/
+url_base_release8=http://ftp.netbsd.org/pub/NetBSD/NetBSD-8.0/
 
 
 #

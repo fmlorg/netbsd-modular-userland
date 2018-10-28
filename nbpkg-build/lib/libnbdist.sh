@@ -73,6 +73,7 @@ _tnftp_nbdist_get_latest_entry () {
 	grep href= 						|
 	awk -F \" '{print $2}'					|
 	sed 's@/$@@'						|
+	grep '^20'						| # Y2100 ;D
 	tail -1
 }
 
@@ -83,6 +84,7 @@ _curl_nbdist_get_latest_entry () {
 	grep href= 						|
 	awk -F \" '{print $2}'					|
 	sed 's@/$@@'						|
+	grep '^20'						| # Y2100 ;D
 	tail -1
 }
 

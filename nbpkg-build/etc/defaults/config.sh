@@ -33,6 +33,7 @@ url_base_release8=http://ftp.iij.ad.jp/pub/NetBSD/NetBSD-8.0/
 #
 prefix=/var/nbpkg-build
 prog_basepkg_dir=$prefix/dist/basepkg
+data_basepkg_dir=$prog_basepkg_dir/sets/lists
 nbpkg_base_dir=$prefix
 ident_base_dir=$nbpkg_base_dir/db/ident
 queue_base_dir=$nbpkg_base_dir/queue

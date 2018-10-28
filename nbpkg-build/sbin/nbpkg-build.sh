@@ -90,9 +90,13 @@ do
 	nbdist_download $arch $url_base$version/$arch/binary/sets/
 	nbdist_extract  $arch
 
-	# check NetBSD changes based on the ident info.
+	# check ident info of downloaded binaries and get the list of
+	# syspkgs names as $_list_changed.
 	_list_changed=$(nbdist_check_ident_changes $arch $type $vers_date)
-	if [ "X$_list_changed" != "X" ]; go ! ; fi
+	if [ "X$_list_changed" = "X" ];then
+	    logit "session: no ident changes, do nothing"
+	    exit 0
+	fi
 	
 	# 2. go if not already done 
 	is_already_done=$(queue_find done $arch $type $vers_date)

@@ -28,12 +28,18 @@ nbdist_get_url_base () {
     local branch=$1
 			    
     case $branch in
-    stable8 ) echo $url_base_stable8;;
-    stable  ) echo $url_base_stable8;;
-    stable7 ) echo $url_base_stable7;;
-    legacy  ) echo $url_base_stable6;;
-    stable6 ) echo $url_base_stable6;;
-    current ) echo $url_base_current;;
+      stable8 ) echo $url_base_stable8;;
+      stable  ) echo $url_base_stable8;;
+     netbsd-8 ) echo $url_base_stable8;;
+    release-8 ) echo $url_base_release8;;
+      stable7 ) echo $url_base_stable7;;
+     netbsd-7 ) echo $url_base_stable7;;
+    release-7 ) echo $url_base_release7;;
+      legacy  ) echo $url_base_stable6;;
+      stable6 ) echo $url_base_stable6;;
+     netbsd-6 ) echo $url_base_stable6;;
+    release-6 ) echo $url_base_release6;;
+      current ) echo $url_base_current;;
     esac
 }
 

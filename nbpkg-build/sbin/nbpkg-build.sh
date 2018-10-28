@@ -42,11 +42,24 @@ export PATH
 
 nbpkg_build_assert
 
+# global flags
 is_debug=${DEBUG:-""}
 is_require_download_and_extract=""
-type=${1:-stable}
-list=${2:-}
-case $type in
+
+# parse options
+while getopts dvhb: _opt
+do
+    case $_opt in
+       h | \?) echo "usage: $0 [-hdv] -b BRANCH [ARCH ...]" 1>&2; exit 1;;
+       d | v)  is_debug=1;;
+       b)      branch=$OPTARG;;
+    esac
+done
+shift $(expr $OPTIND - 1)
+list=${1:-}
+
+# determine target arch to build
+case $branch in
     stable8 ) url_base=$url_base_stable8;;
     stable  ) url_base=$url_base_stable8;;
     stable7 ) url_base=$url_base_stable7;;

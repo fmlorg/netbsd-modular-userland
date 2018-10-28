@@ -75,6 +75,10 @@ do
 	nbdist_download $arch $url_base$version/$arch/binary/sets/
 	nbdist_extract  $arch
 
+	# check NetBSD changes based on the ident info.
+	_list_changed=$(nbdist_check_ident_changes $arch $type $vers_date)
+	if [ "X$_list_changed" != "X" ]; go ! ; fi
+	
 	# 2. go if not already done 
 	is_already_done=$(queue_find done $arch $type $vers_date)
 	if [ ${is_already_done} -eq 1 ];then

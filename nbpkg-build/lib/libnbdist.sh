@@ -233,3 +233,125 @@ nbdist_extract () {
     t_diff=$(($t_end - $t_start))
     logit "extract: $t_diff sec. arch=$arch"
 }
+
+
+
+#
+# IDENT BASED TRACE
+#
+
+nbdist_get_ident_list () {
+    local arch=$1
+    local type=$2
+    local vers=$3
+    local list=$4
+
+    _nbdist_ident_listup                                                |
+    _nbdist_ident_canonicalize                                          >$list
+}
+
+# Descriptions: return the list of changed syspkgs names 
+#               if the ident based changes are found.
+#    Arguments: STR(arch) STR(type) NUM(vers)
+# Side Effects: update(append) ident database if changes are found.
+# Return Value: LIST_STR
+nbdist_check_ident_changes () {
+    local arch=$1
+    local type=$2
+    local vers=$3
+    local diff=""
+
+    # e.g. /var/nbpkg-build/db/ident/netbsd-8/i386
+    local bak=$(_nbdist_ident_data_file $arch $type $vers)
+    local new=$junk_dir/ident.tmp.$type.$arch.$vers.$$
+
+    nbdist_get_ident_list $arch $type $vers $tmp
+    if [ -s $tmp ];then
+	# diff = the list of changed syspkgs names 
+        diff=$(_nbdist_ident_changed_files $arch $type $vers $bak $new	|
+	       _nbdist_ident_file_to_syspkgs_name  $arch $type $vers    )
+	if [ "X$diff" != "X" ];then
+	    for _pkg in $diff
+	    do
+		logit "nbdist_ident: $_pkg changed arch=$arch"
+	    done
+	else
+	    logit "nbdist_ident: no changes arch=$arch"
+	fi
+    else
+	fatal "nbdist_ident: empty output"
+    fi
+
+    echo $diff
+}
+
+_nbdist_ident_data_dir () {
+    local arch=$1
+    local type=$2
+    local vers=$3
+
+    echo $ident_dir/$type
+}
+
+_nbdist_ident_data_file () {
+    local arch=$1
+    local type=$2
+    local vers=$3
+    local _dir=$(_nbdist_ident_data_dir $arch $type $vers)
+    
+    echo $_dir/$arch
+}
+
+_nbdist_ident_listup () {
+    (
+	cd $dest_dir || fatal "cannot chdir \$dest_dir"
+	find . -type f -exec ident {} \;  2>&1
+    )
+}
+
+
+_nbdist_ident_canonicalize () {
+    awk '{								\
+    if ($1 != "$NetBSD:" && match($1, "/")){ sub(":",""); name = $1;}	\
+    if ($1 == "$NetBSD:"){ printf("%-50s %-20s %s\n", name, $2, $3)}	\
+    }'							    		|
+    sort -T /var/tmp
+}
+
+
+# return the list of changed files not "syspkgs name"
+_nbdist_ident_changed_files () {
+    local arch=$1
+    local type=$2
+    local vers=$3
+    local _bak=$4
+    local _new=$5
+
+    diff -ub $_bak $_new						|
+    egrep '^\-|^\+'							|
+    sed 's/^.//'							|
+    sed 's@^/@./@'							|
+    awk '{print $1}'							|
+    grep /								|
+    sort 								|
+    uniq
+}
+ 
+
+# convert the list of changed files to "syspkgs name"
+_nbdist_ident_file_to_syspkgs_name () {
+    local arch=$1
+    local type=$2
+    local vers=$3
+
+    local    tmp=$junk_dir/list.syspkgs
+    local    fil=$junk_dir/list.filter
+    local  files=$(echo $data_basepkg_dir/*/mi $data_basepkg_dir/*/md*$arch)
+
+    sh diff.sh > $fil
+    cat $files > $tmp
+    # XXX the exact match of "$1" is required
+    awk 'NR == FNR{ c[$1] = $1; next;}c[$1]{print $2}' $fil $tmp	|
+    sort 								|
+    uniq
+}

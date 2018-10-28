@@ -57,6 +57,7 @@ do
 done
 shift $(expr $OPTIND - 1)
 list=${1:-}
+type=$branch
 
 # determine target arch to build
 case $branch in

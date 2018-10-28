@@ -20,14 +20,19 @@ nbpkg_dir_init () {
 	r="debug"
     fi
 
+    # temporary area
     base_dir=/var/tmp/nbpkg-build/$d/$arch.$r
     dest_dir=$base_dir/destdir.$arch
     dist_dir=$base_dir/distdir.$arch
     rels_dir=$base_dir/reldir.$arch
     junk_dir=$base_dir/tmpdir.$arch
     done_dir=$done_xxx/$d
-    log_dir=$log_base_dir/${vers_date}
-
+    
+    # persistnet area
+    queue_dir=$queue_base_dir
+    ident_dir=$ident_base_dir
+      log_dir=$log_base_dir/${vers_date}
+    
     for _dir in $base_dir $dest_dir $dist_dir $rels_dir $junk_dir $done_dir \
 			  $log_dir $queue_dir $ident_dir
     do

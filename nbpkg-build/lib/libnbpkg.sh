@@ -121,7 +121,7 @@ nbpkg_src_dir () {
 nbpkg_dst_dir () {
     local arch=$1
     local vers_nbpkg=$2
-    echo /pub/www/pub/NetBSD/basepkg/$vers_nbpkg/$arch
+    echo $www_base_dir/$vers_nbpkg/$arch
 }
 
 nbpkg_dst_symlink () {
@@ -130,7 +130,7 @@ nbpkg_dst_symlink () {
     local vers_major=$3
     local machine_w_arch=$(nbpkg_src_arch $1 $2)
     (
-	cd /pub/www/pub/NetBSD/basepkg/$vers_major/ || exit 1
+	cd $www_base_dir/$vers_major/ || exit 1
 	if [ -d $arch -a ! -h $machine_w_arch ];then
 	    ln -s $arch $machine_w_arch
 	    logit "symlink: $arch == $machine_w_arch"
@@ -165,12 +165,12 @@ nbpkg_dst_clean () {
 }
 
 nbpkg_dst_dir_list_version () {
-    ls /pub/www/pub/NetBSD/basepkg
+    ls $www_base_dir
 }
 
 nbpkg_dst_dir_list_arch () {
     local vers=$1
-    ls /pub/www/pub/NetBSD/basepkg/$vers
+    ls $www_base_dir/$vers
 }
 
 nbpkg_basepkg_version () {

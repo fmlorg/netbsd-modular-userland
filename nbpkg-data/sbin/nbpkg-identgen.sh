@@ -87,8 +87,10 @@ do
 	nbdist_download $arch $url_base$version/$arch/binary/sets/
 	nbdist_extract  $arch
 
-	out=$(_nbdist_ident_data_file $arch $type $vers)
-	nbdist_get_ident_list $arch $type $vers $out
+	_dir=./work/$type
+	_out=$_dir/$arch
+	test -d $_dir || mkdir -p $_dir
+	nbdist_get_ident_list $arch $type $vers $_out
 
 	t_end=$(unixtime)
 	t_diff=$(($t_end - $t_start))

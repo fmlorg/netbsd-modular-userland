@@ -41,6 +41,9 @@ queue_base_dir=$nbpkg_base_dir/queue
 # www: public area where generated packages are published.
   www_base_dir=/pub/www/pub/NetBSD/basepkg/
 
+# pre-defined for emergency stop.
+logf=/var/tmp/log.nbpkg-debug
+
 
 #
 # working directories which pre-defiend value is dummy.

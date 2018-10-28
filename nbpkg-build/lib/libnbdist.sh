@@ -23,6 +23,21 @@ nbdist_check_ignore () {
 #
 # utility functions to get the list to download and check the current version.
 #
+
+nbdist_get_url_base () {
+    local branch=$1
+			    
+    case $branch in
+    stable8 ) echo $url_base_stable8;;
+    stable  ) echo $url_base_stable8;;
+    stable7 ) echo $url_base_stable7;;
+    legacy  ) echo $url_base_stable6;;
+    stable6 ) echo $url_base_stable6;;
+    current ) echo $url_base_current;;
+    esac
+}
+
+
 nbdist_get_list () {
     _tnftp_nbdist_get_list $1
 }

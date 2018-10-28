@@ -60,14 +60,7 @@ list=${1:-}
 type=$branch
 
 # determine target arch to build
-case $branch in
-    stable8 ) url_base=$url_base_stable8;;
-    stable  ) url_base=$url_base_stable8;;
-    stable7 ) url_base=$url_base_stable7;;
-    legacy  ) url_base=$url_base_stable6;;
-    stable6 ) url_base=$url_base_stable6;;
-    current ) url_base=$url_base_current;;
-esac
+url_base=$(nbdist_get_url_base $branch)
 version=$(nbdist_get_latest_entry $url_base)
 vers_date=$(echo $version | awk '{print substr($1, 0, 8)}')
 list_all=$(nbdist_get_list $url_base$version/				|

@@ -19,17 +19,21 @@
 ####################   CONFIGURATIONS   ####################
 ############################################################
 
-. $(dirname $0)/../../nbpkg-build/etc/defaults/config.sh
-. $(dirname $0)/../../nbpkg-build/etc/config.sh
+etc_dir=$(dirname $0)/../../nbpkg-build/etc
+lib_dir=$(dirname $0)/../../nbpkg-build/lib
+wrk_dir=$(dirname $0)/../../nbpkg-data/work
+
+. $etc_dir/defaults/config.sh
+. $etc_dir/config.sh
 
 ############################################################
 ####################      FUNCTIONS     ####################
 ############################################################
 
-. $(dirname $0)/../../nbpkg-build/lib/libutil.sh
-. $(dirname $0)/../../nbpkg-build/lib/libqueue.sh
-. $(dirname $0)/../../nbpkg-build/lib/libnbpkg.sh
-. $(dirname $0)/../../nbpkg-build/lib/libnbdist.sh
+. $lib_dir/libutil.sh
+. $lib_dir/libqueue.sh
+. $lib_dir/libnbpkg.sh
+. $lib_dir/libnbdist.sh
 
 ############################################################
 ####################        MAIN        ####################

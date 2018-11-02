@@ -194,8 +194,10 @@ nbdist_checksum () {
 
     cd $dist_dir || exit 1
 
-    /usr/bin/cksum -a sha512 *tgz | sort > $cksum1
-    sort SHA512 > $cksum2
+    # XXX "sort | uniq" added to avoid the weired bug
+    # XXX  (duplicated entries in the checksum e.g. SHA512 of *arm).
+    /usr/bin/cksum -a sha512 *tgz | sort | uniq > $cksum1
+    sort SHA512 | uniq > $cksum2
     cmp $cksum1 $cksum2
     if [ $? != 0 ];then
 	logit "checksum: failed arch=$arch"

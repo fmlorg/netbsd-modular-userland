@@ -88,18 +88,27 @@ do
 	logit "session: start $type $arch $version"
 	t_start=$(unixtime)
 
-	nbdist_download $arch $url_base$version/$arch/binary/sets/
-	nbdist_extract  $arch
-
-	_dir=./work/$type
+	_dir=$wrk_dir/$type
 	_out=$_dir/$arch
 	test -d $_dir || mkdir -p $_dir
-	nbdist_get_ident_list $arch $type $vers $_out
+
+	nbdist_download $arch $url_base$version/$arch/binary/sets/
+	nbdist_extract  $arch
+	nbdist_get_ident_list $arch $type "-" $_out
 
 	t_end=$(unixtime)
 	t_diff=$(($t_end - $t_start))
 	logit "session: end $type $arch $version total: $t_diff sec."
+	exit 0
     )
+
+    if [ $? != 0 ];then
+	nbpkg_dir_clean 1
+    	logit "session: ***error*** arch=$arch ended abnormally."
+    else
+	nbpkg_dir_clean 0
+    fi
+
 done
 
 exit 0

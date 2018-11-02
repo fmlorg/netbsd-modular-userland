@@ -142,9 +142,12 @@ _tnftp_nbdist_download () {
     _list=$(nbdist_get_list $url					|
 		tr ' ' '\n'					|
 		grep '^[a-z]'					)
+    # XXX dirty hack: we use JAIST for official release binaries (only)
+    #                 to speed up the download (but FASTLY for daily build).
+    _url=$(echo $url | sed -e s/ftp.netbsd.org/ftp.jaist.ac.jp/g)
     for _x in $_list
     do
-	/usr/bin/ftp -V -o $_x $url$_x
+	/usr/bin/ftp -V -o $_x $_url$_x
     done
 }
 

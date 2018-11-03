@@ -230,7 +230,11 @@ nbdist_extract () {
     logit "extract: arch=$arch"
     logit "extract: tar -C $dest_dir -zxpf $dist_dir/{base,...}"
     t_start=$(unixtime)
-    for _x in $dist_dir/[a-jl-z]*tgz $dist_dir/kern-GENERIC.tgz
+    # XXX disabled /netbsd extraction
+    #     1. kern-GENERIC.tgz does not exist in some ports. 
+    #     2. our hooked basepkg does not generate the kernel package now.
+    # for _x in $dist_dir/[a-jl-z]*tgz $dist_dir/kern-GENERIC.tgz
+    for _x in $dist_dir/[a-jl-z]*tgz
     do
 	tar -C $dest_dir -zxpf $_x
     done

@@ -269,19 +269,25 @@ nbdist_check_ident_changes () {
     local arch=$1
     local type=$2
     local vers=$3
-    local diff=""
+    local diff=$4
 
-    # e.g. /var/nbpkg-build/db/ident/netbsd-8/i386
+    # e.g. /var/nbpkg-build/db/ident/netbsd-8/i386 holds the latest ident data
+    #	   which will be replaced to the current one if ident changes are found.
     local bak=$(_nbdist_ident_data_file $arch $type $vers)
     local new=$junk_dir/ident.tmp.$type.$arch.$vers.$$
 
-    nbdist_get_ident_list $arch $type $vers $tmp
-    if [ -s $tmp ];then
+    if [ ! -s $bak ];then
+	fatal "nbdist_ident: $bak not exist"
+    fi
+
+    nbdist_get_ident_list $arch $type $vers $new
+    if [ -s $new ];then
 	# diff = the list of changed syspkgs names 
-        diff=$(_nbdist_ident_changed_files $arch $type $vers $bak $new	|
-	       _nbdist_ident_file_to_syspkgs_name  $arch $type $vers    )
-	if [ "X$diff" != "X" ];then
-	    for _pkg in $diff
+        _nbdist_ident_compare_files        $arch $type $vers $bak $new	|
+	_nbdist_ident_file_to_syspkgs_name $arch $type $vers		> $diff
+	if [ -s $diff ];then
+	    cat $diff 							|
+	    while read _pkg 
 	    do
 		logit "nbdist_ident: $_pkg changed arch=$arch"
 	    done

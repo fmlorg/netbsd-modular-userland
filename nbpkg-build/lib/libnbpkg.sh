@@ -13,15 +13,14 @@ nbpkg_dir_init () {
     local arch=$1
     local r=$(random_number)
     local d=$(date +%Y%m%d)
-    local _dir
+    local _dir _debug_dir
 
     if [ "X$is_debug" != "X" ];then
-	echo "===> debug on"
-	r="debug"
+	_debug_dir=/var/tmp/nbpkg-debug
     fi
 
     # temporary area
-    base_dir=/var/tmp/nbpkg-build/$d/$arch.$r
+    base_dir=${_debug_dir:-/var/tmp/nbpkg-build/$d/$arch.$r}
     dest_dir=$base_dir/destdir.$arch
     dist_dir=$base_dir/distdir.$arch
     rels_dir=$base_dir/reldir.$arch

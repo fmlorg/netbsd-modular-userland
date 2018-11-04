@@ -132,7 +132,8 @@ _tnftp_nbdist_download () {
     cd $dist_dir || exit 1
 
     # 1. verify
-    /usr/bin/ftp -V -o SHA512 $url/SHA512
+    _url=$(echo $url | sed -e s/ftp.netbsd.org/ftp.jaist.ac.jp/g)
+    /usr/bin/ftp -V -o SHA512 $_url/SHA512
     if [ $? != 0 ];then
 	logit "download: invalid arch=$arch (no SHA512)"
 	exit 1

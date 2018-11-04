@@ -79,18 +79,23 @@ do
 	t_start=$(unixtime)
 	queue_add active $arch $type $vers_date
 
-	# 1. prepare
+	# 1.  preparation
+	# 1.1 download and extract the latest daily build
 	nbdist_download $arch $url_base$version/$arch/binary/sets/
 	nbdist_extract  $arch
 
-	# check ident info of downloaded binaries and get the list of
-	# syspkgs names as $_list_changed.
-	_list_changed=$(nbdist_check_ident_changes $arch $type $vers_date)
-	if [ "X$_list_changed" = "X" ];then
+	# 1.2 ident based check
+	#     extract ident data, compare it with the saved one and
+	#     generate the list of basepkg to re-build as a file $basepkg_diff.
+	basepkg_diff=$junk_dir/list-basepkg-to-be-update
+	nbdist_check_ident_changes $arch $type $vers_date $basepkg_diff
+	if [ -s $basepkg_diff ];then
+	    logit "session: ident changes found, go forward"
+	else
 	    logit "session: no ident changes, do nothing"
 	    exit 0
 	fi
-	
+
 	# 2. go if not already done 
 	is_already_done=$(queue_find done $arch $type $vers_date)
 	if [ ${is_already_done} -eq 1 ];then

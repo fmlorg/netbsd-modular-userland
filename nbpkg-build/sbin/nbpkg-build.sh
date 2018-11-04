@@ -109,6 +109,8 @@ do
 	logit "session: end $type $arch $version total: $t_diff sec."
     )
 
+    if [ "X$is_debug" != "X" ];then logit "session: debug: not clean"; exit 0; fi
+
     if [ $? != 0 ];then
 	queue_del active $arch $type $vers_date
 	queue_add retry $arch $type $vers_date

@@ -356,9 +356,9 @@ _nbdist_ident_file_to_syspkgs_name () {
 
     local    tmp=$junk_dir/list.syspkgs
     local    fil=$junk_dir/list.filter
-    local  files=$(echo $data_basepkg_dir/*/mi $data_basepkg_dir/*/md*$arch)
+    local  files="$(echo $data_basepkg_dir/*/mi $data_basepkg_dir/*/md*$arch)"
 
-    sh diff.sh > $fil
+    cat        > $fil
     cat $files > $tmp
     # XXX the exact match of "$1" is required
     awk 'NR == FNR{ c[$1] = $1; next;}c[$1]{print $2}' $fil $tmp	|

@@ -330,7 +330,7 @@ _nbdist_ident_canonicalize () {
 
 
 # return the list of changed files not "syspkgs name"
-_nbdist_ident_changed_files () {
+_nbdist_ident_compare_files () {
     local arch=$1
     local type=$2
     local vers=$3

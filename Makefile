@@ -11,7 +11,7 @@ all:
 	@ echo "make update		run \"git pull --rebase\""
 	@ echo "make clean		clean up *~ recursively"
 	@ echo ""
-	@ echo "gen-ident-database"	generate ident database for specific BRANCH
+	@ echo "gen-ident-database	generate ident database for specific BRANCH"
 	@ echo ""
 
 show-status: 

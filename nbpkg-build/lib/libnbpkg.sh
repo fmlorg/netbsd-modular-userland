@@ -88,23 +88,23 @@ nbpkg_build_assert () {
 #
 # HOOKS
 #
-nbpkg_build_path_start_hook () {
-	echo $junk_dir/nbpkg_build_start_hook
+nbpkg_build_path_session_start_hook () {
+	echo $junk_dir/nbpkg_build_session_start_hook
 }
 
 
-nbpkg_build_path_end_hook () {
-	echo $junk_dir/nbpkg_build_end_hook
+nbpkg_build_path_session_end_hook () {
+	echo $junk_dir/nbpkg_build_session_end_hook
 }
 
 
-nbpkg_build_run_start_hook () {
-	run_hook $(nbpkg_build_path_start_hook)
+nbpkg_build_run_session_start_hook () {
+	run_hook $(nbpkg_build_path_session_start_hook)
 }
 
 
-nbpkg_build_run_end_hook () {
-	run_hook $(nbpkg_build_path_end_hook)
+nbpkg_build_run_session_end_hook () {
+	run_hook $(nbpkg_build_path_session_end_hook)
 }
 
 

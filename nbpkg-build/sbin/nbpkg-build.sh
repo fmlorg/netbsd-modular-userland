@@ -74,11 +74,12 @@ do
     
     nbpkg_dir_init $arch
     nbpkg_log_init $arch
-    nbpkg_build_run_start_hook
     (
 	logit "session: start $type $arch $version"
 	t_start=$(unixtime)
 	queue_add active $arch $type $vers_date
+
+        nbpkg_build_run_session_start_hook
 
 	# 1.  preparation
 	# 1.1 download and extract the latest daily build
@@ -109,6 +110,8 @@ do
 	    queue_del retry $arch $type $vers_date  # clear flag if exists
 	fi
 
+        nbpkg_build_run_session_end_hook
+
 	queue_del active $arch $type $vers_date	
 	t_end=$(unixtime)
 	t_diff=$(($t_end - $t_start))
@@ -125,8 +128,6 @@ do
     else
 	nbpkg_dir_clean 0
     fi
-
-    nbpkg_build_run_end_hook
 done
 
 exit 0

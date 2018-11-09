@@ -86,6 +86,29 @@ nbpkg_build_assert () {
 
 
 #
+# HOOKS
+#
+nbpkg_build_path_start_hook () {
+	echo $junk_dir/nbpkg_build_start_hook
+}
+
+
+nbpkg_build_path_end_hook () {
+	echo $junk_dir/nbpkg_build_end_hook
+}
+
+
+nbpkg_build_run_start_hook () {
+	run_hook $(nbpkg_build_path_start_hook)
+}
+
+
+nbpkg_build_run_end_hook () {
+	run_hook $(nbpkg_build_path_end_hook)
+}
+
+
+#
 # run basepkg
 #
 nbpkg_build_run_basepkg () {

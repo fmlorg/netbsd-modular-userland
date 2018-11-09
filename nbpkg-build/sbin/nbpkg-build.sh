@@ -74,6 +74,7 @@ do
     
     nbpkg_dir_init $arch
     nbpkg_log_init $arch
+    nbpkg_build_run_start_hook
     (
 	logit "session: start $type $arch $version"
 	t_start=$(unixtime)
@@ -124,6 +125,8 @@ do
     else
 	nbpkg_dir_clean 0
     fi
+
+    nbpkg_build_run_end_hook
 done
 
 exit 0

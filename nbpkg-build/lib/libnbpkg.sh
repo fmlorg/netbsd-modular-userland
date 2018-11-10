@@ -28,8 +28,7 @@ nbpkg_dir_init () {
     done_dir=$done_xxx/$d
     
     # persistnet area
-    queue_dir=$queue_base_dir
-      log_dir=$log_base_dir/${vers_date}
+     log_dir=$log_base_dir/${vers_date}
     
     for _dir in $base_dir $dest_dir $dist_dir $rels_dir $junk_dir $done_dir \
 			  $log_dir $queue_dir $db_ident_dir $db_basepkg_dir

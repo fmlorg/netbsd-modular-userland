@@ -284,9 +284,9 @@ nbdist_check_ident_changes () {
     if [ -s $new ];then
 	# diff = the list of changed syspkgs names 
         _nbdist_ident_compare_files        $arch $type $vers $bak $new	|
-	_nbdist_ident_file_to_syspkgs_name $arch $type $vers		> $diff
+	_nbdist_ident_file_to_syspkgs_name $arch $type $vers		>$diff
 	if [ -s $diff ];then
-	    cat $diff 							|
+	    cat $diff							|
 	    while read _pkg 
 	    do
 		logit "nbdist_ident: $_pkg changed arch=$arch"

@@ -306,7 +306,7 @@ _nbdist_ident_data_dir () {
     local type=$2
     local vers=$3
 
-    echo $ident_dir/$type
+    echo $db_ident_dir/$type
 }
 
 _nbdist_ident_data_file () {

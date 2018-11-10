@@ -291,6 +291,10 @@ nbdist_check_ident_changes () {
 	    do
 		logit "nbdist_ident: $_pkg changed arch=$arch"
 	    done
+
+	    # prepare the build database update commits processed
+	    # after the basepkg is(are) released successfully.
+	    _nbdist_defer_commit_updates $arch $type $vers $bak $new $diff 
 	else
 	    logit "nbdist_ident: no changes arch=$arch"
 	fi
@@ -370,4 +374,53 @@ _nbdist_ident_file_to_syspkgs_name () {
     awk 'NR == FNR{ c[$1] = $1; next;}c[$1]{print $2}' $fil $tmp	|
     sort 								|
     uniq
+}
+
+
+_nbdist_basepkg_data_dir () {
+    local arch=$1
+    local type=$2
+    local vers=$3
+
+    echo $db_basepkg_dir/$type
+}
+
+_nbdist_basepkg_data_file () {
+    local arch=$1
+    local type=$2
+    local vers=$3
+    local _dir=$(_nbdist_basepkg_data_dir $arch $type $vers)
+    
+    echo $_dir/$arch
+}
+
+
+# XXX transaction queue: commit it after this process succeeded.
+# (1) add syspkgs name list passed to "basepkg.sh ..." to build.
+#     e.g. "/var/nbpkg-build/db/basepkg/$branch/$arch".
+# (2) update ident data
+#     e.g. "/var/nbpkg-build/db/ident/$branch/$arch".
+#     
+_nbdist_defer_commit_updates () {
+	local         arch=$1
+	local         type=$2
+	local         vers=$3
+	local    ident_bak=$4
+	local    ident_new=$5
+	local basepkg_diff=$6
+	local   basepkg_db=$(_nbdist_basepkg_data_file $arch $type $vers)
+	local         hook=$(nbpkg_build_path_session_end_hook)
+
+	cat >> $hook <<__EOF__
+	# transaction: it should be eval-ed after the session successed.
+
+	# 1.   ident database: overwritten
+	cp -p $ident_new $ident_bak
+
+	# 2. basepkg database: append the rebuilt packages
+	#    each line: base-sys-root 20181101
+	#               used as e.g. "@sysdep base-sys-root>=20181101" 
+	cat $basepkg_diff >> $basepkg_db
+
+__EOF__
 }

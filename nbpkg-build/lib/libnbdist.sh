@@ -262,9 +262,9 @@ nbdist_get_ident_list () {
 
 # Descriptions: return the list of changed syspkgs names 
 #               if the ident based changes are found.
-#    Arguments: STR(arch) STR(type) NUM(vers)
-# Side Effects: update(append) ident database if changes are found.
-# Return Value: LIST_STR
+#    Arguments: STR(arch) STR(type) NUM(vers) STR(diff)
+# Side Effects: add the updates into transaction queue if changes are found.
+# Return Value: NONE
 nbdist_check_ident_changes () {
     local arch=$1
     local type=$2
@@ -272,7 +272,7 @@ nbdist_check_ident_changes () {
     local diff=$4
 
     # e.g. /var/nbpkg-build/db/ident/netbsd-8/i386 holds the latest ident data
-    #	   which will be replaced to the current one if ident changes are found.
+    #	   which will be replaced to the current one if the changes are found.
     local bak=$(_nbdist_ident_data_file $arch $type $vers)
     local new=$junk_dir/ident.tmp.$type.$arch.$vers.$$
 

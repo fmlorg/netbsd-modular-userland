@@ -35,9 +35,13 @@ prefix=/var/nbpkg-build
 prog_basepkg_dir=$prefix/dist/basepkg
 data_basepkg_dir=$prog_basepkg_dir/sets/lists
 nbpkg_base_dir=$prefix
-ident_base_dir=$nbpkg_base_dir/db/ident
+  db_base_dir=$nbpkg_base_dir/db
 queue_base_dir=$nbpkg_base_dir/queue
   log_base_dir=$nbpkg_base_dir/log
+
+# nbpkg-build database
+  db_ident_dir=$db_base_dir/ident
+db_basepkg_dir=$db_base_dir/basepkg
 
 # www: public area where generated packages are published.
   www_base_dir=/pub/www/pub/NetBSD/basepkg/

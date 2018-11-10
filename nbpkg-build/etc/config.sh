@@ -22,7 +22,6 @@ prog_basepkg_dir=/var/nbpkg-build/dist/basepkg
 
 # nbpkg-build specific directories: these hold persistent data.
 nbpkg_base_dir=/var/nbpkg-build
-ident_base_dir=$nbpkg_base_dir/db/ident
 queue_base_dir=$nbpkg_base_dir/queue
   log_base_dir=$nbpkg_base_dir/log
 

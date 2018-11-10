@@ -18,12 +18,11 @@
 
 # mandatory external programs
 prog_basepkg_dir=/var/nbpkg-build/dist/basepkg
+data_basepkg_dir=$prog_basepkg_dir/sets/lists
 
 
 # nbpkg-build specific directories: these hold persistent data.
 nbpkg_base_dir=/var/nbpkg-build
-queue_base_dir=$nbpkg_base_dir/queue
-  log_base_dir=$nbpkg_base_dir/log
 
 
 # web base directory where generated packages are published.

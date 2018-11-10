@@ -31,20 +31,16 @@ url_base_release8=http://ftp.netbsd.org/pub/NetBSD/NetBSD-8.0/
 #
 # nbpkg-build specific directories: these hold persistent data.
 #
-prefix=/var/nbpkg-build
-prog_basepkg_dir=$prefix/dist/basepkg
-data_basepkg_dir=$prog_basepkg_dir/sets/lists
-nbpkg_base_dir=$prefix
-  db_base_dir=$nbpkg_base_dir/db
-queue_base_dir=$nbpkg_base_dir/queue
+   db_base_dir=$nbpkg_base_dir/db
   log_base_dir=$nbpkg_base_dir/log
+
+# queue
+     queue_dir=$nbpkg_base_dir/queue
 
 # nbpkg-build database
   db_ident_dir=$db_base_dir/ident
 db_basepkg_dir=$db_base_dir/basepkg
 
-# www: public area where generated packages are published.
-  www_base_dir=/pub/www/pub/NetBSD/basepkg/
 
 # pre-defined for emergency stop.
 logf=/var/tmp/log.nbpkg-debug

@@ -33,7 +33,7 @@ netbsd_resolve_version () {
 }    
 
 netbsd_resolve_machine_and_arch () {
-    local machine=$(/usr/bin/uname -m)	
+    local  machine=$(/usr/bin/uname -m)	
     local platform=$(/usr/bin/uname -p)
 
     if [ "X$machine" != "X$platform" ];then
@@ -82,7 +82,6 @@ do_update () {
 do_upgrade () {
     local found
     
-    # nbpkg advisory format is such as "base-secsh-bin>7.1.20180706 REASON URL".
     ftp -o $NBPKG_ADVISORY $NBPKG_ADVISORY_URL
     if [ ! -f $NBPKG_ADVISORY ];then
 	cat <<-__EOF__
@@ -96,18 +95,19 @@ __EOF__
 	exit 0
     fi
 
+    # nbpkg advisory format is such as "base-secsh-bin>7.1.20180706 REASON URL".
     cat $NBPKG_ADVISORY               		|
-	while read rule reason url
-	do
-	    echo "debug>>> $rule"		1>&2
-	    found=$(pkg_info -E "$rule")
-	    if [ $? -ne 0 ];then
-		do_pkgin -n install "$rule"
-	    else
-		echo "   $found already installed, so ignored"
-	    fi
-	    echo ""
-	done
+    while read rule reason url
+    do
+	echo "debug>>> $rule"		1>&2
+	found=$(pkg_info -E "$rule")
+	if [ $? -ne 0 ];then
+	    do_pkgin -n install "$rule"
+	else
+	    echo "   $found already installed, so ignored"
+	fi
+	echo ""
+    done
 }
 
 do_full_upgrade () {
@@ -143,13 +143,12 @@ export PATH
      arch=$(netbsd_resolve_machine_and_arch)
    branch=$(echo $rel | awk '{printf("netbsd-%d\n", $1)}')
      host=basepkg.netbsd.fml.org
+   
  PKG_PATH=http://$host/pub/NetBSD/basepkg/diff/$branch/$arch
 PKG_REPOS=$PKG_PATH
-
 export PKG_PATH
 export PKG_REPOS
 
-# nbpkg advisory format is such as "base-secsh-bin>7.1.20180706 REASON URL".
           NBPKG_DB=/var/db/nbpkg
     NBPKG_ADVISORY=$NBPKG_DB/nbpkg-advisory.txt
 NBPKG_ADVISORY_URL=http://$host/pub/NetBSD/nbpkg/$branch/$arch/nbpkg-advisory.txt

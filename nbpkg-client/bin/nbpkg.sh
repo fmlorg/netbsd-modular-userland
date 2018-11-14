@@ -119,7 +119,7 @@ do_init () {
     test -d $NBPKG_DB || mkdir -p $NBPKG_DB
 
     if [ ! -x /usr/pkg/bin/pkgin ];then
-	env PKG_PATH=ftp://ftp.NetBSD.org/pub/pkgsrc/packages/NetBSD/$arch/$rel/All pkg_add -v pkgin
+	env PKG_PATH=ftp://ftp.NetBSD.org/pub/pkgsrc/packages/NetBSD/$arch/$release/All pkg_add -v pkgin
     fi
 }
 
@@ -139,9 +139,9 @@ export PATH
 #
 # variables
 #
-      rel=$(netbsd_resolve_version)
+  release=$(netbsd_resolve_version)
      arch=$(netbsd_resolve_machine_and_arch)
-   branch=$(echo $rel | awk '{printf("netbsd-%d\n", $1)}')
+   branch=$(echo $release | awk '{printf("netbsd-%d\n", $1)}')
      host=basepkg.netbsd.fml.org
    
  PKG_PATH=http://$host/pub/NetBSD/basepkg/diff/$branch/$arch

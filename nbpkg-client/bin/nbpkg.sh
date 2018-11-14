@@ -156,10 +156,10 @@ NBPKG_ADVISORY_URL=http://$host/pub/NetBSD/nbpkg/$branch/$arch/nbpkg-advisory.tx
 NBPKG_LIST_PKG_URL=http://$host/pub/NetBSD/basepkg/diff/$branch/$arch/list-pkg
 
 # debug
-echo ""
-echo "debug: PKG_PATH  = $PKG_PATH"
-echo "debug: PKG_REPOS = $PKG_REPOS"
-echo ""
+echo ""                                 1>&2                    
+echo "debug: PKG_PATH  = $PKG_PATH"     1>&2
+echo "debug: PKG_REPOS = $PKG_REPOS"    1>&2
+echo ""                                 1>&2
 
 do_init
 

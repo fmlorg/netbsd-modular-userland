@@ -80,8 +80,8 @@ do
     is_ignore=$(nbdist_check_ignore $arch)
     if [ $is_ignore = 1 ];then continue;fi
     
-    nbpkg_dir_init $arch
-    nbpkg_log_init $arch
+    nbpkg_dir_init $arch $branch $build_date
+    nbpkg_log_init $arch $branch $build_date
     (
 	logit "session: start $arch $branch $build_nyid"
 	t_start=$(unixtime)

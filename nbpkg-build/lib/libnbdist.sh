@@ -272,7 +272,7 @@ nbdist_check_ident_changes () {
 
     # e.g. /var/nbpkg-build/db/ident/netbsd-8/i386 holds the latest ident data
     #	   which will be replaced to the current one if the changes are found.
-    local bak=$(_nbdist_ident_data_file $arch $type $vers)
+    local bak=$(nbpkg_ident_data_file $arch $type $vers)
     local new=$junk_dir/ident.tmp.$type.$arch.$vers.$$
 
     if [ ! -s $bak ];then
@@ -304,22 +304,6 @@ nbdist_check_ident_changes () {
     echo $diff
 }
 
-_nbdist_ident_data_dir () {
-    local arch=$1
-    local type=$2
-    local vers=$3
-
-    echo $db_ident_dir/$type
-}
-
-_nbdist_ident_data_file () {
-    local arch=$1
-    local type=$2
-    local vers=$3
-    local _dir=$(_nbdist_ident_data_dir $arch $type $vers)
-    
-    echo $_dir/$arch
-}
 
 _nbdist_ident_listup () {
     (
@@ -376,24 +360,6 @@ _nbdist_ident_file_to_syspkgs_name () {
 }
 
 
-_nbdist_basepkg_data_dir () {
-    local arch=$1
-    local type=$2
-    local vers=$3
-
-    echo $db_basepkg_dir/$type
-}
-
-_nbdist_basepkg_data_file () {
-    local arch=$1
-    local type=$2
-    local vers=$3
-    local _dir=$(_nbdist_basepkg_data_dir $arch $type $vers)
-    
-    echo $_dir/$arch
-}
-
-
 # XXX transaction queue: commit it after this process succeeded.
 # (1) add syspkgs name list passed to "basepkg.sh ..." to build.
 #     e.g. "/var/nbpkg-build/db/basepkg/$branch/$arch".
@@ -407,7 +373,7 @@ _nbdist_defer_commit_updates () {
 	local    ident_bak=$4
 	local    ident_new=$5
 	local basepkg_diff=$6
-	local   basepkg_db=$(_nbdist_basepkg_data_file $arch $type $vers)
+	local   basepkg_db=$(nbpkg_basepkg_data_file $arch $type $vers)
 	local         hook=$(nbpkg_build_path_session_end_hook)
 
 	cat >> $hook <<__EOF__

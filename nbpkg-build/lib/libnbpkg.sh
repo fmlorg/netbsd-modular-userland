@@ -38,6 +38,40 @@ nbpkg_dir_init () {
     done
 }
 
+nbpkg_ident_data_dir () {
+    local arch=$1
+    local type=$2
+    local vers=$3
+
+    echo $db_ident_dir/$type
+}
+
+nbpkg_ident_data_file () {
+    local arch=$1
+    local type=$2
+    local vers=$3
+    local _dir=$(nbpkg_ident_data_dir $arch $type $vers)
+    
+    echo $_dir/$arch
+}
+
+nbpkg_basepkg_data_dir () {
+    local arch=$1
+    local type=$2
+    local vers=$3
+
+    echo $db_basepkg_dir/$type
+}
+
+nbpkg_basepkg_data_file () {
+    local arch=$1
+    local type=$2
+    local vers=$3
+    local _dir=$(nbpkg_basepkg_data_dir $arch $type $vers)
+    
+    echo $_dir/$arch
+}
+
 nbpkg_dir_clean () {
     local status=$1
     local name=$(basename $base_dir)

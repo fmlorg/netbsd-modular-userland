@@ -203,7 +203,6 @@ nbdist_checksum () {
     if [ $? != 0 ];then
 	logit "checksum: failed arch=$arch"
 	diff -ub $cksum1 $cksum2
-	queue_add retry $arch $type $vers_date
 	exit 1
     else
 	logit "checksum: ok arch=$arch"

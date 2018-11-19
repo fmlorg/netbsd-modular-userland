@@ -141,16 +141,51 @@ nbpkg_build_run_session_end_hook () {
 
 
 #
+# generate configuration to pass as the argument in running basepkg.sh.
+#
+nbpkg_build_gen_basepkg_conf () {
+    local   arch=$1
+    local branch=$2
+    local   date=$3
+    local   conf=$4
+    local    all=$5
+    local    new=$6
+    local    rel=$(nbdist_get_major_version $branch)
+    local _pkg
+
+    # filter
+    local filter=$junk_dir/list.basepkg.filter
+    for _pkg in $(cat $new)
+    do
+	echo $_pkg'$' >> $filter
+    done 
+
+    cat > $conf <<_EOF_
+
+      nbpkg_build_list_all=$all
+
+      nbpkg_build_list_new=$new
+   nbpkg_build_list_filter=$filter
+
+          nbpkg_build_date=$date
+            nbpkg_build_id=$rel.$date
+    
+_EOF_
+}
+
+
+#
 # run basepkg
 #
 nbpkg_build_run_basepkg () {
     local arch=$1
+    local conf=$2
     local prog
     local t_start t_end tdiff
 
     prog="basepkg.sh"
     opt1="--obj $base_dir --releasedir=$rels_dir --machine=$arch"
-    opt2="--buildmaster --buildmasterdate $vers_date"
+    opt2="--enable-nbpkg-build --with-nbpkg-build-config=$conf"
     logit "run_basepkg: $prog"
     t_start=$(unixtime)
     (

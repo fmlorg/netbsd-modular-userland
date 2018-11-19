@@ -283,35 +283,36 @@ nbdist_get_ident_list () {
 # Side Effects: add the updates into transaction queue if changes are found.
 # Return Value: NONE
 nbdist_check_ident_changes () {
-    local arch=$1
-    local type=$2
-    local vers=$3
-    local diff=$4
+    local   arch=$1
+    local   type=$2
+    local   vers=$3
+    local _bdiff=$4	# basepkg diff
 
+    # ident database
     # e.g. /var/nbpkg-build/db/ident/netbsd-8/i386 holds the latest ident data
     #	   which will be replaced to the current one if the changes are found.
-    local bak=$(nbpkg_ident_data_file $arch $type $vers)
-    local new=$junk_dir/ident.tmp.$type.$arch.$vers.$$
+    local _ibak=$(nbpkg_ident_data_file $arch $type $vers)
+    local _inew=$junk_dir/tmp.ident.new
 
-    if [ ! -s $bak ];then
-	fatal "nbdist_ident: $bak not exist"
+    if [ ! -s $_ibak ];then
+	fatal "nbdist_ident: $_ibak not exist"
     fi
 
-    nbdist_get_ident_list $arch $type $vers $new
-    if [ -s $new ];then
-	# diff = the list of changed syspkgs names 
-        _nbdist_ident_compare_files        $arch $type $vers $bak $new	|
-	_nbdist_ident_file_to_syspkgs_name $arch $type $vers		>$diff
-	if [ -s $diff ];then
-	    cat $diff							|
-	    while read _pkg 
-	    do
-		logit "nbdist_ident: $_pkg changed arch=$arch"
-	    done
-
+    # 1. create the latest ident data at "$_inew",
+    # 2. compare "$_ibak" with "$_inew" to generate ident diff,
+    # 3. convert ident diff to the list of basepkg packages "$_bdiff".
+    nbdist_get_ident_list $arch $type $vers $_inew
+    if [ -s $_inew ];then
+	# _i{bak,new} = ident database
+	#      _bdiff = the list of changed basepkg names 
+        _nbdist_ident_compare_files        $arch $type $vers $_ibak $_inew   |
+	_nbdist_ident_file_to_syspkgs_name $arch $type $vers	     > $_bdiff
+	if [ -s $_bdiff ];then
+		
 	    # prepare the build database update commits processed
 	    # after the basepkg is(are) released successfully.
-	    _nbdist_defer_commit_updates $arch $type $vers $bak $new $diff 
+	    _nbdist_commit_updates  $arch $type $vers $_bdiff
+	    _nbdist_prepare_updates $arch $type $vers $_ibak $_inew
 	else
 	    logit "nbdist_ident: no changes arch=$arch"
 	fi
@@ -319,7 +320,7 @@ nbdist_check_ident_changes () {
 	fatal "nbdist_ident: empty output"
     fi
 
-    echo $diff
+    echo $_bdiff
 }
 
 
@@ -377,33 +378,45 @@ _nbdist_ident_file_to_syspkgs_name () {
     uniq
 }
 
-
-# XXX transaction queue: commit it after this process succeeded.
-# (1) add syspkgs name list passed to "basepkg.sh ..." to build.
+# (1) _nbdist_commit_updates () 
+#     update list of released basepkg packages.
 #     e.g. "/var/nbpkg-build/db/basepkg/$branch/$arch".
-# (2) update ident data
+#
+# (2) _nbdist_prepare_updates ()
+#     update ident data if basekpkg run succeesfully.
 #     e.g. "/var/nbpkg-build/db/ident/$branch/$arch".
-#     
-_nbdist_defer_commit_updates () {
+#
+_nbdist_commit_updates () {
 	local         arch=$1
-	local         type=$2
+	local       branch=$2
+	local         vers=$3
+	local basepkg_diff=$4
+	local   basepkg_db=$(nbpkg_basepkg_data_file $arch $branch $vers)
+
+	# update released basepkg database
+	#    each line: base-sys-root 20181101
+	#               used as e.g. "@sysdep base-sys-root>=20181101"
+	# XXX $basepkg_diff contains only basepkg names
+	while read -r pkg
+	do
+		logit "nbdist_ident: $pkg changed arch=$arch"
+		echo "$pkg $vers"  >> $basepkg_db
+	done < $basepkg_diff
+
+}
+
+_nbdist_prepare_updates () {
+	local         arch=$1
+	local       branch=$2
 	local         vers=$3
 	local    ident_bak=$4
 	local    ident_new=$5
-	local basepkg_diff=$6
-	local   basepkg_db=$(nbpkg_basepkg_data_file $arch $type $vers)
 	local         hook=$(nbpkg_build_path_session_end_hook)
 
-	cat >> $hook <<__EOF__
+	cat > $hook <<__EOF__
 	# transaction: it should be eval-ed after the session successed.
 
 	# 1.   ident database: overwritten
 	cp -p $ident_new $ident_bak
-
-	# 2. basepkg database: append the rebuilt packages
-	#    each line: base-sys-root 20181101
-	#               used as e.g. "@sysdep base-sys-root>=20181101" 
-	cat $basepkg_diff >> $basepkg_db
-
 __EOF__
 }

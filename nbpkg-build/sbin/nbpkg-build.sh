@@ -57,7 +57,6 @@ do
 done
 shift $(expr $OPTIND - 1)
 list=${1:-}
-type=$branch
 
 # determine target arch to build
 url_base=$(nbdist_get_url_base $branch)
@@ -75,9 +74,9 @@ do
     nbpkg_dir_init $arch $branch
     nbpkg_log_init $arch $branch
     (
-	logit "session: start $type $arch $version"
+	logit "session: start $branch $arch $version"
 	t_start=$(unixtime)
-	queue_add active $arch $type $vers_date
+	queue_add active $arch $branch $vers_date
 
         nbpkg_build_run_session_start_hook
 
@@ -90,9 +89,9 @@ do
 	#     extract ident data, compare it with the saved one and
 	#     generate the list of basepkg to re-build as a file $basepkg_new.
 	basepkg_cnf=$junk_dir/basepkg.conf
-	basepkg_all=$(nbpkg_basepkg_data_file $arch $type $vers_date)
+	basepkg_all=$(nbpkg_basepkg_data_file $arch $branch $vers_date)
 	basepkg_new=$junk_dir/list.basepkg.changed
-	nbdist_check_ident_changes $arch $type $vers_date $basepkg_new
+	nbdist_check_ident_changes $arch $branch $vers_date $basepkg_new
 	if [ -s $basepkg_new ];then
 	    logit "session: ident changes found, go forward"
 	else
@@ -101,32 +100,32 @@ do
 	fi
 
 	# 2. go if not already done 
-	is_already_done=$(queue_find done $arch $type $vers_date)
+	is_already_done=$(queue_find done $arch $branch $vers_date)
 	if [ ${is_already_done} -eq 1 ];then
-	    logit "session: skip $type $arch $version"
+	    logit "session: skip $branch $arch $version"
 	else
-	    logit "session: run $type $arch $version"
-	    nbpkg_build_gen_basepkg_conf    $arch $type $vers_date \
+	    logit "session: run $branch $arch $version"
+	    nbpkg_build_gen_basepkg_conf    $arch $branch $vers_date \
 			$basepkg_cnf $basepkg_all $basepkg_new
 	    nbpkg_build_run_basepkg         $arch $basepkg_cnf
-	    nbpkg_release_basepkg_packages  $arch $type
-	    queue_add done  $arch $type $vers_date
-	    queue_del retry $arch $type $vers_date  # clear flag if exists
+	    nbpkg_release_basepkg_packages  $arch $branch
+	    queue_add done  $arch $branch $vers_date
+	    queue_del retry $arch $branch $vers_date  # clear flag if exists
 	fi
 
         nbpkg_build_run_session_end_hook
 
-	queue_del active $arch $type $vers_date	
+	queue_del active $arch $branch $vers_date	
 	t_end=$(unixtime)
 	t_diff=$(($t_end - $t_start))
-	logit "session: end $type $arch $version total: $t_diff sec."
+	logit "session: end $branch $arch $version total: $t_diff sec."
     )
 
     if [ "X$is_debug" != "X" ];then logit "session: debug: not clean"; exit 0; fi
 
     if [ $? != 0 ];then
-	queue_del active $arch $type $vers_date
-	queue_add retry $arch $type $vers_date
+	queue_del active $arch $branch $vers_date
+	queue_add retry  $arch $branch $vers_date
 	nbpkg_dir_clean 1
     	logit "session: ***error*** arch=$arch ended abnormally."
     else

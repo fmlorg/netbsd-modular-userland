@@ -43,6 +43,24 @@ nbdist_get_url_base () {
     esac
 }
 
+nbdist_get_major_version () {
+    local branch=$1
+			    
+    case $branch in
+      stable8 ) echo  8.0;;
+      stable  ) echo  8.0;;
+     netbsd-8 ) echo  8.0;;
+    release-8 ) echo  8.0;;
+      stable7 ) echo  7.0;;
+     netbsd-7 ) echo  7.0;;
+    release-7 ) echo  7.0;;
+      legacy  ) echo  7.0;;
+      stable6 ) echo  6.0;;
+     netbsd-6 ) echo  6.0;;
+    release-6 ) echo  6.0;;
+      current ) echo 8.99;;
+    esac
+}
 
 nbdist_get_list () {
     _tnftp_nbdist_get_list $1

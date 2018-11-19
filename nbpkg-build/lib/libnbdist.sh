@@ -122,7 +122,7 @@ _wget_nbdist_get_latest_entry () {
 #
 nbdist_download () {
     local arch=$1
-    local url=$2
+    local  url=$2
     local t_start t_end tdiff
 
     if [ "X$is_require_download_and_extract" != "X" ];then
@@ -144,7 +144,7 @@ nbdist_download () {
 
 _tnftp_nbdist_download () {
     local arch=$1
-    local url=$2
+    local  url=$2
     local _x _list
 
     cd $dist_dir || exit 1
@@ -173,7 +173,7 @@ _tnftp_nbdist_download () {
 
 _curl_nbdist_download () {
     local arch=$1
-    local url=$2
+    local  url=$2
     local _x _list
 
     cd $dist_dir || exit 1
@@ -268,10 +268,10 @@ nbdist_extract () {
 #
 
 nbdist_get_ident_list () {
-    local arch=$1
-    local type=$2
-    local vers=$3
-    local list=$4
+    local   arch=$1
+    local branch=$2
+    local   vers=$3
+    local   list=$4
 
     _nbdist_ident_listup                                                |
     _nbdist_ident_canonicalize                                          >$list
@@ -279,19 +279,19 @@ nbdist_get_ident_list () {
 
 # Descriptions: return the list of changed syspkgs names 
 #               if the ident based changes are found.
-#    Arguments: STR(arch) STR(type) NUM(vers) STR(diff)
+#    Arguments: STR(arch) STR(branch) NUM(vers) STR(diff)
 # Side Effects: add the updates into transaction queue if changes are found.
 # Return Value: NONE
 nbdist_check_ident_changes () {
     local   arch=$1
-    local   type=$2
+    local branch=$2
     local   vers=$3
     local _bdiff=$4	# basepkg diff
 
     # ident database
     # e.g. /var/nbpkg-build/db/ident/netbsd-8/i386 holds the latest ident data
     #	   which will be replaced to the current one if the changes are found.
-    local _ibak=$(nbpkg_ident_data_file $arch $type $vers)
+    local _ibak=$(nbpkg_ident_data_file $arch $branch $vers)
     local _inew=$junk_dir/tmp.ident.new
 
     if [ ! -s $_ibak ];then
@@ -301,18 +301,18 @@ nbdist_check_ident_changes () {
     # 1. create the latest ident data at "$_inew",
     # 2. compare "$_ibak" with "$_inew" to generate ident diff,
     # 3. convert ident diff to the list of basepkg packages "$_bdiff".
-    nbdist_get_ident_list $arch $type $vers $_inew
+    nbdist_get_ident_list $arch $branch $vers $_inew
     if [ -s $_inew ];then
 	# _i{bak,new} = ident database
 	#      _bdiff = the list of changed basepkg names 
-        _nbdist_ident_compare_files        $arch $type $vers $_ibak $_inew   |
-	_nbdist_ident_file_to_syspkgs_name $arch $type $vers	     > $_bdiff
+        _nbdist_ident_compare_files        $arch $branch $vers $_ibak $_inew |
+	_nbdist_ident_file_to_syspkgs_name $arch $branch $vers	     > $_bdiff
 	if [ -s $_bdiff ];then
 		
 	    # prepare the build database update commits processed
 	    # after the basepkg is(are) released successfully.
-	    _nbdist_commit_updates  $arch $type $vers $_bdiff
-	    _nbdist_prepare_updates $arch $type $vers $_ibak $_inew
+	    _nbdist_commit_updates  $arch $branch $vers $_bdiff
+	    _nbdist_prepare_updates $arch $branch $vers $_ibak $_inew
 	else
 	    logit "nbdist_ident: no changes arch=$arch"
 	fi
@@ -343,11 +343,11 @@ _nbdist_ident_canonicalize () {
 
 # return the list of changed files not "syspkgs name"
 _nbdist_ident_compare_files () {
-    local arch=$1
-    local type=$2
-    local vers=$3
-    local _bak=$4
-    local _new=$5
+    local   arch=$1
+    local branch=$2
+    local   vers=$3
+    local   _bak=$4
+    local   _new=$5
 
     diff -ub $_bak $_new						|
     egrep '^\-|^\+'							|
@@ -362,9 +362,9 @@ _nbdist_ident_compare_files () {
 
 # convert the list of changed files to "syspkgs name"
 _nbdist_ident_file_to_syspkgs_name () {
-    local arch=$1
-    local type=$2
-    local vers=$3
+    local   arch=$1
+    local branch=$2
+    local   vers=$3
 
     local    tmp=$junk_dir/list.sets.basepkg.all
     local    fil=$junk_dir/list.ident.changed

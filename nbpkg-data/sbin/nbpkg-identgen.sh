@@ -84,7 +84,7 @@ do
     nbpkg_dir_init $arch
     nbpkg_log_init $arch
     (
-	logit "session: start $branch $arch $version"
+	logit "session: start $arch $branch $version"
 	t_start=$(unixtime)
 
 	_dir=$wrk_dir/$branch
@@ -97,7 +97,7 @@ do
 
 	t_end=$(unixtime)
 	t_diff=$(($t_end - $t_start))
-	logit "session: end $branch $arch $version total: $t_diff sec."
+	logit "session: end $arch $branch $version total: $t_diff sec."
 	exit 0
     )
 

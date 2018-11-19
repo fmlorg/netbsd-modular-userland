@@ -4,13 +4,15 @@
 #
 
 nbpkg_log_init () {
-    local arch=$1
+    local   arch=$1
+    local branch=$2
     
     logf=$log_dir/$branch.$arch
 }
 
 nbpkg_dir_init () {
-    local arch=$1
+    local   arch=$1
+    local branch=$2
     local r=$(random_number)
     local d=$(date +%Y%m%d)
     local _dir _debug_dir

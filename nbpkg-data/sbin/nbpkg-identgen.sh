@@ -61,7 +61,6 @@ do
 done
 shift $(expr $OPTIND - 1)
 list=${1:-}
-type=$branch
 
 # determine target arch to build
 url_base=$(nbdist_get_url_base $branch)
@@ -85,20 +84,20 @@ do
     nbpkg_dir_init $arch
     nbpkg_log_init $arch
     (
-	logit "session: start $type $arch $version"
+	logit "session: start $branch $arch $version"
 	t_start=$(unixtime)
 
-	_dir=$wrk_dir/$type
+	_dir=$wrk_dir/$branch
 	_out=$_dir/$arch
 	test -d $_dir || mkdir -p $_dir
 
 	nbdist_download $arch $url_base$version/$arch/binary/sets/
 	nbdist_extract  $arch
-	nbdist_get_ident_list $arch $type "-" $_out
+	nbdist_get_ident_list $arch $branch "-" $_out
 
 	t_end=$(unixtime)
 	t_diff=$(($t_end - $t_start))
-	logit "session: end $type $arch $version total: $t_diff sec."
+	logit "session: end $branch $arch $version total: $t_diff sec."
 	exit 0
     )
 

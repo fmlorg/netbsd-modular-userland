@@ -6,6 +6,7 @@
 nbpkg_log_init () {
     local   arch=$1
     local branch=$2
+    local b_date=$3	# build date at nyftp.netbsd.org
     
     logf=$log_dir/$branch.$arch
 }
@@ -13,6 +14,7 @@ nbpkg_log_init () {
 nbpkg_dir_init () {
     local   arch=$1
     local branch=$2
+    local b_date=$3	# build date at nyftp.netbsd.org
     local r=$(random_number)
     local d=$(date +%Y%m%d)
     local _dir _debug_dir

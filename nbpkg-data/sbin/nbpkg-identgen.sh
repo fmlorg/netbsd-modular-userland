@@ -63,7 +63,10 @@ shift $(expr $OPTIND - 1)
 list=${1:-}
 
 # determine target arch to build
-url_base=$(nbdist_get_url_base $branch)
+#    url_base = http://nycdn.netbsd.org/pub/NetBSD-daily/netbsd-8/
+#  build_nyid = 201811180430Z
+#  build_date = 20181118
+  url_base=$(nbdist_get_url_base $branch)
 build_nyid=$(nbdist_get_latest_entry $url_base)
 build_date=$(echo $build_nyid | awk '{print substr($1, 0, 8)}')
 

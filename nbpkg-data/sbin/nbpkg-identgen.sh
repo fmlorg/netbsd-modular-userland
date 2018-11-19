@@ -65,7 +65,7 @@ list=${1:-}
 # determine target arch to build
 url_base=$(nbdist_get_url_base $branch)
 version=$(nbdist_get_latest_entry $url_base)
-vers_date=$(echo $version | awk '{print substr($1, 0, 8)}')
+build_date=$(echo $version | awk '{print substr($1, 0, 8)}')
 
 list_all=$(nbdist_get_list $url_base$version/				|
 tee /tmp/debug	| 

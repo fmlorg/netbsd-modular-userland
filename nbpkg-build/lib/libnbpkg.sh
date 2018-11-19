@@ -219,12 +219,13 @@ nbpkg_dst_dir () {
 }
 
 nbpkg_dst_symlink () {
-    local arch=$1
-    local vers_nbpkg=$2
-    local vers_major=$3
-    local machine_w_arch=$(nbpkg_src_arch $1 $2)
+    local       arch=$1
+    local     branch=$2
+    local vers_nbpkg=$3
+
+    local machine_w_arch=$(nbpkg_src_arch $arch $vers_nbpkg)
     (
-	cd $www_base_dir/$vers_major/ || exit 1
+	cd $www_base_dir/$branch/ || exit 1
 	if [ -d $arch -a ! -h $machine_w_arch ];then
 	    ln -s $arch $machine_w_arch
 	    logit "symlink: $arch == $machine_w_arch"
@@ -284,12 +285,13 @@ nbpkg_basepkg_major_version () {
 
 
 nbpkg_release_basepkg_packages () {
-    local arch=$1
+    local   arch=$1
+    local branch=$2
 
     vers_nbpkg=$(nbpkg_basepkg_version)        # 7.1_STABLE
     vers_major=$(nbpkg_basepkg_major_version)  # 7
-    pkg_dir=$(nbpkg_src_dir $arch $vers_nbpkg) # basepkg/.../7.1_STABLE/i386
-    www_dir=$(nbpkg_dst_dir $arch $vers_major) # pub/NetBSD/.../7/i386
+    pkg_dir=$(nbpkg_src_dir $arch $vers_nbpkg) # $REL_DIR/package/8.0.DATE/..
+    www_dir=$(nbpkg_dst_dir $arch $branch)     # NetBSD/basepkg/netbsd-8/amd64
     test -d $www_dir || mkdir -p $www_dir
 
     logit "release: $pkg_dir -> $www_dir"
@@ -302,10 +304,10 @@ nbpkg_release_basepkg_packages () {
 
     /usr/bin/cksum -a sha512 *tgz | sort    > SHA512
     if [ ! -s SHA512         ];then fatal "release: empty SHA512"        ;fi
-    mv *tgz                   $www_dir/
-    mv SHA512 pkg_summary.gz  $www_dir/    # update info after all *.tgz are moved.
+    mv *tgz                   $www_dir/    # after all *.tgz are moved.	
+    mv SHA512 pkg_summary.gz  $www_dir/    # update checksum and pkg info.
     logit "release: arch=$arch at $www_dir/"
     
     # fix symlinks if needed.
-    nbpkg_dst_symlink $arch $vers_nbpkg $vers_major
+    nbpkg_dst_symlink $arch $branch $vers_nbpkg
 }

@@ -88,10 +88,12 @@ do
 
 	# 1.2 ident based check
 	#     extract ident data, compare it with the saved one and
-	#     generate the list of basepkg to re-build as a file $basepkg_diff.
-	basepkg_diff=$junk_dir/list-basepkg-to-be-update
-	nbdist_check_ident_changes $arch $type $vers_date $basepkg_diff
-	if [ -s $basepkg_diff ];then
+	#     generate the list of basepkg to re-build as a file $basepkg_new.
+	basepkg_cnf=$junk_dir/basepkg.conf
+	basepkg_all=$(nbpkg_basepkg_data_file $arch $type $vers_date)
+	basepkg_new=$junk_dir/list.basepkg.changed
+	nbdist_check_ident_changes $arch $type $vers_date $basepkg_new
+	if [ -s $basepkg_new ];then
 	    logit "session: ident changes found, go forward"
 	else
 	    logit "session: no ident changes, do nothing"
@@ -104,8 +106,10 @@ do
 	    logit "session: skip $type $arch $version"
 	else
 	    logit "session: run $type $arch $version"
-	    nbpkg_build_run_basepkg         $arch
-	    nbpkg_release_basepkg_packages  $arch
+	    nbpkg_build_gen_basepkg_conf    $arch $type $vers_date \
+			$basepkg_cnf $basepkg_all $basepkg_new
+	    nbpkg_build_run_basepkg         $arch $basepkg_cnf
+	    nbpkg_release_basepkg_packages  $arch $type
 	    queue_add done  $arch $type $vers_date
 	    queue_del retry $arch $type $vers_date  # clear flag if exists
 	fi

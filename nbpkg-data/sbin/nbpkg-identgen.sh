@@ -64,10 +64,10 @@ list=${1:-}
 
 # determine target arch to build
 url_base=$(nbdist_get_url_base $branch)
-version=$(nbdist_get_latest_entry $url_base)
-build_date=$(echo $version | awk '{print substr($1, 0, 8)}')
+build_nyid=$(nbdist_get_latest_entry $url_base)
+build_date=$(echo $build_nyid | awk '{print substr($1, 0, 8)}')
 
-list_all=$(nbdist_get_list $url_base$version/				|
+list_all=$(nbdist_get_list $url_base$build_nyid/			|
 tee /tmp/debug	| 
 		tr ' ' '\n'						|
 		grep '^[a-z]'						)
@@ -80,20 +80,20 @@ do
     nbpkg_dir_init $arch
     nbpkg_log_init $arch
     (
-	logit "session: start $arch $branch $version"
+	logit "session: start $arch $branch $build_nyid"
 	t_start=$(unixtime)
 
 	_dir=$wrk_dir/$branch
 	_out=$_dir/$arch
 	test -d $_dir || mkdir -p $_dir
 
-	nbdist_download $arch $url_base$version/$arch/binary/sets/
+	nbdist_download $arch $url_base$build_nyid/$arch/binary/sets/
 	nbdist_extract  $arch
 	nbdist_get_ident_list $arch $branch "-" $_out
 
 	t_end=$(unixtime)
 	t_diff=$(($t_end - $t_start))
-	logit "session: end $arch $branch $version total: $t_diff sec."
+	logit "session: end $arch $branch $build_nyid total: $t_diff sec."
 	exit 0
     )
 

@@ -60,9 +60,9 @@ list=${1:-}
 
 # determine target arch to build
 url_base=$(nbdist_get_url_base $branch)
-version=$(nbdist_get_latest_entry $url_base)
-build_date=$(echo $version | awk '{print substr($1, 0, 8)}')
-list_all=$(nbdist_get_list $url_base$version/				|
+build_nyid=$(nbdist_get_latest_entry $url_base)
+build_date=$(echo $build_nyid | awk '{print substr($1, 0, 8)}')
+list_all=$(nbdist_get_list $url_base$build_nyid/			|
 		tr ' ' '\n'						|
 		grep '^[a-z]'						)
 
@@ -74,7 +74,7 @@ do
     nbpkg_dir_init $arch $branch $build_date
     nbpkg_log_init $arch $branch $build_date
     (
-	logit "session: start $arch $branch $version"
+	logit "session: start $arch $branch $build_nyid"
 	t_start=$(unixtime)
 	queue_add active $arch $branch $build_date
 
@@ -82,7 +82,7 @@ do
 
 	# 1.  preparation
 	# 1.1 download and extract the latest daily build
-	nbdist_download $arch $url_base$version/$arch/binary/sets/
+	nbdist_download $arch $url_base$build_nyid/$arch/binary/sets/
 	nbdist_extract  $arch
 
 	# 1.2 ident based check
@@ -102,9 +102,9 @@ do
 	# 2. go if not already done 
 	is_already_done=$(queue_find done $arch $branch $build_date)
 	if [ ${is_already_done} -eq 1 ];then
-	    logit "session: skip $arch $branch $version"
+	    logit "session: skip $arch $branch $build_nyid"
 	else
-	    logit "session: run $arch $branch $version"
+	    logit "session: run $arch $branch $build_nyid"
 	    nbpkg_build_gen_basepkg_conf    $arch $branch $build_date \
 			$basepkg_cnf $basepkg_all $basepkg_new
 	    nbpkg_build_run_basepkg         $arch $basepkg_cnf
@@ -118,7 +118,7 @@ do
 	queue_del active $arch $branch $build_date	
 	t_end=$(unixtime)
 	t_diff=$(($t_end - $t_start))
-	logit "session: end $arch $branch $version total: $t_diff sec."
+	logit "session: end $arch $branch $build_nyid total: $t_diff sec."
     )
 
     if [ "X$is_debug" != "X" ];then logit "session: debug: not clean"; exit 0; fi

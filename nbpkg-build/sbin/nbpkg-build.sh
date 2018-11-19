@@ -74,7 +74,7 @@ do
     nbpkg_dir_init $arch $branch
     nbpkg_log_init $arch $branch
     (
-	logit "session: start $branch $arch $version"
+	logit "session: start $arch $branch $version"
 	t_start=$(unixtime)
 	queue_add active $arch $branch $vers_date
 
@@ -102,9 +102,9 @@ do
 	# 2. go if not already done 
 	is_already_done=$(queue_find done $arch $branch $vers_date)
 	if [ ${is_already_done} -eq 1 ];then
-	    logit "session: skip $branch $arch $version"
+	    logit "session: skip $arch $branch $version"
 	else
-	    logit "session: run $branch $arch $version"
+	    logit "session: run $arch $branch $version"
 	    nbpkg_build_gen_basepkg_conf    $arch $branch $vers_date \
 			$basepkg_cnf $basepkg_all $basepkg_new
 	    nbpkg_build_run_basepkg         $arch $basepkg_cnf
@@ -118,7 +118,7 @@ do
 	queue_del active $arch $branch $vers_date	
 	t_end=$(unixtime)
 	t_diff=$(($t_end - $t_start))
-	logit "session: end $branch $arch $version total: $t_diff sec."
+	logit "session: end $arch $branch $version total: $t_diff sec."
     )
 
     if [ "X$is_debug" != "X" ];then logit "session: debug: not clean"; exit 0; fi

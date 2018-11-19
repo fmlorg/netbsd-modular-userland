@@ -6,7 +6,7 @@
 nbpkg_log_init () {
     local arch=$1
     
-    logf=$log_dir/$type.$arch
+    logf=$log_dir/$branch.$arch
 }
 
 nbpkg_dir_init () {
@@ -39,35 +39,35 @@ nbpkg_dir_init () {
 }
 
 nbpkg_ident_data_dir () {
-    local arch=$1
-    local type=$2
-    local vers=$3
+    local   arch=$1
+    local branch=$2
+    local   vers=$3
 
-    echo $db_ident_dir/$type
+    echo $db_ident_dir/$branch
 }
 
 nbpkg_ident_data_file () {
-    local arch=$1
-    local type=$2
-    local vers=$3
-    local _dir=$(nbpkg_ident_data_dir $arch $type $vers)
+    local   arch=$1
+    local branch=$2
+    local   vers=$3
+    local   _dir=$(nbpkg_ident_data_dir $arch $branch $vers)
     
     echo $_dir/$arch
 }
 
 nbpkg_basepkg_data_dir () {
-    local arch=$1
-    local type=$2
-    local vers=$3
+    local   arch=$1
+    local branch=$2
+    local   vers=$3
 
-    echo $db_basepkg_dir/$type
+    echo $db_basepkg_dir/$branch
 }
 
 nbpkg_basepkg_data_file () {
-    local arch=$1
-    local type=$2
-    local vers=$3
-    local _dir=$(nbpkg_basepkg_data_dir $arch $type $vers)
+    local   arch=$1
+    local branch=$2
+    local   vers=$3
+    local   _dir=$(nbpkg_basepkg_data_dir $arch $branch $vers)
     
     echo $_dir/$arch
 }

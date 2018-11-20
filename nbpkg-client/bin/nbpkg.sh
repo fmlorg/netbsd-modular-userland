@@ -123,8 +123,9 @@ export PATH
 #
 rel=$(netbsd_resolve_version)
 arch=$(netbsd_resolve_machine_and_arch)
+branch=$(echo $rel | awk '{printf("netbsd-%d\n", $1)}')
 host=basepkg.netbsd.fml.org
-PKG_PATH=http://$host/pub/NetBSD/basepkg/$rel/$arch
+PKG_PATH=http://$host/pub/NetBSD/basepkg/$branch/$arch
 PKG_REPOS=$PKG_PATH
 export PKG_PATH
 export PKG_REPOS

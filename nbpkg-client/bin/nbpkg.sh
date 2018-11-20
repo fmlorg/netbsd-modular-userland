@@ -103,7 +103,8 @@ do_init () {
     test -d $NBPKG_DB || mkdir -p $NBPKG_DB
 
     if [ ! -x /usr/pkg/bin/pkgin ];then
-	pkg_add pkgin
+	rel=$(netbsd_resolve_version)
+	env PKG_PATH=ftp://ftp.NetBSD.org/pub/pkgsrc/packages/NetBSD/$arch/$rel/All pkg_add -v pkgin
     fi
 }
 

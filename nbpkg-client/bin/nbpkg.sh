@@ -111,8 +111,8 @@ __EOF__
 }
 
 do_full_upgrade () {
-    ftp -o list-pkg $NBPKG_LIST_PKG_URL
-    do_pkgin import list-pkg
+    ftp -o $NBPKG_LIST_PKG $NBPKG_LIST_PKG_URL
+    do_pkgin import $NBPKG_LIST_PKG
 }
 
 do_init () {
@@ -154,6 +154,7 @@ export PKG_REPOS
           NBPKG_DB=/var/db/nbpkg
     NBPKG_ADVISORY=$NBPKG_DB/nbpkg-advisory.txt
 NBPKG_ADVISORY_URL=http://$host/pub/NetBSD/nbpkg/$branch/$arch/nbpkg-advisory.txt
+    NBPKG_LIST_PKG=$NBPKG_DB/list-pkg
 NBPKG_LIST_PKG_URL=http://$host/pub/NetBSD/basepkg/$branch/$arch/list-pkg
 
 # debug

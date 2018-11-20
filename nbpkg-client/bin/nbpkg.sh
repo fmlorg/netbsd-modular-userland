@@ -52,7 +52,7 @@ do_install () {
 	do_pkgin install $*
     else
 	echo pkg_add $*
-	pkg_add $*
+	     pkg_add $*
     fi
 }
 

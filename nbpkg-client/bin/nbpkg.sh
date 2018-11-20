@@ -27,7 +27,9 @@ usage () {
 
 # return the NetBSD version such as 7.0 7.1 8.0 ... without _STABLE et.al.
 netbsd_resolve_version () {
-    /usr/bin/uname -r | cut -c 1-3
+    /usr/bin/uname -r				|
+    sed s/_STABLE//g				|
+    awk '{printf("%2.1f\n", $1)}'
 }    
 
 netbsd_resolve_machine_and_arch () {

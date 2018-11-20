@@ -135,7 +135,7 @@ export PKG_REPOS
 # nbpkg advisory format is such as "base-secsh-bin>7.1.20180706 REASON URL".
 NBPKG_DB=/var/db/nbpkg
 NBPKG_ADVISORY=$NBPKG_DB/nbpkg-advisory.txt
-NBPKG_ADVISORY_URL=http://$host/pub/NetBSD/nbpkg/$rel/$arch/nbpkg-advisory.txt
+NBPKG_ADVISORY_URL=http://$host/pub/NetBSD/nbpkg/$branch/$arch/nbpkg-advisory.txt
 
 # debug
 echo ""

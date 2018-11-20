@@ -26,4 +26,4 @@ nbpkg_base_dir=/var/nbpkg-build
 
 
 # web base directory where generated packages are published.
-www_base_dir=/pub/www/pub/NetBSD/basepkg/
+www_base_dir=/pub/www/pub/NetBSD/basepkg/diff

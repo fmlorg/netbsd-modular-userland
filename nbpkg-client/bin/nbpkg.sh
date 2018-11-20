@@ -68,9 +68,6 @@ do_remove () {
 
 # XXX update (1) nbpkg-advisory (2) pkg_summary.gz
 do_update () {
-    # nbpkg advisory format is such as "base-secsh-bin>7.1.20180706 REASON URL".
-    ftp -o $NBPKG_ADVISORY $NBPKG_ADVISORY_URL
-
     if [ -x /usr/pkg/bin/pkgin ];then
 	do_pkgin update
     else
@@ -85,6 +82,20 @@ do_update () {
 do_upgrade () {
     local found
     
+    # nbpkg advisory format is such as "base-secsh-bin>7.1.20180706 REASON URL".
+    ftp -o $NBPKG_ADVISORY $NBPKG_ADVISORY_URL
+    if [ ! -f $NBPKG_ADVISORY ];then
+	cat <<-__EOF__
+	*** WARNING *** nbpkg advisory NOT SUPPORTED
+
+	$0 install ...
+		or
+	$0 full-upgrade
+
+__EOF__
+	exit 0
+    fi
+
     cat $NBPKG_ADVISORY               		|
 	while read rule reason url
 	do

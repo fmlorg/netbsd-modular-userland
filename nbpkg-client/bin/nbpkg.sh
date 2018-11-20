@@ -110,6 +110,11 @@ __EOF__
 	done
 }
 
+do_full_upgrade () {
+    ftp -o list-pkg $NBPKG_LIST_PKG_URL
+    do_pkgin import list-pkg
+}
+
 do_init () {
     test -d $NBPKG_DB || mkdir -p $NBPKG_DB
 
@@ -148,6 +153,7 @@ export PKG_REPOS
 NBPKG_DB=/var/db/nbpkg
 NBPKG_ADVISORY=$NBPKG_DB/nbpkg-advisory.txt
 NBPKG_ADVISORY_URL=http://$host/pub/NetBSD/nbpkg/$branch/$arch/nbpkg-advisory.txt
+NBPKG_LIST_PKG_URL=http://$host/pub/NetBSD/basepkg/$branch/$arch/list-pkg
 
 # debug
 echo ""
@@ -159,14 +165,15 @@ do_init
 
 if [ $# -eq 0 ]; then usage; exit 1;fi
 case $1 in
-    help | -h | \?  ) usage; exit 1;;
-    install )  shift; do_install       $* ;;
-    remove  )  shift; do_remove        $* ;;
-    update  )  shift; do_update        $* ;;
-    upgrade )  shift; do_upgrade       $* ;;
-    init    )  shift; do_init          $* ;;
-    [a-z]*  )         do_direct_pkgin  $* ;;
-    *               ) usage; exit 1;;
+    help | -h | \?  )  usage;               exit 1;;
+    install         )  shift; do_install       $* ;;
+    remove          )  shift; do_remove        $* ;;
+    update          )  shift; do_update        $* ;;
+    upgrade         )  shift; do_upgrade       $* ;;
+    full-upgrade    )  shift; do_full_upgrade  $* ;;
+    init            )  shift; do_init          $* ;;
+    [a-z]*          )         do_direct_pkgin  $* ;;
+    *               )  usage;               exit 1;;
 esac
 
 exit 0;

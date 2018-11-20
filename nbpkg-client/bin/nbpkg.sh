@@ -85,10 +85,10 @@ do_update () {
 do_upgrade () {
     local found
     
-    cat $NBPKG_ADVISORY               |
+    cat $NBPKG_ADVISORY               		|
 	while read rule reason url
 	do
-	    echo "debug>>> $rule"
+	    echo "debug>>> $rule"		1>&2
 	    found=$(pkg_info -E "$rule")
 	    if [ $? -ne 0 ];then
 		do_pkgin -n install "$rule"

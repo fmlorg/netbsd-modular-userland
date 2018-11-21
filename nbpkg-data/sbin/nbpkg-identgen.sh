@@ -70,6 +70,9 @@ list=${1:-}
 build_nyid=$(nbdist_get_latest_entry $url_base)
 build_date=$(echo $build_nyid | awk '{print substr($1, 0, 8)}')
 
+# dummy build_date since NetBSD major release has no such $build_nyid.
+build_date=${build_date:-19700101}
+
 list_all=$(nbdist_get_list $url_base$build_nyid/			|
 tee /tmp/debug	| 
 		tr ' ' '\n'						|
@@ -92,7 +95,7 @@ do
 
 	nbdist_download $arch $url_base$build_nyid/$arch/binary/sets/
 	nbdist_extract  $arch
-	nbdist_get_ident_list $arch $branch "-" $_out
+	nbdist_get_ident_list $arch $branch $build_date $_out
 
 	t_end=$(unixtime)
 	t_diff=$(($t_end - $t_start))

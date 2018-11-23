@@ -383,15 +383,16 @@ _nbdist_commit_updates () {
 	local       b_date=$3
 	local basepkg_diff=$4
 	local   basepkg_db=$(nbpkg_basepkg_data_file $arch $branch $b_date)
+        local  _vers_major=$(nbdist_get_major_version $branch)
 
 	# update released basepkg database
-	#    each line: base-sys-root 20181101
-	#               used as e.g. "@sysdep base-sys-root>=20181101"
+	#    each line: base-sys-root 8.0.20181101
+	#               used as e.g. "@sysdep base-sys-root>=8.0.20181101"
 	# XXX $basepkg_diff contains only basepkg names
 	while read -r pkg
 	do
 		logit "nbdist_ident: $pkg changed arch=$arch"
-		echo "$pkg $b_date"  >> $basepkg_db
+		echo "$pkg $_vers_major.$b_date"  >> $basepkg_db
 	done < $basepkg_diff
 
 }

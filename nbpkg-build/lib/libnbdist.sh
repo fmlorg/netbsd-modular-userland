@@ -116,9 +116,9 @@ nbdist_download () {
     local t_start t_end tdiff
 
     if [ "X$is_require_download_and_extract" != "X" ];then
-	echo "===> DEBUG: download (first time)"
+	debug_msg "download (first time)"
     else
-	echo "===> DEBUG: not require download"
+	debug_msg "not require download"
 	return
     fi
 
@@ -228,9 +228,9 @@ nbdist_extract () {
     local _x
 
     if [ "X$is_require_download_and_extract" != "X" ];then
-	echo "===> DEBUG: require extraction (first time)"
+	debug_msg "require extraction (first time)"
     else
-	echo "===> DEBUG: not require extraction"
+	debug_msg "not require extraction"
 	return
     fi
 

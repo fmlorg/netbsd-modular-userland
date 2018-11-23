@@ -47,7 +47,10 @@ nbpkg_ident_data_dir () {
     local branch=$2
     local   vers=$3
 
-    echo $db_ident_dir/$branch
+    local   _dir=$db_ident_dir/$branch
+    test -d $_dir || mkdir -p $_dir 
+
+    echo $_dir
 }
 
 nbpkg_ident_data_file () {
@@ -64,7 +67,10 @@ nbpkg_basepkg_data_dir () {
     local branch=$2
     local   vers=$3
 
-    echo $db_basepkg_dir/$branch
+    local   _dir=$db_basepkg_dir/$branch
+    test -d $_dir || mkdir -p $_dir
+
+    echo $_dir
 }
 
 nbpkg_basepkg_data_file () {

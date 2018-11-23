@@ -331,7 +331,7 @@ _nbdist_ident_canonicalize () {
 }
 
 
-# return the list of changed files not "syspkgs name"
+# return the list of ident changed files not "syspkgs name".
 _nbdist_ident_compare_files () {
     local   arch=$1
     local branch=$2
@@ -350,7 +350,8 @@ _nbdist_ident_compare_files () {
 }
  
 
-# convert the list of changed files to "syspkgs name"
+# convert the list of indent changed files to "syspkgs name".
+# XXX basepkg uses syspkgs metadata, so the package name is syspkgs derived.
 _nbdist_ident_file_to_syspkgs_name () {
     local   arch=$1
     local branch=$2

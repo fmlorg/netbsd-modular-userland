@@ -21,6 +21,11 @@ fatal () {
 }
 
 
+debug_msg () {
+    echo "===> DEBUG: $*" 1>&2    
+}
+
+
 random_number () {
     echo $(od -An -N 2 -t u2 /dev/urandom)
 }

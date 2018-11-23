@@ -23,8 +23,8 @@ etc_dir=$(dirname $0)/../../nbpkg-build/etc
 lib_dir=$(dirname $0)/../../nbpkg-build/lib
 wrk_dir=$(dirname $0)/../../nbpkg-data/work
 
-. $etc_dir/config.sh
 . $etc_dir/defaults/config.sh
+. $etc_dir/config.sh
 
 ############################################################
 ####################      FUNCTIONS     ####################

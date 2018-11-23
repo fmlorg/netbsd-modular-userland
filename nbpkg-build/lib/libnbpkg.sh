@@ -45,7 +45,7 @@ nbpkg_dir_init () {
 nbpkg_ident_data_dir () {
     local   arch=$1
     local branch=$2
-    local   vers=$3
+    local b_date=$3
 
     local   _dir=$db_ident_dir/$branch
     test -d $_dir || mkdir -p $_dir 
@@ -56,8 +56,8 @@ nbpkg_ident_data_dir () {
 nbpkg_ident_data_file () {
     local   arch=$1
     local branch=$2
-    local   vers=$3
-    local   _dir=$(nbpkg_ident_data_dir $arch $branch $vers)
+    local b_date=$3
+    local   _dir=$(nbpkg_ident_data_dir $arch $branch $b_date)
     
     echo $_dir/$arch
 }
@@ -65,7 +65,7 @@ nbpkg_ident_data_file () {
 nbpkg_basepkg_data_dir () {
     local   arch=$1
     local branch=$2
-    local   vers=$3
+    local b_date=$3
 
     local   _dir=$db_basepkg_dir/$branch
     test -d $_dir || mkdir -p $_dir
@@ -76,8 +76,8 @@ nbpkg_basepkg_data_dir () {
 nbpkg_basepkg_data_file () {
     local   arch=$1
     local branch=$2
-    local   vers=$3
-    local   _dir=$(nbpkg_basepkg_data_dir $arch $branch $vers)
+    local b_date=$3
+    local   _dir=$(nbpkg_basepkg_data_dir $arch $branch $b_date)
     
     echo $_dir/$arch
 }
@@ -274,8 +274,8 @@ nbpkg_dst_dir_list_version () {
 }
 
 nbpkg_dst_dir_list_arch () {
-    local vers=$1
-    ls $www_base_dir/$vers
+    local b_date=$1
+    ls $www_base_dir/$b_date
 }
 
 nbpkg_basepkg_version () {

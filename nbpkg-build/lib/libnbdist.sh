@@ -260,7 +260,7 @@ nbdist_extract () {
 nbdist_get_ident_list () {
     local   arch=$1
     local branch=$2
-    local   vers=$3
+    local b_date=$3
     local   list=$4
 
     _nbdist_ident_listup					|
@@ -275,13 +275,13 @@ nbdist_get_ident_list () {
 nbdist_check_ident_changes () {
     local   arch=$1
     local branch=$2
-    local   vers=$3
+    local b_date=$3
     local _bdiff=$4	# basepkg diff
 
     # ident database
     # e.g. /var/nbpkg-build/db/ident/netbsd-8/i386 holds the latest ident data
     #	   which will be replaced to the current one if the changes are found.
-    local _ibak=$(nbpkg_ident_data_file $arch $branch $vers)
+    local _ibak=$(nbpkg_ident_data_file $arch $branch $b_date)
     local _inew=$junk_dir/tmp.ident.new
 
     if [ ! -s $_ibak ];then
@@ -291,18 +291,18 @@ nbdist_check_ident_changes () {
     # 1. create the latest ident data at "$_inew",
     # 2. compare "$_ibak" with "$_inew" to generate ident diff,
     # 3. convert ident diff to the list of basepkg packages "$_bdiff".
-    nbdist_get_ident_list $arch $branch $vers $_inew
+    nbdist_get_ident_list $arch $branch $b_date $_inew
     if [ -s $_inew ];then
 	# _i{bak,new} = ident database
 	#      _bdiff = the list of changed basepkg names 
-        _nbdist_ident_compare_files        $arch $branch $vers $_ibak $_inew |
-	_nbdist_ident_file_to_syspkgs_name $arch $branch $vers	     > $_bdiff
+        _nbdist_ident_compare_files        $arch $branch $b_date $_ibak $_inew |
+	_nbdist_ident_file_to_syspkgs_name $arch $branch $b_date	     > $_bdiff
 	if [ -s $_bdiff ];then
 		
 	    # prepare the build database update commits processed
 	    # after the basepkg is(are) released successfully.
-	    _nbdist_commit_updates  $arch $branch $vers $_bdiff
-	    _nbdist_prepare_updates $arch $branch $vers $_ibak $_inew
+	    _nbdist_commit_updates  $arch $branch $b_date $_bdiff
+	    _nbdist_prepare_updates $arch $branch $b_date $_ibak $_inew
 	else
 	    logit "nbdist_ident: no changes arch=$arch"
 	fi
@@ -335,7 +335,7 @@ _nbdist_ident_canonicalize () {
 _nbdist_ident_compare_files () {
     local   arch=$1
     local branch=$2
-    local   vers=$3
+    local b_date=$3
     local   _bak=$4
     local   _new=$5
 
@@ -355,7 +355,7 @@ _nbdist_ident_compare_files () {
 _nbdist_ident_file_to_syspkgs_name () {
     local   arch=$1
     local branch=$2
-    local   vers=$3
+    local b_date=$3
 
     local    tmp=$junk_dir/list.sets.basepkg.all
     local    fil=$junk_dir/list.ident.changed
@@ -380,9 +380,9 @@ _nbdist_ident_file_to_syspkgs_name () {
 _nbdist_commit_updates () {
 	local         arch=$1
 	local       branch=$2
-	local         vers=$3
+	local       b_date=$3
 	local basepkg_diff=$4
-	local   basepkg_db=$(nbpkg_basepkg_data_file $arch $branch $vers)
+	local   basepkg_db=$(nbpkg_basepkg_data_file $arch $branch $b_date)
 
 	# update released basepkg database
 	#    each line: base-sys-root 20181101
@@ -391,18 +391,18 @@ _nbdist_commit_updates () {
 	while read -r pkg
 	do
 		logit "nbdist_ident: $pkg changed arch=$arch"
-		echo "$pkg $vers"  >> $basepkg_db
+		echo "$pkg $b_date"  >> $basepkg_db
 	done < $basepkg_diff
 
 }
 
 _nbdist_prepare_updates () {
-	local         arch=$1
-	local       branch=$2
-	local         vers=$3
-	local    ident_bak=$4
-	local    ident_new=$5
-	local         hook=$(nbpkg_build_path_session_end_hook)
+	local      arch=$1
+	local    branch=$2
+	local    b_date=$3
+	local ident_bak=$4
+	local ident_new=$5
+	local      hook=$(nbpkg_build_path_session_end_hook)
 
 	cat > $hook <<__EOF__
 	# transaction: it should be eval-ed after the session successed.

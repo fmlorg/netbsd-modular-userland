@@ -82,6 +82,43 @@ nbpkg_basepkg_data_file () {
     echo $_dir/$arch
 }
 
+nbpkg_data_backup_dir () {
+    local   arch=$1
+    local branch=$2
+    local b_date=$3
+    local   type=$4   # ident basepkg
+
+    local   _dir=$nbpkg_data_dir/backups/$type/diff/$branch
+    test -d $_dir || mkdir -p $_dir
+
+    echo $_dir
+}
+
+nbpkg_data_backup () {
+    local   arch=$1
+    local branch=$2
+    local b_date=$3
+    local   type=$4   # ident basepkg
+    local   _src=$5   # i386 amd64 ...
+    local   file=$(basename $_src)
+    local   _dir=$(nbpkg_data_backup_dir $arch $branch $b_date $type)
+    local   _msg="updated-$b_date"
+
+    echo DEBUG: cp -p $_src $_dir/$file
+    cp -p $_src $_dir/$file
+    (   
+	cd $_dir || exit 1
+
+	/usr/bin/ci  -q -f  -u -t-$_msg -m$_msg $file
+	/usr/bin/rcs -q -kb -U                  $file
+	/usr/bin/co  -q -f  -u                  $file
+    )
+
+    if [ $? != 0 ];then
+	logit "data_backup: failed to backup config $src"
+    fi
+}
+
 nbpkg_dir_clean () {
     local status=$1
     local name=$(basename $base_dir)

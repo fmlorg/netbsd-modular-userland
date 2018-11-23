@@ -29,7 +29,7 @@ nbpkg_dir_init () {
     dist_dir=$base_dir/distdir.$arch
     rels_dir=$base_dir/reldir.$arch
     junk_dir=$base_dir/tmpdir.$arch
-    done_dir=$done_xxx/$b_date
+    done_dir=/var/tmp/nbpkg-build-done/$b_date
     
     # persistnet area
      log_dir=$log_base_dir/${b_date}

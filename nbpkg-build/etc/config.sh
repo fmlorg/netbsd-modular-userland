@@ -11,19 +11,37 @@
 # $FML$
 # $Revision$
 #        NAME: config.sh (nbpkg-build/etc/config.sh)
-# DESCRIPTION: configuration file each user can customize (overwrite the defautls).
+# DESCRIPTION: configuration file each user can customize
 # CODINGSTYLE: POSIX compliant (checked by running "bash --posix" this script)
 #
 
+
+#
+# CONFIGURATIONS
+#
 
 # mandatory external programs
 prog_basepkg_dir=/var/nbpkg-build/dist/basepkg
 data_basepkg_dir=$prog_basepkg_dir/sets/lists
 
-
 # nbpkg-build specific directories: these hold persistent data.
 nbpkg_base_dir=/var/nbpkg-build
 
-
 # web base directory where generated packages are published.
 www_base_dir=/pub/www/pub/NetBSD/basepkg/diff
+
+
+#
+# nbpkg-build specific directories: these hold persistent data.
+#
+  log_base_dir=$nbpkg_base_dir/log
+     queue_dir=$nbpkg_base_dir/queue
+   db_base_dir=$nbpkg_base_dir/db
+  db_ident_dir=$db_base_dir/ident
+db_basepkg_dir=$db_base_dir/basepkg
+
+
+#
+# pre-defined for emergency stop. nbpkg_log_init() re-defines $logf.
+#
+          logf=/var/tmp/log.nbpkg-debug

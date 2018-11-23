@@ -26,32 +26,3 @@ url_base_current=http://nycdn.netbsd.org/pub/NetBSD-daily/HEAD/
 url_base_release6=http://ftp.netbsd.org/pub/NetBSD/NetBSD-6.0/
 url_base_release7=http://ftp.netbsd.org/pub/NetBSD/NetBSD-7.0/
 url_base_release8=http://ftp.netbsd.org/pub/NetBSD/NetBSD-8.0/
-
-
-#
-# nbpkg-build specific directories: these hold persistent data.
-#
-   db_base_dir=$nbpkg_base_dir/db
-  log_base_dir=$nbpkg_base_dir/log
-
-# queue
-     queue_dir=$nbpkg_base_dir/queue
-
-# nbpkg-build database
-  db_ident_dir=$db_base_dir/ident
-db_basepkg_dir=$db_base_dir/basepkg
-
-
-# pre-defined for emergency stop.
-logf=/var/tmp/log.nbpkg-debug
-
-
-#
-# working directories which pre-defiend value is dummy.
-#
-base_dir=$nbpkg_base_dir/work/base.$$	# dummy
-dist_dir=$nbpkg_base_dir/work/dist.$$	# dummy
-dest_dir=$nbpkg_base_dir/work/dest.$$	# dummy
-rels_dir=$nbpkg_base_dir/work/rels.$$	# dummy
-junk_dir=$nbpkg_base_dir/work/junk.$$	# dummy
-done_xxx=/var/tmp/nbpkg-build-done

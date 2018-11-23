@@ -27,6 +27,9 @@ basepkg_list_dir=$basepkg_base_dir/sets/lists
 # nbpkg-build specific directories: these hold persistent data.
 nbpkg_base_dir=/var/nbpkg-build
 
+# nbpkg-build data backup
+nbpkg_data_dir=/var/nbpkg-data
+
 # web base directory where generated packages are published.
 www_base_dir=/pub/www/pub/NetBSD/basepkg/diff
 

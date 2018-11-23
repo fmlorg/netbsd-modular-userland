@@ -295,8 +295,9 @@ nbdist_check_ident_changes () {
     if [ -s $_inew ];then
 	# _i{bak,new} = ident database
 	#      _bdiff = the list of changed basepkg names 
-        _nbdist_ident_compare_files        $arch $branch $b_date $_ibak $_inew |
-	_nbdist_ident_file_to_syspkgs_name $arch $branch $b_date	     > $_bdiff
+        _nbdist_ident_compare_files        $arch $branch $b_date \
+					   $_ibak $_inew	 |
+	_nbdist_ident_file_to_syspkgs_name $arch $branch $b_date > $_bdiff
 	if [ -s $_bdiff ];then
 		
 	    # prepare the build database update commits processed

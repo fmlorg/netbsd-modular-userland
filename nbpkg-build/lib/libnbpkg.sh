@@ -121,8 +121,8 @@ nbpkg_build_assert () {
 	fatal "run this program by root"
     fi
 
-    if [ ! -f $prog_basepkg_dir/basepkg.sh ];then
-	fatal "no basepkg.sh ($prog_basepkg_dir/basepkg.sh)"
+    if [ ! -f $basepkg_base_dir/basepkg.sh ];then
+	fatal "no basepkg.sh ($basepkg_base_dir/basepkg.sh)"
     fi
 }
 
@@ -199,7 +199,7 @@ nbpkg_build_run_basepkg () {
     logit "run_basepkg: $prog"
     t_start=$(unixtime)
     (
-	cd $prog_basepkg_dir || exit 1
+	cd $basepkg_base_dir || exit 1
 	pwd
 	/bin/sh $prog $opt1 $opt2  pkg
     )

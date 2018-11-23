@@ -359,7 +359,7 @@ _nbdist_ident_file_to_syspkgs_name () {
 
     local    tmp=$junk_dir/list.sets.basepkg.all
     local    fil=$junk_dir/list.ident.changed
-    local  files="$(echo $data_basepkg_dir/*/mi $data_basepkg_dir/*/md*$arch)"
+    local  files="$(echo $basepkg_list_dir/*/mi $basepkg_list_dir/*/md*$arch)"
 
     cat        > $fil
     cat $files > $tmp

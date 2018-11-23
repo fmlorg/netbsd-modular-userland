@@ -21,8 +21,8 @@
 #
 
 # mandatory external programs
-prog_basepkg_dir=/var/nbpkg-build/dist/basepkg
-data_basepkg_dir=$prog_basepkg_dir/sets/lists
+basepkg_base_dir=/var/nbpkg-build/dist/basepkg
+basepkg_list_dir=$basepkg_base_dir/sets/lists
 
 # nbpkg-build specific directories: these hold persistent data.
 nbpkg_base_dir=/var/nbpkg-build

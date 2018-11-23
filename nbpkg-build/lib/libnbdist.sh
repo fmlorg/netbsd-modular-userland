@@ -11,9 +11,9 @@ nbdist_check_ignore () {
     local arch=$1
 
     case $arch in
-	images ) echo 1;exit 0;;
-	shared ) echo 1;exit 0;;
-	source ) echo 1;exit 0;;
+	images ) echo 1; exit 0;;
+	shared ) echo 1; exit 0;;
+	source ) echo 1; exit 0;;
     esac
     
     echo 0
@@ -28,18 +28,13 @@ nbdist_get_url_base () {
     local branch=$1
 			    
     case $branch in
-      stable8 ) echo $url_base_stable8;;
-      stable  ) echo $url_base_stable8;;
-     netbsd-8 ) echo $url_base_stable8;;
+     netbsd-8 ) echo $url_base_stable8 ;;
     release-8 ) echo $url_base_release8;;
-      stable7 ) echo $url_base_stable7;;
-     netbsd-7 ) echo $url_base_stable7;;
+     netbsd-7 ) echo $url_base_stable7 ;;
     release-7 ) echo $url_base_release7;;
-      legacy  ) echo $url_base_stable6;;
-      stable6 ) echo $url_base_stable6;;
-     netbsd-6 ) echo $url_base_stable6;;
+     netbsd-6 ) echo $url_base_stable6 ;;
     release-6 ) echo $url_base_release6;;
-      current ) echo $url_base_current;;
+      current ) echo $url_base_current ;;
     esac
 }
 
@@ -47,15 +42,10 @@ nbdist_get_major_version () {
     local branch=$1
 			    
     case $branch in
-      stable8 ) echo  8.0;;
-      stable  ) echo  8.0;;
      netbsd-8 ) echo  8.0;;
     release-8 ) echo  8.0;;
-      stable7 ) echo  7.0;;
      netbsd-7 ) echo  7.0;;
     release-7 ) echo  7.0;;
-      legacy  ) echo  7.0;;
-      stable6 ) echo  6.0;;
      netbsd-6 ) echo  6.0;;
     release-6 ) echo  6.0;;
       current ) echo 8.99;;

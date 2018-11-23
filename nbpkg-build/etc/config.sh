@@ -37,8 +37,8 @@ www_base_dir=/pub/www/pub/NetBSD/basepkg/diff
   log_base_dir=$nbpkg_base_dir/log
      queue_dir=$nbpkg_base_dir/queue
    db_base_dir=$nbpkg_base_dir/db
-  db_ident_dir=$db_base_dir/ident
-db_basepkg_dir=$db_base_dir/basepkg
+  db_ident_dir=$db_base_dir/ident/diff
+db_basepkg_dir=$db_base_dir/basepkg/diff
 
 
 #

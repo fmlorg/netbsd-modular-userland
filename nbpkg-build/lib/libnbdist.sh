@@ -210,7 +210,7 @@ nbdist_checksum () {
     cmp $cksum1 $cksum2
     if [ $? != 0 ];then
 	logit "checksum: failed arch=$arch"
-	diff -ub $cksum1 $cksum2
+	diff -ub $cksum1 $cksum2 1>&2
 	exit 1
     else
 	logit "checksum: ok arch=$arch"

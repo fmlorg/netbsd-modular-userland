@@ -148,7 +148,7 @@ _tnftp_nbdist_download () {
     fi
 
     # 2. download all entries
-    _list=$(nbdist_get_list $url					|
+    _list=$(nbdist_get_list $url				|
 		tr ' ' '\n'					|
 		grep '^[a-z]'					)
     # XXX dirty hack: we use JAIST for official release binaries (only)
@@ -176,7 +176,7 @@ _curl_nbdist_download () {
     fi
 
     # 2. download all entries
-    _list=$(nbdist_get_list $url					|
+    _list=$(nbdist_get_list $url				|
 		tr ' ' '\n'					|
 		grep '^[a-z]'					)
     for _x in $_list
@@ -263,8 +263,8 @@ nbdist_get_ident_list () {
     local   vers=$3
     local   list=$4
 
-    _nbdist_ident_listup                                                |
-    _nbdist_ident_canonicalize                                          >$list
+    _nbdist_ident_listup					|
+    _nbdist_ident_canonicalize					>$list
 }
 
 # Descriptions: return the list of changed syspkgs names 

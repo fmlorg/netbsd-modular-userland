@@ -396,6 +396,7 @@ _nbdist_commit_updates () {
 		echo "$pkg $_vers_major.$b_date"  >> $basepkg_db
 	done < $basepkg_diff
 
+        nbpkg_data_backup $arch $branch $build_date "basepkg" $basepkg_db
 }
 
 _nbdist_prepare_updates () {
@@ -411,5 +412,7 @@ _nbdist_prepare_updates () {
 
 	# 1.   ident database: overwritten
 	cp -p $ident_new $ident_bak
+
+        nbpkg_data_backup $arch $branch $b_date "ident" $ident_bak
 __EOF__
 }

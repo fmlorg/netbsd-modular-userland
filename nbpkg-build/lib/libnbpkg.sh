@@ -239,7 +239,7 @@ nbpkg_build_run_basepkg () {
     local arch=$1
     local conf=$2
     local prog
-    local t_start t_end tdiff
+    local t_start t_end t_diff
 
     prog="basepkg.sh"
     opt1="--obj $base_dir --releasedir=$rels_dir --machine=$arch"

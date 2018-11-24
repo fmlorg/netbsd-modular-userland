@@ -1,8 +1,8 @@
 <!-- -*- coding:utf-8 -*- -->
 
-# NetBSD ユーザランドのパッケージ化 *NetBSD modular userland*
+# NetBSD ユーザランドのパッケージ化
 
-## 概要
+## 今できること
 
 1. NetBSD 8.0 を Full Installation している環境で、
    nbpkg.sh full-upgrade を実行すると、

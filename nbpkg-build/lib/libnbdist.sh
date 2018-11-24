@@ -379,40 +379,40 @@ _nbdist_ident_file_to_syspkgs_name () {
 #     e.g. "/var/nbpkg-build/db/ident/$branch/$arch".
 #
 _nbdist_commit_updates () {
-	local         arch=$1
-	local       branch=$2
-	local       b_date=$3
-	local basepkg_diff=$4
-	local   basepkg_db=$(nbpkg_basepkg_data_file $arch $branch $b_date)
-        local  _vers_major=$(nbdist_get_major_version $branch)
+    local         arch=$1
+    local       branch=$2
+    local       b_date=$3
+    local basepkg_diff=$4
+    local   basepkg_db=$(nbpkg_basepkg_data_file $arch $branch $b_date)
+    local  _vers_major=$(nbdist_get_major_version $branch)
 
-	# update released basepkg database
-	#    each line: base-sys-root 8.0.20181101
-	#               used as e.g. "@sysdep base-sys-root>=8.0.20181101"
-	# XXX $basepkg_diff contains only basepkg names
-	while read -r pkg
-	do
-		logit "nbdist_ident: $pkg changed arch=$arch"
-		echo "$pkg $_vers_major.$b_date"  >> $basepkg_db
-	done < $basepkg_diff
+    # update released basepkg database
+    #    each line: base-sys-root 8.0.20181101
+    #               used as e.g. "@sysdep base-sys-root>=8.0.20181101"
+    # XXX $basepkg_diff contains only basepkg names
+    while read -r pkg
+    do
+	logit "nbdist_ident: $pkg changed arch=$arch"
+	echo "$pkg $_vers_major.$b_date"  >> $basepkg_db
+    done < $basepkg_diff
 
-        nbpkg_data_backup $arch $branch $b_date "basepkg" $basepkg_db
+    nbpkg_data_backup $arch $branch $b_date "basepkg" $basepkg_db
 }
 
 _nbdist_prepare_updates () {
-	local      arch=$1
-	local    branch=$2
-	local    b_date=$3
-	local ident_bak=$4
-	local ident_new=$5
-	local      hook=$(nbpkg_build_path_session_end_hook)
+    local      arch=$1
+    local    branch=$2
+    local    b_date=$3
+    local ident_bak=$4
+    local ident_new=$5
+    local      hook=$(nbpkg_build_path_session_end_hook)
 
-	cat > $hook <<__EOF__
-	# transaction: it should be eval-ed after the session successed.
+    cat > $hook <<__EOF__
+    # transaction: it should be eval-ed after the session successed.
 
-	# 1.   ident database: overwritten
-	cp -p $ident_new $ident_bak
+    # 1.   ident database: overwritten
+    cp -p $ident_new $ident_bak
 
-        nbpkg_data_backup $arch $branch $b_date "ident" $ident_bak
+    nbpkg_data_backup $arch $branch $b_date "ident" $ident_bak
 __EOF__
 }

@@ -32,4 +32,7 @@
     1. nbpkg.sh (pkgsrc/pkgtools/pkginのwrapper)を使いシステム更新
 
 
+## 裏側
 
+詳細は、
+[こちら](nbpkg-internals.md)

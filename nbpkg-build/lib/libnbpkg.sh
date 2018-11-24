@@ -271,9 +271,9 @@ nbpkg_src_dir () {
 }
 
 nbpkg_dst_dir () {
-    local arch=$1
-    local vers_nbpkg=$2
-    echo $www_base_dir/$vers_nbpkg/$arch
+    local   arch=$1
+    local branch=$2
+    echo $www_base_dir/$branch/$arch
 }
 
 nbpkg_dst_symlink () {

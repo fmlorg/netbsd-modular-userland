@@ -147,8 +147,18 @@ nbpkg_dir_clean () {
 
 #
 # nbpgk functions
-
 #
+
+# return 8.0.20181101
+nbpkg_build_id () {
+    local         arch=$1
+    local       branch=$2
+    local       b_date=$3
+    local  _vers_major=$(nbdist_get_major_version $branch)
+
+    return $_vers_major.$b_date"
+}
+
 nbpkg_build_assert () {
     local id
 

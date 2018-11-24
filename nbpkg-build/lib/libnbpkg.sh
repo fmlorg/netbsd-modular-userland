@@ -86,8 +86,9 @@ nbpkg_data_backup_dir () {
     local   arch=$1
     local branch=$2
     local b_date=$3
-    local   type=$4   # ident basepkg
+    local   type=$4   # "ident" or "basepkg"
 
+    # e.g.      /var/nbpkg-data/backups/ident/netbsd-8/
     local   _dir=$nbpkg_data_backup_dir/$type/$branch
     test -d $_dir || mkdir -p $_dir
 

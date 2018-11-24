@@ -321,18 +321,6 @@ nbpkg_basepkg_version () {
     ls $rels_dir/packages
 }
 
-nbpkg_basepkg_major_version () {
-    local v=$(ls $rels_dir/packages)
-
-    c=$(expr $v : '\([0-9]*\.99\)')
-    if [ "X$c" != "X" ];then
-	echo $c                    # 8.99 (current)
-    else
-	echo $v | cut -c 1-3       # 8.0  (release, stable)
-    fi
-}
-
-
 nbpkg_release_basepkg_packages () {
     local   arch=$1
     local branch=$2

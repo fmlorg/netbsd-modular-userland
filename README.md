@@ -1,7 +1,7 @@
 # NetBSD modular userland
 
-[[English]](doc/en/nbpkg-build.md)
-[[Japanese]](doc/ja/nbpkg-build.md)
+[[English]](doc/en/nbpkg-index.md)
+[[Japanese]](doc/ja/nbpkg-index.md)
 for more details. 
 
 

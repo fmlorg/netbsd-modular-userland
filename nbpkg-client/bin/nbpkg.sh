@@ -144,7 +144,7 @@ export PATH
    branch=$(echo $release | awk '{printf("netbsd-%d\n", $1)}')
      host=basepkg.netbsd.fml.org
    
- PKG_PATH=http://$host/pub/NetBSD/basepkg/diff/$branch/$arch
+ PKG_PATH=http://$host/pub/NetBSD/basepkg/$branch/$arch
 PKG_REPOS=$PKG_PATH
 export PKG_PATH
 export PKG_REPOS
@@ -153,7 +153,7 @@ export PKG_REPOS
     NBPKG_ADVISORY=$NBPKG_DB/nbpkg-advisory.txt
 NBPKG_ADVISORY_URL=http://$host/pub/NetBSD/nbpkg/$branch/$arch/nbpkg-advisory.txt
     NBPKG_LIST_PKG=$NBPKG_DB/list-pkg
-NBPKG_LIST_PKG_URL=http://$host/pub/NetBSD/basepkg/diff/$branch/$arch/list-pkg
+NBPKG_LIST_PKG_URL=http://$host/pub/NetBSD/basepkg/$branch/$arch/list-pkg
 
 # debug
 echo ""                                 1>&2                    

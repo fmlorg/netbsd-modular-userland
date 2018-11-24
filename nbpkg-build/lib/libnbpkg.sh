@@ -203,11 +203,11 @@ nbpkg_build_run_session_end_hook () {
 nbpkg_build_gen_basepkg_conf () {
     local   arch=$1
     local branch=$2
-    local   date=$3
+    local b_date=$3
     local   conf=$4
     local    all=$5
     local    new=$6
-    local    rel=$(nbdist_get_major_version $branch)
+    local   b_id=$(nbpkg_build_id $arch $branch $b_date)
     local _pkg
 
     # filter
@@ -224,8 +224,8 @@ nbpkg_build_gen_basepkg_conf () {
       nbpkg_build_list_new=$new
    nbpkg_build_list_filter=$filter
 
-          nbpkg_build_date=$date
-            nbpkg_build_id=$rel.$date
+          nbpkg_build_date=$b_date
+            nbpkg_build_id=$b_id
     
 _EOF_
 }

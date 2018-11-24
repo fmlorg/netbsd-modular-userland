@@ -42,7 +42,9 @@ Package pkgin-0.11.6 registered in /var/db/pkg/pkgin-0.11.6
    ...
 
 Requesting http://basepkg.netbsd.fml.org/pub/NetBSD/basepkg/diff/netbsd-8/i386/list-pkg
-  0% |                                   |     0        0.00 KiB/s    --:-- ETA100% |***********************************|   431      663.87 KiB/s    00:00 ETA
+  0% |                                   |     0        0.00 KiB/s    --:-- ETA
+   ...
+100% |***********************************|   431      663.87 KiB/s    00:00 ETA
 431 bytes retrieved in 00:00 (70.66 KiB/s)
 pkgin import /var/db/nbpkg/list-pkg
 reading local summary...

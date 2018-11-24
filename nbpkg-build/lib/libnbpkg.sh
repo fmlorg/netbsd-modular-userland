@@ -88,7 +88,7 @@ nbpkg_data_backup_dir () {
     local b_date=$3
     local   type=$4   # ident basepkg
 
-    local   _dir=$nbpkg_data_dir/backups/$type/diff/$branch
+    local   _dir=$nbpkg_data_backup_dir/$type/$branch
     test -d $_dir || mkdir -p $_dir
 
     echo $_dir

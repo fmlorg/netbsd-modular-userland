@@ -258,16 +258,16 @@ nbpkg_build_run_basepkg () {
 
 
 nbpkg_src_arch () {
-    local arch=$1
-    local vers_nbpkg=$2
-    basename $rels_dir/packages/$vers_nbpkg/[a-z]*
+    local       arch=$1
+    local basepkg_id=$2
+    basename $rels_dir/packages/$basepkg_id/[a-z]*
 }
 
 nbpkg_src_dir () {
-    local arch=$1
-    local vers_nbpkg=$2
-    local machine_w_arch=$(nbpkg_src_arch $1 $2)
-    echo $rels_dir/packages/$vers_nbpkg/$machine_w_arch
+    local       arch=$1
+    local basepkg_id=$2
+    local machine_w_arch=$(nbpkg_src_arch $arch $basepkg_id)
+    echo $rels_dir/packages/$basepkg_id/$machine_w_arch
 }
 
 nbpkg_dst_dir () {
@@ -279,9 +279,9 @@ nbpkg_dst_dir () {
 nbpkg_dst_symlink () {
     local       arch=$1
     local     branch=$2
-    local vers_nbpkg=$3
+    local basepkg_id=$3
 
-    local machine_w_arch=$(nbpkg_src_arch $arch $vers_nbpkg)
+    local machine_w_arch=$(nbpkg_src_arch $arch $basepkg_id)
     (
 	cd $www_base_dir/$branch/ || exit 1
 	if [ -d $arch -a ! -h $machine_w_arch ];then
@@ -325,8 +325,8 @@ nbpkg_release_basepkg_packages () {
     local   arch=$1
     local branch=$2
 
-    vers_nbpkg=$(nbpkg_basepkg_version)        # 7.1_STABLE
-    pkg_dir=$(nbpkg_src_dir $arch $vers_nbpkg) # $REL_DIR/package/8.0.DATE/..
+    basepkg_id=$(nbpkg_basepkg_version)        # 8.0.20181101
+    pkg_dir=$(nbpkg_src_dir $arch $basepkg_id) # $rels_dir/.../8.0.20181101/
     www_dir=$(nbpkg_dst_dir $arch $branch)     # NetBSD/basepkg/netbsd-8/amd64
     test -d $www_dir || mkdir -p $www_dir
 
@@ -362,5 +362,5 @@ nbpkg_release_basepkg_packages () {
     logit "release: arch=$arch at $www_dir/"
     
     # fix symlinks if needed.
-    nbpkg_dst_symlink $arch $branch $vers_nbpkg
+    nbpkg_dst_symlink $arch $branch $basepkg_id
 }

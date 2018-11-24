@@ -319,8 +319,11 @@ nbpkg_dst_clean () {
     exit 0
 }
 
+# XXX "tail ..." is useful only in debug mode to avoid duplication.
+# XXX "tail ..." is not needed in norma operation.
 nbpkg_basepkg_version () {
-    ls $rels_dir/packages
+    ls $rels_dir/packages				|
+    tail -1
 }
 
 nbpkg_release_basepkg_packages () {

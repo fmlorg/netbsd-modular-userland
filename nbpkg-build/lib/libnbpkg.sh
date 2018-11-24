@@ -346,7 +346,6 @@ nbpkg_release_basepkg_packages () {
     local branch=$2
 
     vers_nbpkg=$(nbpkg_basepkg_version)        # 7.1_STABLE
-    vers_major=$(nbpkg_basepkg_major_version)  # 7
     pkg_dir=$(nbpkg_src_dir $arch $vers_nbpkg) # $REL_DIR/package/8.0.DATE/..
     www_dir=$(nbpkg_dst_dir $arch $branch)     # NetBSD/basepkg/netbsd-8/amd64
     test -d $www_dir || mkdir -p $www_dir

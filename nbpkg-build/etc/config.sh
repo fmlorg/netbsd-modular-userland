@@ -29,6 +29,7 @@ nbpkg_base_dir=/var/nbpkg-build
 
 # nbpkg-build data backup
 nbpkg_data_dir=/var/nbpkg-data
+nbpkg_data_backup_dir=$nbpkg_data_dir/backups
 
 # web base directory where generated packages are published.
 www_base_dir=/pub/www/pub/NetBSD/basepkg/diff

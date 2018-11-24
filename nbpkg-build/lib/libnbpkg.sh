@@ -284,9 +284,11 @@ nbpkg_dst_symlink () {
     local machine_w_arch=$(nbpkg_src_arch $arch $basepkg_id)
     (
 	cd $www_base_dir/$branch/ || exit 1
-	if [ -d $arch -a ! -h $machine_w_arch ];then
-	    ln -s $arch $machine_w_arch
-	    logit "symlink: $arch == $machine_w_arch"
+	if [ "X$arch" != "X$machine_w_arch" ];then
+	    if [ -d $arch -a ! -h $machine_w_arch ];then
+		ln -s $arch $machine_w_arch
+		logit "symlink: $arch == $machine_w_arch"
+	    fi
 	fi
     )
 }

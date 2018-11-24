@@ -396,7 +396,7 @@ _nbdist_commit_updates () {
 		echo "$pkg $_vers_major.$b_date"  >> $basepkg_db
 	done < $basepkg_diff
 
-        nbpkg_data_backup $arch $branch $build_date "basepkg" $basepkg_db
+        nbpkg_data_backup $arch $branch $b_date "basepkg" $basepkg_db
 }
 
 _nbdist_prepare_updates () {

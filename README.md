@@ -1,6 +1,6 @@
-# NetBSD modular userland *ident based package creation* 
+# NetBSD modular userland
 
-[[English]](doc/ja/nbpkg-build.md)
+[[English]](doc/en/nbpkg-build.md)
 [[Japanese]](doc/ja/nbpkg-build.md)
 for more details. 
 

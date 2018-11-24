@@ -317,15 +317,6 @@ nbpkg_dst_clean () {
     exit 0
 }
 
-nbpkg_dst_dir_list_version () {
-    ls $www_base_dir
-}
-
-nbpkg_dst_dir_list_arch () {
-    local b_date=$1
-    ls $www_base_dir/$b_date
-}
-
 nbpkg_basepkg_version () {
     ls $rels_dir/packages
 }

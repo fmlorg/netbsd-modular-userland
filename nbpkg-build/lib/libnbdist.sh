@@ -383,7 +383,7 @@ _nbdist_commit_updates () {
     local       branch=$2
     local       b_date=$3
     local basepkg_diff=$4
-    local   basepkg_db=$(nbpkg_basepkg_data_file $arch $branch $b_date)
+    local   basepkg_db=$(nbpkg_basepkg_data_file $arch $branch)
     local    _build_id=$(nbpkg_build_id $arch $branch $b_date)
 
     # update released basepkg database

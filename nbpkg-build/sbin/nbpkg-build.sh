@@ -62,11 +62,11 @@ list=${1:-}
 #    url_base = http://nycdn.netbsd.org/pub/NetBSD-daily/netbsd-8/
 #  build_nyid = 201811180430Z
 #  build_date = 20181118
-  url_base=$(nbdist_get_url_base $branch)
+  url_base=$(nbdist_get_url_base   $branch)
 build_nyid=$(nbdist_get_build_id   $branch $url_base)
 build_date=$(nbdist_get_build_date $branch $build_nyid)
  build_url=$(nbdist_get_url        $branch $url_base $build_nyid)
-list_all=$(nbdist_get_list $build_url					|
+  list_all=$(nbdist_get_list               $build_url			|
 		tr ' ' '\n'						|
 		grep '^[a-z]'						)
 

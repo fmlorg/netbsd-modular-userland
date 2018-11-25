@@ -343,22 +343,20 @@ nbpkg_release_basepkg_packages () {
     cd $www_dir || exit 1
 
     # https://wiki.netbsd.org/pkgsrc/intro_to_packaging/
-    pkg_info -X              *tgz | gzip -9	> pkg_summary.gz.new
-    if [ -s pkg_summary.gz.new ];then mv pkg_summary.gz.new pkg_summary.gz ;fi
-    if [ ! -s pkg_summary.gz ];then fatal "release: empty pkg_summary.gz"  ;fi
+    pkg_info -X              *tgz | gzip -9	> pkg_summary.new
+    if [ ! -s pkg_summary.new ];then fatal "release: empty pkg_summary.gz" ;fi
+    if [   -s pkg_summary.new ];then    mv pkg_summary.new pkg_summary.gz  ;fi
 
     /usr/bin/cksum -a sha512 *tgz | sort	> SHA512.new
     if [ ! -s SHA512.new     ];then fatal "release: empty SHA512"          ;fi
+    if [   -s SHA512.new     ];then    mv    SHA512.new   SHA512           ;fi
 
     /bin/ls *.tgz 					|
     sed 's/-[0-9]*.[0-9]*.[0-9]*.tgz//'			|
     sort						|
     uniq 						> list-pkg.new 
     if [ ! -s list-pkg.new   ];then fatal "release: empty list-pkg"        ;fi
-
-    mv SHA512.new          SHA512
-    mv pkg_summary.gz.new  pkg_summary.gz
-    mv list-pkg.new        list-pkg
+    if [   -s list-pkg.new   ];then    mv  list-pkg.new   list-pkg         ;fi
 
     logit "release: arch=$arch at $www_dir/"
     

@@ -52,6 +52,20 @@ nbdist_get_major_version () {
     esac
 }
 
+nbdist_get_major_build_id () {
+    local branch=$1
+			    
+    case $branch in
+     netbsd-8 ) echo  8.0.20180717;;
+    release-8 ) echo  8.0.20180717;;
+     netbsd-7 ) echo  7.0.20150925;;
+    release-7 ) echo  7.0.20150925;;
+     netbsd-6 ) echo  6.0.20121017;;
+    release-6 ) echo  6.0.20121017;;
+      current ) echo  8.0.20180717;;
+    esac
+}
+
 nbdist_get_list () {
     _tnftp_nbdist_get_list $1
 }

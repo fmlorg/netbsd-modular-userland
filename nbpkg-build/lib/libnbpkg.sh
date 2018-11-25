@@ -204,13 +204,70 @@ nbpkg_build_run_session_end_hook () {
 #
 # generate configuration to pass as the argument in running basepkg.sh.
 #
+
+_nbpkg_build_gen_list_all_maint () {
+    local   arch=$1
+    local branch=$2
+    local   mode=$3
+    local   _src=$(nbpkg_basepkg_data_file $arch $branch)
+    local   _dst=$junk_dir/list.basepkg.all.$mode
+
+    debug_msg "list_all: mode=$mode cp -p $_src $_dst"
+    cp -p $_src $_dst
+    echo $_dst
+}
+
+_nbpkg_build_gen_list_all_all () {
+    local   arch=$1
+    local branch=$2
+    local   mode=$3
+    local   _src=$(nbpkg_basepkg_data_file $arch $branch)
+    local   _dst=$junk_dir/list.basepkg.all.$mode
+    local   _tmp=$junk_dir/tmp.list.basepkg.all.$mode.$$
+    local   b_id=$(nbdist_get_major_build_id $branch)
+    local  files="$(nbpkg_basepkg_get_sets_lists $arch $branch)"
+
+    debug_msg "list_all: mode=$mode $_src + faked release => $_dst"
+
+    cat $files							|
+    grep -v obsolete						|
+    awk '/^#/{ next;}						\
+	$2 ~ /[a-z]+-[a-z]+-[a-z]+/{print $2}'			|
+    sort							|
+    uniq							|
+    awk -v id=$b_id '{printf("%s\t%s\n", $1, id)}' 		>  $_dst
+    cat  $_src							>> $_dst
+
+    echo $_dst
+}
+
+_nbpkg_build_gen_list_all () {
+    local   arch=$1
+    local branch=$2
+    local   mode=$3
+
+    if [ "X$mode" = "Xmaint" ];then
+	_nbpkg_build_gen_list_all_maint $arch $branch $mode
+    elif [ "X$mode" = "Xall" ];then
+	_nbpkg_build_gen_list_all_all   $arch $branch $mode
+    else
+	fatal "gen_list_all: unknown mode=$mode"
+    fi
+}
+
+_nbpkg_build_basepkg_conf_path () {
+    local   arch=$1
+    local branch=$2
+    local   mode=$3
+
+    printf "%s/basepkg-%s.conf" $junk_dir $mode
+}
+
 nbpkg_build_gen_basepkg_conf () {
     local   arch=$1
     local branch=$2
     local b_date=$3
-    local   conf=$4
-    local    all=$5
-    local    new=$6
+    local    new=$4
     local   b_id=$(nbpkg_build_id $arch $branch $b_date)
     local _pkg
 
@@ -221,9 +278,14 @@ nbpkg_build_gen_basepkg_conf () {
 	echo $_pkg'$' >> $filter
     done 
 
-    cat > $conf <<_EOF_
+    for mode in maint all
+    do
+	_conf=$(_nbpkg_build_basepkg_conf_path $arch $branch $mode)
+	_list=$(_nbpkg_build_gen_list_all      $arch $branch $mode)
 
-      nbpkg_build_list_all=$all
+        cat > $_conf <<_EOF_
+
+      nbpkg_build_list_all=$_list
 
       nbpkg_build_list_new=$new
    nbpkg_build_list_filter=$filter
@@ -232,6 +294,8 @@ nbpkg_build_gen_basepkg_conf () {
             nbpkg_build_id=$b_id
     
 _EOF_
+
+   done
 }
 
 
@@ -239,8 +303,10 @@ _EOF_
 # run basepkg
 #
 nbpkg_build_run_basepkg () {
-    local arch=$1
-    local conf=$2
+    local   arch=$1
+    local branch=$2
+    local   mode=$3
+    local   conf=$(_nbpkg_build_basepkg_conf_path $arch $branch $mode)
     local prog
     local t_start t_end t_diff
 

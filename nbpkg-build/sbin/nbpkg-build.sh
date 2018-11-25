@@ -91,8 +91,6 @@ do
 	# 1.2 ident based check
 	#     extract ident data, compare it with the saved one and
 	#     generate the list of basepkg to re-build as a file $basepkg_new.
-	basepkg_cnf=$junk_dir/basepkg.conf
-	basepkg_all=$(nbpkg_basepkg_data_file $arch $branch $build_date)
 	basepkg_new=$junk_dir/list.basepkg.changed
 	nbdist_check_ident_changes $arch $branch $build_date $basepkg_new
 	if [ -s $basepkg_new ];then
@@ -109,9 +107,11 @@ do
 	else
 	    logit "session: run $arch $branch $build_nyid"
 	    nbpkg_build_gen_basepkg_conf    $arch $branch $build_date \
-			$basepkg_cnf $basepkg_all $basepkg_new
-	    nbpkg_build_run_basepkg         $arch $basepkg_cnf
-	    nbpkg_release_basepkg_packages  $arch $branch
+					                  $basepkg_new
+	    nbpkg_build_run_basepkg         $arch $branch "maint"
+	    nbpkg_release_basepkg_packages  $arch $branch "maint"
+	    nbpkg_build_run_basepkg         $arch $branch   "all"
+	    nbpkg_release_basepkg_packages  $arch $branch   "all"
 	    queue_add done  $arch $branch $build_date
 	    queue_del retry $arch $branch $build_date  # clear flag if exists
 	fi

@@ -281,7 +281,7 @@ nbdist_check_ident_changes () {
     # ident database
     # e.g. /var/nbpkg-build/db/ident/netbsd-8/i386 holds the latest ident data
     #	   which will be replaced to the current one if the changes are found.
-    local _ibak=$(nbpkg_ident_data_file $arch $branch $b_date)
+    local _ibak=$(nbpkg_ident_data_file $arch $branch)
     local _inew=$junk_dir/tmp.ident.new
 
     if [ ! -s $_ibak ];then

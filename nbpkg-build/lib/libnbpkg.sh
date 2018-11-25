@@ -45,7 +45,6 @@ nbpkg_dir_init () {
 nbpkg_ident_data_dir () {
     local   arch=$1
     local branch=$2
-    local b_date=$3
 
     local   _dir=$db_ident_dir/$branch
     test -d $_dir || mkdir -p $_dir 
@@ -56,8 +55,7 @@ nbpkg_ident_data_dir () {
 nbpkg_ident_data_file () {
     local   arch=$1
     local branch=$2
-    local b_date=$3
-    local   _dir=$(nbpkg_ident_data_dir $arch $branch $b_date)
+    local   _dir=$(nbpkg_ident_data_dir $arch $branch)
     
     echo $_dir/$arch
 }

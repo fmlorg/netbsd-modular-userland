@@ -276,7 +276,9 @@ nbpkg_src_dir () {
 nbpkg_dst_dir () {
     local   arch=$1
     local branch=$2
-    echo $www_base_dir/$branch/$arch
+    local   mode=$3
+
+    echo $www_base_dir/$branch/$arch/$mode
 }
 
 nbpkg_dst_symlink () {
@@ -332,10 +334,11 @@ nbpkg_basepkg_version () {
 nbpkg_release_basepkg_packages () {
     local   arch=$1
     local branch=$2
+    local   mode=$3
 
-    basepkg_id=$(nbpkg_basepkg_version)        # 8.0.20181101
-    pkg_dir=$(nbpkg_src_dir $arch $basepkg_id) # $rels_dir/.../8.0.20181101/
-    www_dir=$(nbpkg_dst_dir $arch $branch)     # NetBSD/basepkg/netbsd-8/amd64
+    basepkg_id=$(nbpkg_basepkg_version)          # 8.0.20181101
+    pkg_dir=$(nbpkg_src_dir $arch $basepkg_id)   # $rels_dir/.../8.0.20181101/
+    www_dir=$(nbpkg_dst_dir $arch $branch $mode) # $WWW/basepkg/netbsd-8/amd64
     test -d $www_dir || mkdir -p $www_dir
 
     logit "release: $pkg_dir -> $www_dir"

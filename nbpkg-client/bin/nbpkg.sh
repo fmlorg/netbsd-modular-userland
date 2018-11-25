@@ -143,17 +143,33 @@ export PATH
      arch=$(netbsd_resolve_machine_and_arch)
    branch=$(echo $release | awk '{printf("netbsd-%d\n", $1)}')
      host=basepkg.netbsd.fml.org
-   
- PKG_PATH=http://$host/pub/NetBSD/basepkg/$branch/$arch
+     mode=maint
+
+# parse options
+while getopts hdvb:m:a _opt
+do
+    case $_opt in
+       h | \?) echo "usage: $0 [-hdv] -b BRANCH [ARCH ...]" 1>&2; exit 1;;
+       d | v)  is_debug=1;;
+       b)      branch=$OPTARG;;
+       m)      mode=$OPTARG;;
+       a)      mode=all;;
+    esac
+done
+shift $(expr $OPTIND - 1)
+list=${1:-}
+
+
+ PKG_PATH=http://$host/pub/NetBSD/basepkg/$branch/$arch/$mode
 PKG_REPOS=$PKG_PATH
 export PKG_PATH
 export PKG_REPOS
 
           NBPKG_DB=/var/db/nbpkg
     NBPKG_ADVISORY=$NBPKG_DB/nbpkg-advisory.txt
-NBPKG_ADVISORY_URL=http://$host/pub/NetBSD/nbpkg/$branch/$arch/nbpkg-advisory.txt
+NBPKG_ADVISORY_URL=http://$host/pub/NetBSD/nbpkg/$branch/$arch/$mode/list-pkg
     NBPKG_LIST_PKG=$NBPKG_DB/list-pkg
-NBPKG_LIST_PKG_URL=http://$host/pub/NetBSD/basepkg/$branch/$arch/list-pkg
+NBPKG_LIST_PKG_URL=$PKG_PATH/list-pkg
 
 # debug
 echo ""                                 1>&2                    

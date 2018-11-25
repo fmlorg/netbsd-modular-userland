@@ -25,8 +25,8 @@ to upgrade it to the latest NetBSD 8.0 stable.
 ```
 # nbpkg.sh full-upgrade
 
-debug: PKG_PATH  = http://basepkg.netbsd.fml.org/pub/NetBSD/basepkg/diff/netbsd-8/i386
-debug: PKG_REPOS = http://basepkg.netbsd.fml.org/pub/NetBSD/basepkg/diff/netbsd-8/i386
+debug: PKG_PATH  = http://basepkg.netbsd.fml.org/pub/NetBSD/basepkg/netbsd-8/i386/maint
+debug: PKG_REPOS = http://basepkg.netbsd.fml.org/pub/NetBSD/basepkg/netbsd-8/i386/maint
 
 Running install with PRE-INSTALL for pkg_install-20180425.
 man/man1/pkg_add.1
@@ -41,7 +41,7 @@ man/man1/pkgin.1
 Package pkgin-0.11.6 registered in /var/db/pkg/pkgin-0.11.6
    ...
 
-Requesting http://basepkg.netbsd.fml.org/pub/NetBSD/basepkg/diff/netbsd-8/i386/list-pkg
+Requesting http://basepkg.netbsd.fml.org/pub/NetBSD/basepkg/netbsd-8/i386/maint/list-pkg
   0% |                                   |     0        0.00 KiB/s    --:-- ETA
    ...
 100% |***********************************|   431      663.87 KiB/s    00:00 ETA
@@ -49,7 +49,7 @@ Requesting http://basepkg.netbsd.fml.org/pub/NetBSD/basepkg/diff/netbsd-8/i386/l
 pkgin import /var/db/nbpkg/list-pkg
 reading local summary...
 processing local summary...
-processing remote summary (http://basepkg.netbsd.fml.org/pub/NetBSD/basepkg/diff/netbsd-8/i386)...
+processing remote summary (http://basepkg.netbsd.fml.org/pub/NetBSD/basepkg/netbsd-8/i386/maint)...
 downloading pkg_summary.gz: ...
 calculating dependencies...done.
 

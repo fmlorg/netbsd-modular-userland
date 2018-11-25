@@ -63,9 +63,10 @@ list=${1:-}
 #  build_nyid = 201811180430Z
 #  build_date = 20181118
   url_base=$(nbdist_get_url_base $branch)
-build_nyid=$(nbdist_get_latest_entry $url_base)
-build_date=$(echo $build_nyid | awk '{print substr($1, 0, 8)}')
-list_all=$(nbdist_get_list $url_base$build_nyid/			|
+build_nyid=$(nbdist_get_build_id   $branch $url_base)
+build_date=$(nbdist_get_build_date $branch $build_nyid)
+ build_url=$(nbdist_get_url        $branch $url_base $build_nyid)
+list_all=$(nbdist_get_list $build_url					|
 		tr ' ' '\n'						|
 		grep '^[a-z]'						)
 
@@ -85,7 +86,7 @@ do
 
 	# 1.  preparation
 	# 1.1 download and extract the latest daily build
-	nbdist_download $arch $url_base$build_nyid/$arch/binary/sets/
+	nbdist_download $arch $build_url/$arch/binary/sets/
 	nbdist_extract  $arch
 
 	# 1.2 ident based check

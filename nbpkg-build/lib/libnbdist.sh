@@ -38,6 +38,17 @@ nbdist_get_url_base () {
     esac
 }
 
+nbdist_get_url () {
+    local   branch=$1
+    local url_base=$2
+    local   b_nyid=$3
+			    
+    case $branch in
+    release-* ) echo        $url_base;;
+            * ) echo $url_base$b_nyid;;
+    esac
+}
+
 nbdist_get_major_version () {
     local branch=$1
 			    
@@ -64,6 +75,42 @@ nbdist_get_major_build_id () {
     release-6 ) echo  6.0.20121017;;
       current ) echo  8.0.20180717;;
     esac
+}
+
+nbdist_get_build_id () {
+    local branch=$1
+    local   _url=$2
+    local  _nyid=""
+
+    case $branch in
+    release-8 ) _nyid=8.0.20180717;;
+    release-7 ) _nyid=7.0.20150925;;
+    release-6 ) _nyid=6.0.20121017;;
+    esac
+
+    if [ "X$_nyid" != "X" ];then
+	echo $_nyid
+    else
+	nbdist_get_latest_entry $_url
+    fi
+}
+
+nbdist_get_build_date () {
+    local branch=$1
+    local  _nyid=$2
+    local  _date=""
+
+    case $branch in
+    release-8 ) _date=20180717;;
+    release-7 ) _date=20150925;;
+    release-6 ) _date=20121017;;
+    esac
+
+    if [ "X$_date" != "X" ];then
+	echo $_date
+    else
+	echo $_nyid | awk '{print substr($1, 0, 8)}'
+    fi
 }
 
 nbdist_get_list () {

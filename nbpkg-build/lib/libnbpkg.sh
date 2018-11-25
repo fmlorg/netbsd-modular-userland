@@ -78,6 +78,13 @@ nbpkg_basepkg_data_file () {
     echo $_dir/$arch
 }
 
+nbpkg_basepkg_get_sets_lists () {
+    local   arch=$1
+    local branch=$2
+
+    echo $basepkg_list_dir/*/mi $basepkg_list_dir/*/md*$arch
+}
+
 nbpkg_data_backup_dir () {
     local   arch=$1
     local branch=$2

@@ -5,7 +5,10 @@
 ## 今できること
 
 1. NetBSD 8.0 を Full Installation している環境で、
-   nbpkg.sh full-upgrade を実行すると、
+   ```
+   nbpkg.sh full-upgrade
+   ```
+   を実行すると、
    NetBSD 8.0 stable の最新環境に更新できます。
 
 1. サポートする(予定)の環境は、次のとおりです。

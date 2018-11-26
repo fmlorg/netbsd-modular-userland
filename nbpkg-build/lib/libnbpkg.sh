@@ -431,6 +431,14 @@ nbpkg_release_basepkg_packages () {
     sed 's/-[0-9]*.[0-9]*.[0-9]*.tgz//'			|
     sort						|
     uniq 						> list-pkg.new 
+
+    # [XXX DIRTY HACK]
+    # Temporarily we exclude "etc-*-*" in full-upgrade to avoid
+    # cirtical side effect such as "/etc/passwd is overwritten". 
+    # So, etc-*-* is removed in the file "list-pkg".
+    egrep -v '^etc-*' list-pkg.new > list-pkg.new.new 
+    mv list-pkg.new.new list-pkg.new
+
     if [ ! -s list-pkg.new   ];then fatal "release: empty list-pkg"        ;fi
     if [   -s list-pkg.new   ];then    mv  list-pkg.new   list-pkg         ;fi
 

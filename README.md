@@ -25,6 +25,10 @@ and a reference implementation.
 Just run "nbpkg.sh full-upgrade" on NetBSD 8.0
 to upgrade it to the latest NetBSD 8.0 stable.
 
+CAUTION: To avoid unexpected critical situation, currently
+"full-upgrade" do not upgrade kernel and /etc/. 
+If you update "/etc/", do "nbpkg.sh install ETC-PACK-AGE" explicitly.
+
 ```
 # nbpkg.sh full-upgrade
 

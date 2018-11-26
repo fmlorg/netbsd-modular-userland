@@ -236,7 +236,13 @@ _nbpkg_build_gen_list_all_all () {
     sort							|
     uniq							|
     awk -v id=$b_id '{printf("%s\t%s\n", $1, id)}' 		>  $_dst
-    cat  $_src							>> $_dst
+
+    expr $branch : release >/dev/null
+    if [ $? -eq 0 ];then
+	:
+    elif [ -f $_src          ];then
+	cat   $_src						>> $_dst
+    fi
 
     echo $_dst
 }

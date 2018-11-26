@@ -89,6 +89,18 @@ do
 	nbdist_download $arch $build_url/$arch/binary/sets/
 	nbdist_extract  $arch
 
+	# 1.2 official release exception
+	expr $branch : release >/dev/null
+	if [ $? -eq 0 ];then
+	    nbpkg_build_gen_basepkg_conf   $arch $branch $build_date /dev/null
+	    nbpkg_build_run_basepkg        $arch $branch             "all"
+	    nbpkg_release_basepkg_packages $arch $branch             "all"
+	    queue_add done                 $arch $branch $build_date
+	    queue_del retry                $arch $branch $build_date
+	    queue_del active               $arch $branch $build_date
+	    exit 0
+	fi
+
 	# 1.2 ident based check
 	#     extract ident data, compare it with the saved one and
 	#     generate the list of basepkg to re-build as a file $basepkg_new.

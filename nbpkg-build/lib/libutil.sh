@@ -37,6 +37,16 @@ unixtime () {
 }
 
 
+rcs_backup () {
+    local file="$1"
+    local _msg="${2:-dummy_msg}"
+
+    /usr/bin/ci  -q -f  -u -t-"$_msg" -m"$_msg" $file
+    /usr/bin/rcs -q -kb -U                      $file
+    /usr/bin/co  -q -f  -u                      $file
+}
+
+
 run_hook () {
     local hook=$1
 

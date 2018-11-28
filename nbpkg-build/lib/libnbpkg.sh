@@ -112,10 +112,7 @@ nbpkg_data_backup () {
     cp -p $_src $_dir/$file
     (   
 	cd $_dir || exit 1
-
-	/usr/bin/ci  -q -f  -u -t-$_msg -m$_msg $file
-	/usr/bin/rcs -q -kb -U                  $file
-	/usr/bin/co  -q -f  -u                  $file
+	rcs_backup $file $_msg
     )
 
     if [ $? != 0 ];then

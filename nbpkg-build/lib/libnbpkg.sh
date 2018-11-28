@@ -286,6 +286,14 @@ nbpkg_build_gen_basepkg_conf () {
 	_conf=$(_nbpkg_build_basepkg_conf_path $arch $branch $mode)
 	_list=$(_nbpkg_build_gen_list_all      $arch $branch $mode)
 
+	# assertion
+	for _x in $_list $new $filter
+	do
+	    [ -s $_x ]       || fatal "gen_basepkg_conf: empty $_x"
+	done
+	[ "X$b_date" = "X" ] && fatal "gen_basepkg_conf: null b_date"
+	[ "X$b_id"   = "X" ] && fatal "gen_basepkg_conf: null b_id"
+
         cat > $_conf <<_EOF_
 
       nbpkg_build_list_all=$_list

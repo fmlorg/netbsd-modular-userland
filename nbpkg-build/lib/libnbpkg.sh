@@ -329,7 +329,11 @@ nbpkg_build_run_basepkg () {
     (
 	cd $basepkg_base_dir || exit 1
 	pwd
-	/bin/sh $prog $opt1 $opt2  pkg
+	if [ "X$is_debug" != "X" ];then
+	    /bin/sh -vx $prog $opt1 $opt2 pkg
+	else
+	    /bin/sh     $prog $opt1 $opt2 pkg
+	fi
     )
     t_end=$(unixtime)
     t_diff=$(($t_end - $t_start))

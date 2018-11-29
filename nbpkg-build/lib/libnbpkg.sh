@@ -335,6 +335,10 @@ nbpkg_build_run_basepkg () {
 	    /bin/sh     $prog $opt1 $opt2 pkg
 	fi
     )
+    _exit=$?
+    if [ $_exit != 0 ];then
+	fatal "run_basepkg: failed ($_exit): $prog $opt1 $opt2 pkg"
+    fi
     t_end=$(unixtime)
     t_diff=$(($t_end - $t_start))
     logit "run_basepkg: $t_diff sec. arch=$arch"

@@ -433,6 +433,11 @@ nbpkg_release_basepkg_packages () {
     #    in $www_dir.
     cd $www_dir || exit 1
 
+    _num_tgz=$(find . -name '*tgz' | wc -l)
+    if [ $_num_tgz -eq 0 ];then
+	fatal "release: no *.tgz (num = $_num_tgz)"
+    fi
+
     # https://wiki.netbsd.org/pkgsrc/intro_to_packaging/
     pkg_info -X              *tgz | gzip -9	> pkg_summary.new
     if [ ! -s pkg_summary.new ];then fatal "release: empty pkg_summary.gz" ;fi

@@ -74,15 +74,21 @@ for arch in ${list:-$list_all}
 do
     is_ignore=$(nbdist_check_ignore $arch)
     if [ $is_ignore = 1 ];then continue;fi
-    
+
     nbpkg_dir_init $arch $branch $build_date
     nbpkg_log_init $arch $branch $build_date
+    t_start=$(unixtime)
     (
 	logit "session: start $arch $branch $build_nyid"
-	t_start=$(unixtime)
 	queue_add active $arch $branch $build_date
-
+	
         nbpkg_build_run_session_start_hook
+
+	is_already_done=$(queue_find done $arch $branch $build_date)
+	if [ ${is_already_done} -eq 1 ];then
+	    logit "session: skip $arch $branch $build_nyid"
+	    exit 0
+	fi
 
 	# 1.  preparation
 	# 1.1 download and extract the latest daily build
@@ -92,7 +98,8 @@ do
 	# 1.2 official release exception
 	expr $branch : release >/dev/null
 	if [ $? -eq 0 ];then
-	    nbpkg_build_gen_basepkg_conf   $arch $branch $build_date /dev/null
+	    _new="build_target=release"
+	    nbpkg_build_gen_basepkg_conf   $arch $branch $build_date $_new
 	    nbpkg_build_run_basepkg        $arch $branch             "all"
 	    nbpkg_release_basepkg_packages $arch $branch             "all"
 	    queue_add done                 $arch $branch $build_date
@@ -132,18 +139,17 @@ do
         nbpkg_build_run_session_end_hook
 
 	queue_del active $arch $branch $build_date	
-	t_end=$(unixtime)
-	t_diff=$(($t_end - $t_start))
-	logit "session: end $arch $branch $build_nyid total: $t_diff sec."
     )
+      exit=$?				# session exit status
+     t_end=$(unixtime)
+    t_diff=$(($t_end - $t_start))
+    logit "session: end($exit) $arch $branch $build_nyid total: $t_diff sec."
 
-    if [ "X$is_debug" != "X" ];then logit "session: debug: not clean"; exit 0; fi
-
-    if [ $? != 0 ];then
+    if [ $exit != 0 ];then
 	queue_del active $arch $branch $build_date
 	queue_add retry  $arch $branch $build_date
 	nbpkg_dir_clean 1
-    	logit "session: ***error*** arch=$arch ended abnormally."
+    	logit "session: ***error*** arch=$arch ended abnormally($exit)."
     else
 	nbpkg_dir_clean 0
     fi

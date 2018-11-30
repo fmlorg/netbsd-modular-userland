@@ -77,9 +77,9 @@ do
 
     nbpkg_dir_init $arch $branch $build_date
     nbpkg_log_init $arch $branch $build_date
+    t_start=$(unixtime)
     (
 	logit "session: start $arch $branch $build_nyid"
-	t_start=$(unixtime)
 	queue_add active $arch $branch $build_date
 	
         nbpkg_build_run_session_start_hook
@@ -140,18 +140,17 @@ do
         nbpkg_build_run_session_end_hook
 
 	queue_del active $arch $branch $build_date	
-	t_end=$(unixtime)
-	t_diff=$(($t_end - $t_start))
-	logit "session: end $arch $branch $build_nyid total: $t_diff sec."
     )
+      exit=$?				# session exit status
+     t_end=$(unixtime)
+    t_diff=$(($t_end - $t_start))
+    logit "session: end($exit) $arch $branch $build_nyid total: $t_diff sec."
 
-    if [ "X$is_debug" != "X" ];then logit "session: debug: not clean"; exit 0; fi
-
-    if [ $? != 0 ];then
+    if [ $exit != 0 ];then
 	queue_del active $arch $branch $build_date
 	queue_add retry  $arch $branch $build_date
 	nbpkg_dir_clean 1
-    	logit "session: ***error*** arch=$arch ended abnormally."
+    	logit "session: ***error*** arch=$arch ended abnormally($exit)."
     else
 	nbpkg_dir_clean 0
     fi

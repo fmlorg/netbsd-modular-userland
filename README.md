@@ -50,12 +50,11 @@ man/man1/pkgin.1
 Package pkgin-0.11.6 registered in /var/db/pkg/pkgin-0.11.6
    ...
 
-Requesting http://basepkg.netbsd.fml.org/pub/NetBSD/basepkg/netbsd-8/i386/maint/list-pkg
-  0% |                                   |     0        0.00 KiB/s    --:-- ETA
-   ...
-100% |***********************************|   431      663.87 KiB/s    00:00 ETA
-431 bytes retrieved in 00:00 (70.66 KiB/s)
-pkgin import /var/db/nbpkg/list-pkg
+Requesting http://basepkg.netbsd.fml.org/pub/NetBSD/basepkg/netbsd-8/i386/maint/pkg_list2upgrade
+  0% |                                   |     0       0.00 KiB/s    --:-- ETA
+100% |***********************************|   435     967.66 KiB/s    00:00 ETA
+435 bytes retrieved in 00:00 (608.60 KiB/s)
+pkgin import /var/db/nbpkg/pkg_list2upgrade
 reading local summary...
 processing local summary...
 processing remote summary (http://basepkg.netbsd.fml.org/pub/NetBSD/basepkg/netbsd-8/i386/maint)...
@@ -63,55 +62,51 @@ downloading pkg_summary.gz: ...
 calculating dependencies...done.
 
 29 packages to install:
-  base-cron-bin-8.0.20181120 base-ext2fs-root-8.0.20181120
-  base-mk-share-8.0.20181120 base-netutil-bin-8.0.20181120
-  base-netutil-root-8.0.20181120 base-nis-bin-8.0.20181120
-  base-sysutil-bin-8.0.20181120 base-sysutil-root-8.0.20181120
-  base-util-bin-8.0.20181120 base-util-root-8.0.20181120
-  comp-c-include-8.0.20181120 comp-c-lib-8.0.20181120 comp-c-man-8.0.20181120
-  comp-c-proflib-8.0.20181120 comp-cron-debug-8.0.20181120
-  comp-ext2fs-debug-8.0.20181120 comp-netutil-debug-8.0.20181120
-  comp-sys-man-8.0.20181120 comp-sysutil-debug-8.0.20181120
-  comp-util-debug-8.0.20181120 etc-sys-etc-8.0.20181120
-  man-ext2fs-man-8.0.20181120 man-npf-man-8.0.20181120 man-pf-man-8.0.20181120
-  man-sys-man-8.0.20181120 man-sysutil-man-8.0.20181120
-  man-util-man-8.0.20181120 text-groff-share-8.0.20181120
-  xetc-sys-etc-8.0.20181120
+  base-cron-bin-8.0.20181123 base-ext2fs-root-8.0.20181123
+  base-mk-share-8.0.20181123 base-netutil-bin-8.0.20181123
+  base-netutil-root-8.0.20181123 base-nis-bin-8.0.20181123
+  base-sysutil-bin-8.0.20181126 base-sysutil-root-8.0.20181123
+  base-util-bin-8.0.20181123 base-util-root-8.0.20181123
+  comp-c-include-8.0.20181123 comp-c-lib-8.0.20181129 comp-c-man-8.0.20181123
+  comp-c-proflib-8.0.20181129 comp-cron-debug-8.0.20181123
+  comp-ext2fs-debug-8.0.20181123 comp-netutil-debug-8.0.20181123
+  comp-sys-man-8.0.20181123 comp-sysutil-debug-8.0.20181126
+  comp-util-debug-8.0.20181123 man-ext2fs-man-8.0.20181123
+  man-netutil-man-8.0.20181126 man-npf-man-8.0.20181123 man-pf-man-8.0.20181123
+  man-sys-man-8.0.20181123 man-sysutil-man-8.0.20181123
+  man-util-man-8.0.20181123 text-groff-share-8.0.20181123
+  xetc-sys-etc-8.0.20181123
 
 0 to refresh, 0 to upgrade, 29 to install
-61M to download, 220M to install
+62M to download, 221M to install
 
 proceed ? [Y/n] y
-downloading base-cron-bin-8.0.20181120.tgz ...
+downloading base-cron-bin-8.0.20181123.tgz ...
     ...
-downloading xetc-sys-etc-8.0.20181120.tgz ...
-installing base-cron-bin-8.0.20181120...
+installing base-cron-bin-8.0.20181123...
     ...
-installing xetc-sys-etc-8.0.20181120...
 pkg_install warnings: 0, errors: 0
 reading local summary...
 processing local summary...
-marking base-cron-bin-8.0.20181120 as non auto-removable
     ...
-marking xetc-sys-etc-8.0.20181120 as non auto-removable
+marking xetc-sys-etc-8.0.20181123 as non auto-removable
 
 
-# ls /var/db/pkg
-base-cron-bin-8.0.20181120              comp-netutil-debug-8.0.20181120
-base-ext2fs-root-8.0.20181120           comp-sys-man-8.0.20181120
-base-mk-share-8.0.20181120              comp-sysutil-debug-8.0.20181120
-base-netutil-bin-8.0.20181120           comp-util-debug-8.0.20181120
-base-netutil-root-8.0.20181120          etc-sys-etc-8.0.20181120
-base-nis-bin-8.0.20181120               man-ext2fs-man-8.0.20181120
-base-sysutil-bin-8.0.20181120           man-npf-man-8.0.20181120
-base-sysutil-root-8.0.20181120          man-pf-man-8.0.20181120
-base-util-bin-8.0.20181120              man-sys-man-8.0.20181120
-base-util-root-8.0.20181120             man-sysutil-man-8.0.20181120
-comp-c-include-8.0.20181120             man-util-man-8.0.20181120
-comp-c-lib-8.0.20181120                 pkg_install-20180425
-comp-c-man-8.0.20181120                 pkgdb.byfile.db
-comp-c-proflib-8.0.20181120             pkgin-0.11.6
-comp-cron-debug-8.0.20181120            text-groff-share-8.0.20181120
-comp-ext2fs-debug-8.0.20181120          xetc-sys-etc-8.0.20181120
-
+techne# ls var/db/pkg
+base-cron-bin-8.0.20181123              comp-netutil-debug-8.0.20181123
+base-ext2fs-root-8.0.20181123           comp-sys-man-8.0.20181123
+base-mk-share-8.0.20181123              comp-sysutil-debug-8.0.20181126
+base-netutil-bin-8.0.20181123           comp-util-debug-8.0.20181123
+base-netutil-root-8.0.20181123          man-ext2fs-man-8.0.20181123
+base-nis-bin-8.0.20181123               man-netutil-man-8.0.20181126
+base-sysutil-bin-8.0.20181126           man-npf-man-8.0.20181123
+base-sysutil-root-8.0.20181123          man-pf-man-8.0.20181123
+base-util-bin-8.0.20181123              man-sys-man-8.0.20181123
+base-util-root-8.0.20181123             man-sysutil-man-8.0.20181123
+comp-c-include-8.0.20181123             man-util-man-8.0.20181123
+comp-c-lib-8.0.20181129                 pkg_install-20180425
+comp-c-man-8.0.20181123                 pkgdb.byfile.db
+comp-c-proflib-8.0.20181129             pkgin-0.11.6
+comp-cron-debug-8.0.20181123            text-groff-share-8.0.20181123
+comp-ext2fs-debug-8.0.20181123          xetc-sys-etc-8.0.20181123
 ```

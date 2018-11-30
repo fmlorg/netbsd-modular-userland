@@ -126,6 +126,10 @@ nbpkg_dir_clean () {
     local time=$(unixtime)
 
     if [ -d $base_dir ];then
+ 	debug_dir=$done_dir/debug-config
+ 	test -d $debug_dir || mkdir -p $debug_dir
+	mv $junk_dir $debug_dir/$(basename $junk_dir).$(date +%s)
+
 	if [ $status = 0 ];then
 	    mv $base_dir $done_dir/done.$name.$time
 	    logit nbpkg_dir_clean: moved to $done_dir/done.$name.$time

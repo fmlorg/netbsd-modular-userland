@@ -319,6 +319,7 @@ nbpkg_build_run_basepkg () {
     local   mode=$3
     local   conf=$(_nbpkg_build_basepkg_conf_path $arch $branch $mode)
     local prog
+    local  trace=$junk_dir/log.run.basepkg.sh
     local t_start t_end t_diff
 
     prog="basepkg.sh"
@@ -330,14 +331,15 @@ nbpkg_build_run_basepkg () {
 	cd $basepkg_base_dir || exit 1
 	pwd
 	if [ "X$is_debug" != "X" ];then
-	    /bin/sh -vx $prog $opt1 $opt2 pkg
+	    /bin/sh -vx $prog $opt1 $opt2 pkg >$trace 2>&1
 	else
-	    /bin/sh     $prog $opt1 $opt2 pkg
+	    /bin/sh     $prog $opt1 $opt2 pkg >$trace 2>&1
 	fi
     )
     _exit=$?
     if [ $_exit != 0 ];then
-	fatal "run_basepkg: failed ($_exit): $prog $opt1 $opt2 pkg"
+	_msg="$(grep ERROR $trace)"
+	fatal "run_basepkg: failed ($_exit: $_msg): trace=$trace: $prog $opt1 $opt2 pkg"
     fi
     t_end=$(unixtime)
     t_diff=$(($t_end - $t_start))

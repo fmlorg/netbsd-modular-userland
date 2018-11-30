@@ -272,7 +272,24 @@ nbpkg_build_gen_basepkg_conf () {
     local b_date=$3
     local    new=$4
     local   b_id=$(nbpkg_build_id $arch $branch $b_date)
+    local b_target
     local _pkg
+    local mode_list
+
+    # release mode: fake $new and $filter not used in basepkg.
+    if [ "X$new" = "Xbuild_target=release" ];then
+	logit "gen_basepkg_conf: release mode"
+	b_target=release
+	mode_list="all"
+
+	# fake $new
+        new=$junk_dir/list.basepkg.mode=release
+	echo "build_target=release" > $new
+    else
+	logit "gen_basepkg_conf: daily mode"
+	b_target=daily
+	mode_list="maint all"	
+    fi
 
     # filter
     local filter=$junk_dir/list.basepkg.filter
@@ -281,7 +298,7 @@ nbpkg_build_gen_basepkg_conf () {
 	echo $_pkg'$' >> $filter
     done 
 
-    for mode in maint all
+    for mode in $mode_list
     do
 	_conf=$(_nbpkg_build_basepkg_conf_path $arch $branch $mode)
 	_list=$(_nbpkg_build_gen_list_all      $arch $branch $mode)
@@ -303,7 +320,7 @@ nbpkg_build_gen_basepkg_conf () {
 
           nbpkg_build_date=$b_date
             nbpkg_build_id=$b_id
-    
+    	nbpkg_build_target=$b_target
 _EOF_
 
    done

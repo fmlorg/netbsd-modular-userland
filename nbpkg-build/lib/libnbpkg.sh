@@ -209,8 +209,13 @@ _nbpkg_build_gen_list_all_maint () {
     local   _src=$(nbpkg_basepkg_data_file $arch $branch)
     local   _dst=$junk_dir/list.basepkg.all.$mode
 
-    debug_msg "list_all: mode=$mode cp -p $_src $_dst"
-    cp -p $_src $_dst
+    if [ -s $_src ];then
+	debug_msg "list_all: mode=$mode cp -p $_src $_dst"
+	cp -p    $_src $_dst
+    else
+	debug_msg "list_all: mode=$mode cp -p /dev/null $_dst"
+	cp -p /dev/null $_dst
+    fi
     echo $_dst
 }
 

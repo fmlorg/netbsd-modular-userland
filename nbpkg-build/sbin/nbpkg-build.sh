@@ -98,7 +98,9 @@ do
 	# 1.2 official release exception
 	expr $branch : release >/dev/null
 	if [ $? -eq 0 ];then
-	    nbpkg_build_gen_basepkg_conf   $arch $branch $build_date /dev/null
+	    logit "session: run $arch $branch $build_nyid"
+	    _new="build_target=release"
+	    nbpkg_build_gen_basepkg_conf   $arch $branch $build_date $_new
 	    nbpkg_build_run_basepkg        $arch $branch             "all"
 	    nbpkg_release_basepkg_packages $arch $branch             "all"
 	    queue_add done                 $arch $branch $build_date

@@ -5,6 +5,8 @@
 for more details. 
 
 Release: 
++ v0.3.0 support release mode for "nbpkg.sh -a" which enables bottom up build.
+         It means you can build your own NetBSD from the minimum installation.
 + v0.2.0 plan-B only updated packages are built by ident based comparison.
 + v0.1.1 plan-A, initial version. all packages are built if could.
 

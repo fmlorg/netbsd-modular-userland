@@ -282,7 +282,7 @@ nbpkg_build_gen_basepkg_conf () {
     local    new=$4
     local   b_id=$(nbpkg_build_id $arch $branch $b_date)
     local b_target
-    local _pkg
+    local _pkg _conf _list _x
     local mode_list
 
     # release mode: fake $new and $filter not used in basepkg.

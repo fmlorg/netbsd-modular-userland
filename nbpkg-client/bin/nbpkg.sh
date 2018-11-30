@@ -167,9 +167,9 @@ export PKG_REPOS
 
           NBPKG_DB=/var/db/nbpkg
     NBPKG_ADVISORY=$NBPKG_DB/nbpkg-advisory.txt
-NBPKG_ADVISORY_URL=http://$host/pub/NetBSD/nbpkg/$branch/$arch/$mode/list-pkg
-    NBPKG_LIST_PKG=$NBPKG_DB/list-pkg
-NBPKG_LIST_PKG_URL=$PKG_PATH/list-pkg
+NBPKG_ADVISORY_URL=http://$host/pub/NetBSD/nbpkg/$branch/$arch/$mode/pkg_list2upgrade
+    NBPKG_LIST_PKG=$NBPKG_DB/pkg_list2upgrade
+NBPKG_LIST_PKG_URL=$PKG_PATH/pkg_list2upgrade
 
 # debug
 echo ""                                 1>&2                    

@@ -461,7 +461,7 @@ nbpkg_release_basepkg_packages () {
     #    so, old and new packages updated from the official release.
     mv *tgz                   $www_dir/
 
-    # 2. generate list-pkg, SHA512 and pkg_summary.gz for all packages
+    # 2. generate pkg_list2upgrade, SHA512 and pkg_summary.gz for all packages
     #    in $www_dir.
     cd $www_dir || exit 1
 
@@ -482,17 +482,17 @@ nbpkg_release_basepkg_packages () {
     /bin/ls *.tgz 					|
     sed 's/-[0-9]*.[0-9]*.[0-9]*.tgz//'			|
     sort						|
-    uniq 						> list-pkg.new 
+    uniq 						> pkg_list2upgrade.new 
 
     # [XXX DIRTY HACK]
     # Temporarily we exclude "etc-*-*" in full-upgrade to avoid
     # cirtical side effect such as "/etc/passwd is overwritten". 
-    # So, etc-*-* is removed in the file "list-pkg".
-    egrep -v '^etc-*' list-pkg.new > list-pkg.new.new 
-    mv list-pkg.new.new list-pkg.new
+    # So, etc-*-* is removed in the file "pkg_list2upgrade".
+    egrep -v '^etc-*' pkg_list2upgrade.new > pkg_list2upgrade.new.new 
+    mv pkg_list2upgrade.new.new pkg_list2upgrade.new
 
-    if [ ! -s list-pkg.new   ];then fatal "release: empty list-pkg"        ;fi
-    if [   -s list-pkg.new   ];then    mv  list-pkg.new   list-pkg         ;fi
+    if [ ! -s pkg_list2upgrade.new ];then fatal "release: empty pkg_list2upgrade" ;fi
+    if [   -s pkg_list2upgrade.new ];then    mv  pkg_list2upgrade.new pkg_list2upgrade ;fi
 
     logit "release: arch=$arch at $www_dir/"
     

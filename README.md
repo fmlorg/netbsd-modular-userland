@@ -14,7 +14,9 @@ You can update NetBSD userland to the NetBSD stable
 by running a command such as
 [nbpkg.sh](https://github.com/fmlorg/netbsd-modular-userland/nbpkg-client/bin/nbpkg.sh).
 [nbpkg.sh](https://github.com/fmlorg/netbsd-modular-userland/nbpkg-client/bin/nbpkg.sh)
-is a shell script used as a client to use **basepkg** packages.
+is a shell script used as a client to use 
+**[basepkg](https://github.comf/user340/basepkg)**
+packages.
 it is a wrapper of [pkgsrc/pkgtools/pkgin](http://pkgin.net/)
 and a reference implementation.
 

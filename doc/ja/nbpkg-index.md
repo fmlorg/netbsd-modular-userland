@@ -22,17 +22,20 @@
    # nbpkg.sh install base-crypto-shlib
    ```
 
-1. [未完成] え、パッケージ名は openssl ではないの？
+1. え、パッケージ名は openssl ではないの？
 
-   nbpkg.sh でエイリアスかけられるようにしようとおもいます。
+   nbpkg.sh で最低限のエイリアスをかけています。
    ```
    # nbpkg.sh install openssl
    ```
-   を実行しても
+   を実行して場合
    ```
    # nbpkg.sh install base-crypto-shlib
    ```
-   を実行するような alias をクライアントに持たせようと思います。
+   を実行します。
+   今、サポートしているエイリアスは
+   bind named openssh openssl postfix
+   です。
    
 
 1. minimum installation からボトムアップしていくときは、どうすればいいの？

@@ -44,6 +44,41 @@ netbsd_resolve_machine_and_arch () {
 
 }
 
+syspkgs_alias_lookup () {
+    local pkg_name=$1
+    local     file=/var/tmp/alias.nppkg.$$
+
+    cat > $file <<-_EOF_ALIAS_
+	libcrypto.so		base-crypto-shlib
+	libssl.so		base-crypto-shlib
+	openssl			base-crypto-shlib
+	openssl			base-crypto-bin
+	openssh			base-secsh-bin
+	named			base-bind-bin
+	bind			base-bind-bin
+	postfix			base-postfix-bin
+	_EOF_ALIAS_
+
+    grep "^$pkg_name[[:space:]]" $file | awk '{print $2}'
+}
+
+nbpkg_expand_argv () {
+    local _arg _r _x
+
+    _r=""
+    for _arg in $*
+    do
+	_x=$(syspkgs_alias_lookup "$_arg")
+	if [ "X$_x" != "X" ];then
+		_r="$_r $_x"
+	else
+		_r="$_r $_arg"
+	fi
+    done
+
+    echo "$_r"
+}
+
 do_pkgin () {
     echo pkgin $*
          pkgin $*
@@ -179,17 +214,21 @@ echo ""                                 1>&2
 
 do_init
 
+argv_new=$(nbpkg_expand_argv $*)
+
+echo "debug: ARGV $argv_new"		1>&2
+
 if [ $# -eq 0 ]; then usage; exit 1;fi
 case $1 in
-    help | -h | \?  )  usage;               exit 1;;
-    install         )  shift; do_install       $* ;;
-    remove          )  shift; do_remove        $* ;;
-    update          )  shift; do_update        $* ;;
-    upgrade         )  shift; do_upgrade       $* ;;
-    full-upgrade    )  shift; do_full_upgrade  $* ;;
-    init            )  shift; do_init          $* ;;
-    [a-z]*          )         do_direct_pkgin  $* ;;
-    *               )  usage;               exit 1;;
+    help | -h | \?  )  usage;                      exit 1;;
+    install         )  shift; do_install       $argv_new ;;
+    remove          )  shift; do_remove        $argv_new ;;
+    update          )  shift; do_update        $argv_new ;;
+    upgrade         )  shift; do_upgrade       $argv_new ;;
+    full-upgrade    )  shift; do_full_upgrade  $argv_new ;;
+    init            )  shift; do_init          $argv_new ;;
+    [a-z]*          )         do_direct_pkgin  $argv_new ;;
+    *               )  usage;                      exit 1;;
 esac
 
 exit 0;

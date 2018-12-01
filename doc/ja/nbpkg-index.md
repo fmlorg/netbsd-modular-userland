@@ -69,9 +69,20 @@
 
 ## 構成要素
 
-次の二つの要素から構成されます。
+これらの要素から構成されます。
 + ユーザランドを分解する仕組み [basepkg](https://github.com/user340/basepkg)
-+ basepkgを用いて作ったパッケージ群を配布する仕組み(nbpkg-build) 
++ basepkgを用いて作ったパッケージ群を配布する仕組み(本リポジトリ)
+    + [nbpkg-build](https://github.com/fmlorg/netbsd-modular-userland/)
+      以下の nbpkg-build がサーバの実体
+    + [nbpkg-build](https://github.com/fmlorg/netbsd-modular-userland/)
+      以下の nbpkg-data  は ident データベース構築のユーティリティ
++ クライアント(本リポジトリ)
+    + [nbpkg-build](https://github.com/fmlorg/netbsd-modular-userland/)
+      以下の nbpkg-client がクライアントのリファレンス実装です。
+      pkgsrcのユーティリティの wapper ですが、
+      それらを呼び出す前に環境設定やエイリアス展開など、
+      いくらか便利な機能が追加されています。
+      
 
 このリポジトリは、配布サーバとクライアントのリファレンス実装です。
 

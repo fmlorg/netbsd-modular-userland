@@ -94,7 +94,7 @@ processing local summary...
 marking xetc-sys-etc-8.0.20181123 as non auto-removable
 
 
-techne# ls var/db/pkg
+# ls var/db/pkg
 base-cron-bin-8.0.20181123              comp-netutil-debug-8.0.20181123
 base-ext2fs-root-8.0.20181123           comp-sys-man-8.0.20181123
 base-mk-share-8.0.20181123              comp-sysutil-debug-8.0.20181126

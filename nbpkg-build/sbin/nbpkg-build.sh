@@ -78,6 +78,9 @@ do
     nbpkg_dir_init $arch $branch $build_date
     nbpkg_log_init $arch $branch $build_date
     t_start=$(unixtime)
+    __lockf=/tmp/.lock.nbpkg.build.$branch.$arch
+    if shlock -f $__lockf -p $$
+    then 
     (
 	logit "session: start $arch $branch $build_nyid"
 	queue_add active $arch $branch $build_date
@@ -141,7 +144,13 @@ do
 
 	queue_del active $arch $branch $build_date	
     )
-      exit=$?				# session exit status
+	exit=$?				# session exit status
+	rm $__lockf
+    else
+	exit=1				# session exit status
+    	logit "session: ***error*** arch=$arch locked."
+    fi
+
      t_end=$(unixtime)
     t_diff=$(($t_end - $t_start))
     logit "session: end($exit) $arch $branch $build_nyid total: $t_diff sec."

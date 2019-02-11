@@ -1,7 +1,7 @@
 # NetBSD modular userland
 
-[[English]](doc/en/nbpkg-index.md)
-[[Japanese]](doc/ja/nbpkg-index.md)
+[[English]](doc/en/README.md)
+[[Japanese]](doc/ja/README.md)
 for more details. 
 
 Latest Release: v0.3.0 (2018/12/01)

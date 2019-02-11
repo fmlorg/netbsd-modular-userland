@@ -178,6 +178,14 @@ nbpkg_build_assert () {
     fi
 }
 
+nbpkg_build_check_suicide () {
+    local preempt="/tmp/.preempt.nbpkg.stop.all"
+
+    if [ -f $preempt ];then
+	fatal "maintenance mode, stopped."
+    fi
+}
+
 
 #
 # HOOKS

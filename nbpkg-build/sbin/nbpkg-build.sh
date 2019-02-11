@@ -154,6 +154,8 @@ do
     else
 	nbpkg_dir_clean 0
     fi
+
+    nbpkg_build_check_suicide
 done
 
 exit 0

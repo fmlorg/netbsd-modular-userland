@@ -1,4 +1,4 @@
-# NetBSD modular userland
+# NetBSD modular userland distribution service
 
 [[English]](doc/en/README.md)
 [[Japanese]](doc/ja/README.md)

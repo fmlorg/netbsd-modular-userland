@@ -1,7 +1,9 @@
-# NetBSD modular userland *ident based comparison*
+# NetBSD modular userland distribution service
 
 **old REMADE.md is moved to here, but not yet updated, sorry.**
 
+There are a few memo/idea on NetBSD modular userland *ident based comparison*.
+ 
 
 ## CAUTION
 

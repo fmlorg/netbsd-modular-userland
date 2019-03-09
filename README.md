@@ -4,11 +4,12 @@
 [[Japanese]](doc/ja/README.md)
 for more details. 
 
-Latest Release: v0.3.0 (2018/12/01)
+Latest Release: v0.4.0 (2018/02/11)
++ v0.4.0 master daemon controlls the whole processes now.
 + v0.3.0 support release mode for "nbpkg.sh -a" which enables bottom up build.
          It means you can build your own NetBSD from the minimum installation.
 
-[[*HISTORY*]](doc/en/history.md)
+[[*CHANGES (see it for a little more details)*]](CHANGES.md)
 
 ## What is this ?
 

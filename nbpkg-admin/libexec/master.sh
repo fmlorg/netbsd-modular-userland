@@ -55,6 +55,7 @@ run_loop_foreach_tier () {
 	1) list="$TIER_1";        shift;;
 	2) list="$TIER_2";        shift;;
 	3) list="$TIER_3";        shift;;
+      all) list="--all";          shift;;
 	*) echo "run_loop_foreach_tier: no arg"; exit 1;
     esac
 
@@ -78,8 +79,17 @@ PREEMPT=/tmp/.preempt.nbpkg.stop.all
  BRANCH=netbsd-8
   LOCKF=/tmp/.lock.nbpkg.master.$BRANCH.$MODE
  TIER_1="amd64 evbarm evbmips evbppc hpcarm i386 sparc64 xen"
+ TIER_1="amd64 hpcarm i386 sparc64 xen"
+ TIER_1="$TIER_1 	evbarm-earm evbarm-earmeb evbarm-earmv6hf 	\
+			evbarm-earmv7hf evbarm-earmv7hfeb"
+ TIER_1="$TIER_1	evbmips-mips64eb evbmips-mips64el 		\
+			evbmips-mipseb evbmips-mipsel"
+ TIER_1="$TIER_1	evbppc"
+
  TIER_2="acorn32 algor alpha amiga amigappc arc atari bebox cats	\
-	 cesfic cobalt dreamcast emips epoc32 evbsh3 ews4800mips hp300	\
+	 cesfic cobalt dreamcast emips epoc32 				\
+	 evbsh3-sh3eb evbsh3-sh3el					\
+	 ews4800mips hp300						\
 	 hppa hpcmips hpcsh ia64 ibmnws iyonix landisk luna68k mac68k	\
 	 macppc mipsco mmeye mvme68k mvmeppc netwinder news68k		\
 	 newsmips next68k ofppc pmax prep rs6000 sandpoint sbmips	\
@@ -109,6 +119,7 @@ then
         run_loop_foreach_tier 1
         run_loop_foreach_tier 2
         run_loop_foreach_tier 3
+        run_loop_foreach_tier all
     else
         run_loop_foreach_tier 1
      fi

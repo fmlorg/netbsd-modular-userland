@@ -82,6 +82,7 @@ nbpkg_basepkg_get_sets_lists () {
     local   arch=$1
     local branch=$2
     local   list=""
+    local  _arch=$(echo $arch | sed 's/-[a-z0-9]*$//')
 
     for x in $basepkg_list_dir/*/mi $basepkg_list_dir/*/md*$_arch
     do

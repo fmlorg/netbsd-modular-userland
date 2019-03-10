@@ -376,7 +376,8 @@ nbpkg_build_run_basepkg () {
     fi 
 
     prog="basepkg.sh"
-    opt1="--obj $base_dir --releasedir=$rels_dir --machine=$arch"
+    opt1="--obj $base_dir --releasedir=$rels_dir --destdir=$dest_dir \
+          --machine=$arch"
     opt2="--enable-nbpkg-build --with-nbpkg-build-config=$conf"
     logit "run_basepkg: $prog"
     t_start=$(unixtime)

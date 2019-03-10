@@ -1,5 +1,16 @@
 	CHANGES on NetBSD modular userland distribution service
 
+2019/03/10
+
+    v0.5.0 beta
+
+    make the broken build of evb*-* targets work following the fixes:
+    (1) use of alias $machine/$machine_arch name to inform to basepkg.sh
+        e.g. evbearm-el for evbarm-earm
+    (2) sets/lists search fixes.
+        e.g. we should search md.evbarm not evbarm-earm
+    (3) run basepkg.sh with --destdir ...
+
 2019/02/11
     v0.4.0 release
 

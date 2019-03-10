@@ -41,6 +41,16 @@ run_nbpkg_build () {
     local   arch=$1
     local branch=$2
 
+    # XXX broken now.
+    for broken in evbarm-earmv6hf  evbarm-earmv7hf  evbarm-earmv7hfeb \
+		  evbmips-mips64eb evbmips-mips64el
+    do
+	if [ "X$arch" = "X$broken" ];then
+	    logger "$0 skip $arch"
+	    exit 1
+	fi
+    done
+
     [ "X$arch" = "X--all" ] && arch=""
     ${SHELL} ${SH_OPTS} nbpkg-build/sbin/nbpkg-build.sh -b $branch $arch
 }

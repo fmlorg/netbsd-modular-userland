@@ -11,6 +11,22 @@
         e.g. we should search md.evbarm not evbarm-earm
     (3) run basepkg.sh with --destdir ...
 
+    The following architures becomes operational now:
+
+	evbarm-earm
+	evbarm-earmeb
+	evbmips-mipseb
+	evbmips-mipsel
+	evbsh3-sh3eb
+	evbsh3-sh3el
+
+    but the build of the following architecures is incomplete:
+	evbmips-mips64el
+	evbmips-mips64eb
+	evbarm-earmv7hf
+	evbarm-earmv6hf
+	evbarm-earmv7hfeb
+
 2019/02/11
     v0.4.0 release
 

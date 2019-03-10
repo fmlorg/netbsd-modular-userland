@@ -81,8 +81,19 @@ nbpkg_basepkg_data_file () {
 nbpkg_basepkg_get_sets_lists () {
     local   arch=$1
     local branch=$2
+    local   list=""
 
-    echo $basepkg_list_dir/*/mi $basepkg_list_dir/*/md*$arch
+    for x in $basepkg_list_dir/*/mi $basepkg_list_dir/*/md*$_arch
+    do
+	if [ -f $x ];then
+	    list="$list $x"
+	else
+	    logit "sets/lists: no such file: $x"
+	fi
+    done
+
+    logit "sets/lists: ($list)"
+    echo $list
 }
 
 nbpkg_data_backup_dir () {

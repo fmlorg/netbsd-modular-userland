@@ -356,6 +356,13 @@ nbpkg_build_run_basepkg () {
     local  trace=$junk_dir/log.run.basepkg.sh
     local t_start t_end t_diff
 
+    # feature/machine-arch-alias branch
+    alias=$(nbdist_get_machine_arch_alias $arch)
+    if [ "X$alias" != "X" ];then
+	logit "run_basepkg: use $alias as \$arch instead of $arch"
+        arch=$alias
+    fi 
+
     prog="basepkg.sh"
     opt1="--obj $base_dir --releasedir=$rels_dir --machine=$arch"
     opt2="--enable-nbpkg-build --with-nbpkg-build-config=$conf"

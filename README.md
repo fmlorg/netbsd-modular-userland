@@ -4,7 +4,8 @@
 [[Japanese]](doc/ja/README.md)
 for more details. 
 
-Latest Release: v0.4.0 (2018/02/11)
+Latest Release: v0.5.0 (2018/03/11)
++ v0.5.0 make the broken build of some evb*-* though some remains as broken.
 + v0.4.0 master daemon controlls the whole processes now.
 + v0.3.0 support release mode for "nbpkg.sh -a" which enables bottom up build.
          It means you can build your own NetBSD from the minimum installation.

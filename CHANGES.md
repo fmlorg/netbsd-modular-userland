@@ -1,8 +1,9 @@
 	CHANGES on NetBSD modular userland distribution service
 
-2019/03/10
+2019/03/11
 
-    v0.5.0 beta
+    v0.5.0 release
+    [feature/machine-arch-alias] branch is merged into master.
 
     make the broken build of evb*-* targets work following the fixes:
     (1) use of alias $machine/$machine_arch name to inform to basepkg.sh

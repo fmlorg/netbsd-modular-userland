@@ -101,23 +101,9 @@ do
 	fi
 
 	# 1.  preparation
-	# 1.1 download only etc.tgz and check mtree changes for stable branch
-	# 1.2 download and extract all *.tgz
-	#     for the latest daily build and official release cases.
-	if [ "X$strategy" = "Xmtree" ];then
-	    echo "-s: download only etc.tgz, extract /etc/mtree and compare"
-	    echo "-s: if some changes found, download all *.tgz"
-	    exit 0
-	    if [ "X$__if_mtree_changes_found__" != "X" ];then
-	        nbdist_download $arch $build_url/$arch/binary/sets/
-	        nbdist_extract  $arch
-	    fi
-	else
-	    # download *.tgz in the case of $strategy == {ident or release}.
-	    # we need all *.tgz in ident check and official release cases.
-	    nbdist_download $arch $build_url/$arch/binary/sets/
-	    nbdist_extract  $arch
-	fi
+	# 1.1 download and extract the latest daily build
+	nbdist_download $arch $build_url/$arch/binary/sets/
+	nbdist_extract  $arch
 	
 	# 1.2 official release exception
 	expr $branch : release >/dev/null
@@ -138,20 +124,19 @@ do
 	#     extract ident data, compare it with the saved one and
 	#     generate the list of basepkg to re-build as a file $basepkg_new.
 	# (b) mtree based check
-	#     mtree changes are verified before download, so that here
-	#     we generate the syspkgs list to build based on mtree changes.
+	#     check mtree changes for /etc/mtree/set.* and
+	#     generate the syspkgs list to build based on mtree changes.
+	basepkg_new=$junk_dir/list.basepkg.changed
 	if   [ "X$strategy" = "Xident" ];then
-	    basepkg_new=$junk_dir/list.basepkg.changed
 	    nbdist_check_ident_changes $arch $branch $build_date $basepkg_new
-	    if [ -s $basepkg_new ];then
-	        logit "session: ident changes found, go forward"
-	    else
-	        logit "session: no ident changes, do nothing"
-	        exit 0
-	    fi
 	elif [ "X$strategy" = "Xmtree" ];then
-	    echo "-s: generate \$basepkg_new based mtree changes"
 	    nbdist_check_mtree_changes $arch $branch $build_date $basepkg_new
+	fi
+	
+	if [ -s $basepkg_new ];then
+	    logit "session: $strategy changes found, go forward"
+	else
+	    logit "session: no ident changes, do nothing"
 	    exit 0
 	fi
 

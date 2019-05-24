@@ -46,13 +46,20 @@ nbpkg_build_assert
 is_debug=${DEBUG:-""}
 is_require_download_and_extract=""
 
+# strategy: ident(v0.2.0-v0.5.0), mtree(>v0.5.0) and release(>v0.5.0)
+#              ident = ident based comparison (obsolete)
+#              mtree = mtree based comparison (default > v0.5.0)
+#            release = virtual strategy for the official release
+strategy=mtree
+
 # parse options
-while getopts dvhb: _opt
+while getopts dvhb:s: _opt
 do
     case $_opt in
        h | \?) echo "usage: $0 [-hdv] -b BRANCH [ARCH ...]" 1>&2; exit 1;;
        d | v)  is_debug=1;;
        b)      branch=$OPTARG;;
+       s)      strategy=$OPTARG;;
     esac
 done
 shift $(expr $OPTIND - 1)
@@ -94,10 +101,24 @@ do
 	fi
 
 	# 1.  preparation
-	# 1.1 download and extract the latest daily build
-	nbdist_download $arch $build_url/$arch/binary/sets/
-	nbdist_extract  $arch
-
+	# 1.1 download only etc.tgz and check mtree changes for stable branch
+	# 1.2 download and extract all *.tgz
+	#     for the latest daily build and official release cases.
+	if [ "X$strategy" = "Xmtree" ];then
+	    echo "-s: download only etc.tgz, extract /etc/mtree and compare"
+	    echo "-s: if some changes found, download all *.tgz"
+	    exit 0
+	    if [ "X$__if_mtree_changes_found__" != "X" ];then
+	        nbdist_download $arch $build_url/$arch/binary/sets/
+	        nbdist_extract  $arch
+	    fi
+	else
+	    # download *.tgz in the case of $strategy == {ident or release}.
+	    # we need all *.tgz in ident check and official release cases.
+	    nbdist_download $arch $build_url/$arch/binary/sets/
+	    nbdist_extract  $arch
+	fi
+	
 	# 1.2 official release exception
 	expr $branch : release >/dev/null
 	if [ $? -eq 0 ];then
@@ -112,15 +133,25 @@ do
 	    exit 0
 	fi
 
-	# 1.2 ident based check
+	# 1.2 ident/mtree based check
+	# (a) ident based check
 	#     extract ident data, compare it with the saved one and
 	#     generate the list of basepkg to re-build as a file $basepkg_new.
-	basepkg_new=$junk_dir/list.basepkg.changed
-	nbdist_check_ident_changes $arch $branch $build_date $basepkg_new
-	if [ -s $basepkg_new ];then
-	    logit "session: ident changes found, go forward"
-	else
-	    logit "session: no ident changes, do nothing"
+	# (b) mtree based check
+	#     mtree changes are verified before download, so that here
+	#     we generate the syspkgs list to build based on mtree changes.
+	if   [ "X$strategy" = "Xident" ];then
+	    basepkg_new=$junk_dir/list.basepkg.changed
+	    nbdist_check_ident_changes $arch $branch $build_date $basepkg_new
+	    if [ -s $basepkg_new ];then
+	        logit "session: ident changes found, go forward"
+	    else
+	        logit "session: no ident changes, do nothing"
+	        exit 0
+	    fi
+	elif [ "X$strategy" = "Xmtree" ];then
+	    echo "-s: generate \$basepkg_new based mtree changes"
+	    nbdist_check_mtree_changes $arch $branch $build_date $basepkg_new
 	    exit 0
 	fi
 

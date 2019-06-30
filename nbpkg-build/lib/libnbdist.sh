@@ -445,6 +445,131 @@ nbdist_extract () {
 
 
 #
+# MTREE BASED TRACE
+#
+
+nbdist_get_mtree_list () {
+    local   arch=$1
+    local branch=$2
+    local b_date=$3
+    local   list=$4
+
+    cd $dest_dir || fatal "cannot chdir \$dest_dir"
+    cat etc/mtree/set.*						|
+    egrep -v '^./'						|
+    sort							>$list
+}
+
+# Descriptions: return the list of changed syspkgs names 
+#               if the mtree based changes are found.
+#    Arguments: STR(arch) STR(branch) NUM(vers) STR(diff)
+# Side Effects: add the updates into transaction queue if changes are found.
+# Return Value: NONE
+nbdist_check_mtree_changes () {
+    local   arch=$1
+    local branch=$2
+    local b_date=$3
+    local _bdiff=$4	# basepkg diff
+
+    # mtree database
+    # e.g. /var/nbpkg-build/db/mtree/netbsd-8/i386 holds the latest mtree data
+    #	   which will be replaced to the current one if the changes are found.
+    local _mbak=$(nbpkg_mtree_data_file $arch $branch)
+    local _mnew=$junk_dir/tmp.mtree.new
+
+    if [ ! -s $_mbak ];then
+	fatal "nbdist_mtree: $_mbak not exist"
+    fi
+
+    # 1. create the latest mtree data at "$_mnew",
+    # 2. compare "$_mbak" with "$_mnew" to generate mtree diff,
+    # 3. convert mtree diff to the list of basepkg packages "$_bdiff".
+    nbdist_get_mtree_list $arch $branch $b_date $_mnew
+    if [ -s $_mnew ];then
+	# _m{bak,new} = mtree database
+	#      _bdiff = the list of changed basepkg names 
+        _nbdist_mtree_compare_files        $arch $branch $b_date \
+					   $_mbak $_mnew	 |
+	_nbdist_mtree_file_to_syspkgs_name $arch $branch $b_date > $_bdiff
+	if [ -s $_bdiff ];then
+		
+	    # prepare the build database update commits processed
+	    # after the basepkg is(are) released successfully.
+	    _nbdist_commit_updates  $arch $branch $b_date $_bdiff
+	    _nbdist_prepare_updates $arch $branch $b_date $_mbak $_mnew
+	else
+	    logit "nbdist_mtree: no changes arch=$arch"
+	fi
+    else
+	fatal "nbdist_mtree: empty output"
+    fi
+
+    echo $_bdiff
+}
+
+
+# return the list of mtree changed files not "syspkgs name".
+_nbdist_mtree_compare_files () {
+    _nbdist_ident_compare_files $1 $2 $3 $4 $5
+}
+
+# convert the list of mtree changed files to "syspkgs name".
+# XXX basepkg uses syspkgs metadata, so the package name is syspkgs derived.
+_nbdist_mtree_file_to_syspkgs_name () {
+    _nbdist_ident_file_to_syspkgs_name $1 $2 $3 $4 $5
+}
+ 
+
+# (1) _nbdist_commit_updates () 
+#     update list of released basepkg packages.
+#     e.g. "/var/nbpkg-build/db/basepkg/$branch/$arch".
+#
+# (2) _nbdist_prepare_updates ()
+#     update mtree data if basekpkg run succeesfully.
+#     e.g. "/var/nbpkg-build/db/mtree/$branch/$arch".
+#
+_nbdist_commit_updates () {
+    local         arch=$1
+    local       branch=$2
+    local       b_date=$3
+    local basepkg_diff=$4
+    local   basepkg_db=$(nbpkg_basepkg_data_file $arch $branch)
+    local    _build_id=$(nbpkg_build_id $arch $branch $b_date)
+
+    # update released basepkg database
+    #    each line: base-sys-root 8.0.20181101
+    #               used as e.g. "@sysdep base-sys-root>=8.0.20181101"
+    # XXX $basepkg_diff contains only basepkg names
+    while read -r pkg
+    do
+	logit "nbdist_mtree: $pkg changed arch=$arch"
+	echo "$pkg $_build_id"                        >> $basepkg_db
+    done < $basepkg_diff
+
+    nbpkg_data_backup $arch $branch $b_date "basepkg" $basepkg_db
+}
+
+_nbdist_prepare_updates () {
+    local      arch=$1
+    local    branch=$2
+    local    b_date=$3
+    local mtree_bak=$4
+    local mtree_new=$5
+    local      hook=$(nbpkg_build_path_session_end_hook)
+
+    cat > $hook <<__EOF__
+    # transaction: it should be eval-ed after the session successed.
+
+    # 1.   mtree database: overwritten
+    cp -p $mtree_new $mtree_bak
+
+    nbpkg_data_backup $arch $branch $b_date "mtree" $mtree_bak
+__EOF__
+}
+
+
+
+#
 # IDENT BASED TRACE
 #
 

@@ -338,6 +338,11 @@ _tnftp_nbdist_download () {
 	exit 1
     fi
 
+    # reset the flag once and check the downloaded status
+    if [ "X$is_debug" != "X" ];then
+	is_require_download_and_extract=0
+    fi
+
     # 2. download all entries
     _list=$(nbdist_get_list $url				|
 		tr ' ' '\n'					|
@@ -347,7 +352,16 @@ _tnftp_nbdist_download () {
     _url=$(echo $url | sed -e s/ftp.netbsd.org/ftp.jaist.ac.jp/g)
     for _x in $_list
     do
-	/usr/bin/ftp -V -o $_x $_url$_x
+	if [ -s $_x ];then
+	    if [ "X$is_debug" != "X" ];then
+		logit "download: debug: ok $_x exists"
+	    else
+		fatal "download: already $_x exists"
+	    fi
+	else
+	    /usr/bin/ftp -V -o $_x $_url$_x
+	    is_require_download_and_extract=1
+	fi
     done
 }
 

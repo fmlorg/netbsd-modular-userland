@@ -161,8 +161,11 @@ nbpkg_dir_clean () {
  	test -d $debug_dir || mkdir -p $debug_dir
 	mv $junk_dir $debug_dir/$(basename $junk_dir).$(date +%s)
 
-	if [ $status = 0 ];then
+	if   [ $status = 0 ];then
 	    mv $base_dir $done_dir/done.$name.$time
+	    logit nbpkg_dir_clean: moved to $done_dir/done.$name.$time
+	elif [ $status -ge 2 ];then
+	    mv $base_dir $base_dir/debug.$name.$time
 	    logit nbpkg_dir_clean: moved to $done_dir/done.$name.$time
 	else
 	    mv $base_dir $done_dir/errr.$name.$time

@@ -172,7 +172,9 @@ do
     t_diff=$(($t_end - $t_start))
     logit "session: end($exit) $arch $branch $build_nyid total: $t_diff sec."
 
-    if [ $exit != 0 ];then
+    if   [ "X$is_debug" != "" ];then
+    	logit "session: debug: $arch $branch holded as it is."
+    elif [ $exit != 0 ];then
 	queue_del active $arch $branch $build_date
 	queue_add retry  $arch $branch $build_date
 	nbpkg_dir_clean 1

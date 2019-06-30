@@ -559,7 +559,7 @@ _nbdist_mtree_compare_files () {
 # convert the list of mtree changed files to "syspkgs name".
 # XXX basepkg uses syspkgs metadata, so the package name is syspkgs derived.
 _nbdist_mtree_file_to_syspkgs_name () {
-    _nbdist_ident_file_to_syspkgs_name $1 $2 $3 $4 $5
+    _nbdist_ident_file_to_syspkgs_name $1 $2 $3
 }
  
 

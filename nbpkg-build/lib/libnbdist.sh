@@ -495,8 +495,8 @@ nbdist_check_mtree_changes () {
 		
 	    # prepare the build database update commits processed
 	    # after the basepkg is(are) released successfully.
-	    _nbdist_commit_updates  $arch $branch $b_date $_bdiff
-	    _nbdist_prepare_updates $arch $branch $b_date $_mbak $_mnew
+	    _nbdist_mtree_commit_updates  $arch $branch $b_date $_bdiff
+	    _nbdist_mtree_prepare_updates $arch $branch $b_date $_mbak $_mnew
 	else
 	    logit "nbdist_mtree: no changes arch=$arch"
 	fi
@@ -520,15 +520,15 @@ _nbdist_mtree_file_to_syspkgs_name () {
 }
  
 
-# (1) _nbdist_commit_updates () 
+# (1) _nbdist_mtree_commit_updates () 
 #     update list of released basepkg packages.
 #     e.g. "/var/nbpkg-build/db/basepkg/$branch/$arch".
 #
-# (2) _nbdist_prepare_updates ()
+# (2) _nbdist_mtree_prepare_updates ()
 #     update mtree data if basekpkg run succeesfully.
 #     e.g. "/var/nbpkg-build/db/mtree/$branch/$arch".
 #
-_nbdist_commit_updates () {
+_nbdist_mtree_commit_updates () {
     local         arch=$1
     local       branch=$2
     local       b_date=$3
@@ -549,7 +549,7 @@ _nbdist_commit_updates () {
     nbpkg_data_backup $arch $branch $b_date "basepkg" $basepkg_db
 }
 
-_nbdist_prepare_updates () {
+_nbdist_mtree_prepare_updates () {
     local      arch=$1
     local    branch=$2
     local    b_date=$3
@@ -618,8 +618,8 @@ nbdist_check_ident_changes () {
 		
 	    # prepare the build database update commits processed
 	    # after the basepkg is(are) released successfully.
-	    _nbdist_commit_updates  $arch $branch $b_date $_bdiff
-	    _nbdist_prepare_updates $arch $branch $b_date $_ibak $_inew
+	    _nbdist_ident_commit_updates  $arch $branch $b_date $_bdiff
+	    _nbdist_ident_prepare_updates $arch $branch $b_date $_ibak $_inew
 	else
 	    logit "nbdist_ident: no changes arch=$arch"
 	fi
@@ -686,15 +686,15 @@ _nbdist_ident_file_to_syspkgs_name () {
     uniq
 }
 
-# (1) _nbdist_commit_updates () 
+# (1) _nbdist_ident_commit_updates () 
 #     update list of released basepkg packages.
 #     e.g. "/var/nbpkg-build/db/basepkg/$branch/$arch".
 #
-# (2) _nbdist_prepare_updates ()
+# (2) _nbdist_ident_prepare_updates ()
 #     update ident data if basekpkg run succeesfully.
 #     e.g. "/var/nbpkg-build/db/ident/$branch/$arch".
 #
-_nbdist_commit_updates () {
+_nbdist_ident_commit_updates () {
     local         arch=$1
     local       branch=$2
     local       b_date=$3
@@ -715,7 +715,7 @@ _nbdist_commit_updates () {
     nbpkg_data_backup $arch $branch $b_date "basepkg" $basepkg_db
 }
 
-_nbdist_prepare_updates () {
+_nbdist_ident_prepare_updates () {
     local      arch=$1
     local    branch=$2
     local    b_date=$3

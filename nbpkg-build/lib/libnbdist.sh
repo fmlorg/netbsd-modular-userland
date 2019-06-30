@@ -432,7 +432,7 @@ nbdist_extract () {
     local t_start t_end tdiff
     local _x
 
-    if [ "X$is_require_download_and_extract" != "X" ];then
+    if [ "X$is_require_download_and_extract" != "X0" ];then
 	debug_msg "require extraction (first time)"
     else
 	debug_msg "not require extraction"

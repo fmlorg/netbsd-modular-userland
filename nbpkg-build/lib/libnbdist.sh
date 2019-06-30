@@ -472,11 +472,15 @@ nbdist_db_init () {
 	fi
     elif [ "X$strategy" = "Xmtree" ];then
 	db_file=$(nbpkg_mtree_data_file $arch $branch)
+	br_stable=$(echo $branch | sed s/release/netbsd/)
+	db_stable=$(nbpkg_mtree_data_file $arch $br_stable)
 	if [ ! -f $db_file ];then
 	    logit "nbdist_db_init: initialize $db_file"
 	    nbdist_get_mtree_list $arch $branch $b_date $db_file
-	    if [ -s $db_file ];then 
+	    cp -p $db_file $db_stable
+	    if [ -s $db_stable ];then
 	    	logit "nbdist_db_init: initialized $db_file"
+	    	logit "nbdist_db_init: initialized $db_stable"
 	    else
 		fatal "nbdist_db_init: failed to initialize $db_file"
 	    fi

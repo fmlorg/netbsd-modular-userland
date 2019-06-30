@@ -443,6 +443,35 @@ nbdist_extract () {
 }
 
 
+#
+# MTREE/IDENT DATABASE (TOP LEVEL DISPATCHE)
+#
+nbdist_db_init () {
+    local   arch=$1
+    local branch=$2
+    local b_date=$3
+    
+    if   [ "X$strategy" = "Xident" ];then
+	db_file=$(nbpkg_ident_data_file $arch $branch)
+	if [ ! -f $db_file ];then
+	    fatal "nbdist_db_init: run nbpkg-identgen.sh manually"
+	fi
+    elif [ "X$strategy" = "Xmtree" ];then
+	db_file=$(nbpkg_mtree_data_file $arch $branch)
+	if [ ! -f $db_file ];then
+	    logit "nbdist_db_init: initialize $db_file"
+	    nbdist_get_mtree_list $arch $branch $b_date $db_file
+	    if [ -s $db_file ];then 
+	    	logit "nbdist_db_init: initialized $db_file"
+	    else
+		fatal "nbdist_db_init: failed to initialize $db_file"
+	    fi
+	else
+	    fatal "nbdist_db_init: already $db_file exists"
+	fi
+    fi
+}
+
 
 #
 # MTREE BASED TRACE

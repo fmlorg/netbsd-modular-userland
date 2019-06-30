@@ -110,6 +110,7 @@ do
 	if [ $? -eq 0 ];then
 	    logit "session: run $arch $branch $build_nyid"
 	    _new="build_target=release"
+	    nbdist_db_init                 $arch $branch $build_date
 	    nbpkg_build_gen_basepkg_conf   $arch $branch $build_date $_new
 	    nbpkg_build_run_basepkg        $arch $branch             "all"
 	    nbpkg_release_basepkg_packages $arch $branch             "all"

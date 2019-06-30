@@ -9,16 +9,20 @@
 
 Linuxのインストールは数千個のパッケージを入れて構成しています。
 つまりユーザランドは etc-password-1.0 bin-ls-2.0 などの集合体で、
-このインストール情報がパッケージとして管理できています。
+それぞれにパッケージを作る担当者(複数の場合もある)がいます。
+インストールしたパッケージの情報がディストリビューションの基本機能として管理されています。
 
-一方 BSD Unixでは、まるっとNetBSD 8.0の配布物などとなってしまうので、
-ユーザランドの部品の区別がありません。
-あえていえば
+一方 BSD Unixでは、
+まるっと一式がNetBSD 8.0リリースの配布物などとなってしまうため、
+ユーザランドの各部品のバージョン番号という考え方がありません。
+あえてリリース番号をつければ
 etc-password-8.0 bin-ls-8.0 などといった表記法になるのかもしれませんが、
+そもそも論は、名前の付け方にあるのではなく
 現在の /bin/ls が NetBSD 8.0 release なのか、
-それとも netbsd-8 からビルドした版なのか？を知る汎用的な方法がありません。
+それとも netbsd-8 からビルドした版なのか？を知る汎用的な方法が
+OSに用意されていません。
 
-Linux の場合には、
+Linux ディストリビューションの場合、
 各パッケージごとに作者やメインテイナーがいて、
 彼らがバージョンをつけているわけですが、
 NetBSD の場合、
@@ -33,12 +37,14 @@ NetBSD 8.0 から新登場した sys_info (/usr/bin/sys_info by agc@)
 
 ### 基準点、バージョン番号、差分の把握
 
-* 公式メジャーリリースを基点とします。つまり基準点を、こちらで決めます。
-    * basepkg パッケージのバージョンは「8.0.日付」とします。
+- 公式メジャーリリースを基点とします。つまり基準点を、こちらで決めます。
+    - basepkg パッケージのバージョンは「8.0.日付」とします。
        この日付は daily build が実行された日です。
        よって、
        base-sys-root-8.0.20181101.tgz などいうパッケージ名になります。
-* 基準との差分を、どのようにして知るのか？というとmtreeないしはident情報です。
+    - 備考: FreeBSD PkgBaseも日付ですね、だれが考えても、これしかないです
+- 基準との差分を、どのようにして知るのか？というとmtreeないしはident情報です。
+    - v0.6.0以降、mtreeをデフォルトにします。v0.2.0〜v0.5.0はidentでした。
     - /etc/mtree 以下の差分を取ります。
       ちなみに各tgz (e.g. base.tgz etc.tgz ...)には、
       それぞれの ./etc/mtree/set.カテゴリ (e.g.
@@ -59,33 +65,55 @@ NetBSD 8.0 から新登場した sys_info (/usr/bin/sys_info by agc@)
       あいにく、
       ただし確実にidentがあるのはCSRG由来の部分だけのようなので、
       部分的にしか動作しません。
-
+        - CSRG 由来? sccs ないしは ident tagがあるソースコード
+	- その後、追加されたとおもわれるソースコードには、
+	    identがないものがあります。
+	    追加するべきですね、いや、send-pr するべきですね。
+    - どっちにしろ、全tarball(*.tgz)をダウンロードして展開する必要があります、
+      と言うのは
+        - mtree は /etc/mtree 以下を各tarballがそれぞれの分を持つため
+	- ident は実際に展開してidentを取るため
+    - 
 
 ### 維持管理する情報
 
 生成システムが追跡するべき情報は次の二つです。
-*   ident 情報: メジャーリリースおよび daily build の ident 履歴
-* basepkg 情報: リリースした basepkg の履歴
+-   mtree 情報: メジャーリリースおよび daily build の mtree 履歴
+-   ident 情報: メジャーリリースおよび daily build の ident 履歴 (obsolete)
+- basepkg 情報: (本システムが)リリースした basepkg の履歴
 
 
 ### サーバ側での動作(配布パッケージの作成時)
 
 作成するマスタープロセス nbpkg-build 側で、basepkg に指示を与えます。
 
-1. ident情報に基づき daily build にアップデートがあったかを検査
+1. (開始前にリリースを元に {mtree,ident} データベースの初期化作業)
+    1. tarball(*.tgz)をダウンロード、展開し、情報を取り出す
+        - mtree は展開した /etc/mtree/set.* から生成(cat)
+	  (nbpkg-data/bin/nbpkg-mtreegen.sh ?)
+        - ident は展開したユーザランドに全ファイルに対し ident を実行
+	  (nbpkg-data/bin/nbpkg-identgen.sh)
+    1. TODO: nbpkg-data/bin/nbpkg-*gen.sh は無くてもよくて、
+             リリースモードでビルドした時に自動的に初期化すればよいはず:
+	     $db_{ident,mtree}_dir/$arch = 
+	     {/var/nbpkg-build/db/ident/, /var/nbpkg-build/db/mtree/}
+	     
+1. {mtree,ident}情報に基づき daily build にアップデートがあったかを検査
     1. 変化がない場合、終了
 
 1. 設定の準備
-    1. daily build のident情報一覧を作成、保存
-        1. 維持管理している情報その１：identの一覧
+    1. daily build の{mtree,ident}情報一覧を作成、保存
+        1. tarball(*.tgz)をダウンロード、展開し、情報を取り出す
+	   (上述の手順と同様)
+        1. 維持管理している情報その１：{mtree,ident}の一覧
 	   メジャーリリースおよび daily build の履歴を維持管理。
 	   daily build の変化がある際に更新。
-	   ファイルに保存されている情報は生成済み分のident最新情報。
-	   例: /var/nbpkg-build/db/ident/netbsd-8/i386
+	   ファイルに保存されている情報は生成済み分の{mtree,ident}最新情報。
+	   例: /var/nbpkg-build/db/{mtree,ident}/netbsd-8/i386
     1. 変化した basepkg の一覧を作成
     1. basepkg の作成履歴も更新(依存関係)
         1. 維持管理している情報その２：リリースしたbasepkg一覧
-	   identにもとづいて何らかの変化があったパッケージのみを作成。
+	   {mtree,ident}にもとづいて何らかの変化があったパッケージのみを作成。
 	   ジャーナル型で複数回リリースがあったならそれらの全履歴を含む。
 	   ```
 	   base-sys-util  8.0.20181001
@@ -132,7 +160,7 @@ NetBSD 8.0 から新登場した sys_info (/usr/bin/sys_info by agc@)
 1. basepkg 側にも手を入れて、
    nbpkg-build の指示で動く場合だけは、
    依存関係(@pkgdep)に手を入れながら、パッケージを作成する特別な挙動をします。
-    1. 作成するものはident情報から判定し、
+    1. 作成するものは{mtree,ident}情報から判定し、
        @pkgdep は basepkg の作成履歴から依存情報を生成です。
        (上の例を使って説明すると) 20181130 に更新した comp-xxx-yyy が
        base-sys-shlib と base-sysutil に依存していた場合、

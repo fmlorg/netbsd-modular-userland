@@ -456,7 +456,7 @@ nbdist_get_mtree_list () {
 
     cd $dest_dir || fatal "cannot chdir \$dest_dir"
     cat etc/mtree/set.*						|
-    egrep -v '^./'						|
+    egrep '^./|^. '						|
     sort							>$list
 }
 

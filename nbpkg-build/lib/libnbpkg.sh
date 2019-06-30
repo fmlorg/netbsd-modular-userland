@@ -61,6 +61,24 @@ nbpkg_ident_data_file () {
     echo $_dir/$arch
 }
 
+nbpkg_mtree_data_dir () {
+    local   arch=$1
+    local branch=$2
+
+    local   _dir=$db_mtree_dir/$branch
+    test -d $_dir || mkdir -p $_dir 
+
+    echo $_dir
+}
+
+nbpkg_mtree_data_file () {
+    local   arch=$1
+    local branch=$2
+    local   _dir=$(nbpkg_mtree_data_dir $arch $branch)
+    
+    echo $_dir/$arch
+}
+
 nbpkg_basepkg_data_dir () {
     local   arch=$1
     local branch=$2

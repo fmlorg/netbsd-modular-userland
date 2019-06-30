@@ -42,6 +42,7 @@ www_base_dir=/pub/www/pub/NetBSD/basepkg
      queue_dir=$nbpkg_base_dir/queue
    db_base_dir=$nbpkg_base_dir/db
   db_ident_dir=$db_base_dir/ident
+  db_mtree_dir=$db_base_dir/mtree
 db_basepkg_dir=$db_base_dir/basepkg
 
 

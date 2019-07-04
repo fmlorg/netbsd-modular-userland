@@ -102,14 +102,21 @@ nbpkg_basepkg_get_sets_lists () {
     local branch=$2
     local   list=""
     local  _arch=$(echo $arch | sed 's/-[a-z0-9]*$//')
+    local c f x
 
-    for x in $basepkg_list_dir/*/mi $basepkg_list_dir/*/md*$_arch
+    for c in $basepkg_list_dir/*
     do
-	if [ -f $x ];then
-	    list="$list $x"
-	else
-	    logit "sets/lists: no such file: $x"
-	fi
+	for f in mi module.mi rescue.mi shl.mi stl.mi \
+		    md.$_arch ad.$_arch rescue.$_arch rescue.ad.$_arch 
+	do
+	    x=$c/$f
+	    
+	    if [ -f $x ];then
+		list="$list $x"
+	    else
+		logit "sets/lists: no such file: $x"
+	    fi
+	done
     done
 
     logit "sets/lists: ($list)"

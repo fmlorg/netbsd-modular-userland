@@ -287,7 +287,7 @@ _nbpkg_build_gen_list_all_all () {
     cat $files							|
     grep -v obsolete						|
     awk '/^#/{ next;}						\
-	$2 ~ /[a-z]+-[a-z]+-[a-z]+/{print $2}'			|
+	$2 ~ /[a-z0-9]+-[a-z0-9]+-[a-z0-9]+/{print $2}'		|
     sort							|
     uniq							|
     awk -v id=$b_id '{printf("%s\t%s\n", $1, id)}' 		>  $_dst

@@ -448,7 +448,8 @@ nbpkg_dst_dir () {
     local branch=$2
     local   mode=$3
 
-    echo $www_base_dir/$branch/$arch/$mode
+    # echo $www_base_dir/$branch/$arch/$mode
+    echo $www_base_dir/$branch/$arch/v0.5.9
 }
 
 nbpkg_dst_symlink () {

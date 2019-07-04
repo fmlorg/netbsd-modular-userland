@@ -149,8 +149,9 @@ do
 	    logit "session: run $arch $branch $build_nyid"
 	    nbpkg_build_gen_basepkg_conf    $arch $branch $build_date \
 					                  $basepkg_new
-	    nbpkg_build_run_basepkg         $arch $branch "maint"
-	    nbpkg_release_basepkg_packages  $arch $branch "maint"
+	    # maint mode was supported in the past (v0.1.0 .. v0.5.0)
+	    # nbpkg_build_run_basepkg         $arch $branch "maint"
+	    # nbpkg_release_basepkg_packages  $arch $branch "maint"
 	    nbpkg_build_run_basepkg         $arch $branch   "all"
 	    nbpkg_release_basepkg_packages  $arch $branch   "all"
 	    queue_add done  $arch $branch $build_date

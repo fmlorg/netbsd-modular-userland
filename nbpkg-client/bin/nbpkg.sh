@@ -57,6 +57,8 @@ syspkgs_alias_lookup () {
 	named			base-bind-bin
 	bind			base-bind-bin
 	postfix			base-postfix-bin
+        cc                      comp-c-bin
+        cc                      comp-util-bin
 	_EOF_ALIAS_
 
     grep "^$pkg_name[[:space:]]" $file | awk '{print $2}'

@@ -180,7 +180,7 @@ export PATH
      arch=$(netbsd_resolve_machine_and_arch)
    branch=$(echo $release | awk '{printf("netbsd-%d\n", $1)}')
      host=basepkg.netbsd.fml.org
-     mode=maint
+     mode=v0.5.9
 
 # parse options
 while getopts hdvb:m:a _opt

@@ -189,7 +189,7 @@ do
        h | \?) echo "usage: $0 [-hdv] -b BRANCH [ARCH ...]" 1>&2; exit 1;;
        d | v)  is_debug=1;;
        b)      branch=$OPTARG;;
-       m)      mode=$OPTARG;;
+#      m)      mode=$OPTARG;;
        a)      mode=all;;
     esac
 done

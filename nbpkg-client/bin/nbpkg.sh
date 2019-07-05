@@ -219,18 +219,19 @@ do_init
 argv_new=$(nbpkg_expand_argv $*)
 
 echo "debug: ARGV $argv_new"		1>&2
+set -- $argv_new
 
 if [ $# -eq 0 ]; then usage; exit 1;fi
 case $1 in
-    help | -h | \?  )  usage;                      exit 1;;
-    install         )  shift; do_install       $argv_new ;;
-    remove          )  shift; do_remove        $argv_new ;;
-    update          )  shift; do_update        $argv_new ;;
-    upgrade         )  shift; do_upgrade       $argv_new ;;
-    full-upgrade    )  shift; do_full_upgrade  $argv_new ;;
-    init            )  shift; do_init          $argv_new ;;
-    [a-z]*          )         do_direct_pkgin  $argv_new ;;
-    *               )  usage;                      exit 1;;
+    help | -h | \?  )  usage;                 exit 1 ;;
+    install         )  shift; do_install          $* ;;
+    remove          )  shift; do_remove           $* ;;
+    update          )  shift; do_update              ;;
+    upgrade         )  shift; do_upgrade             ;;
+    full-upgrade    )  shift; do_full_upgrade        ;;
+    init            )  shift; do_init                ;;
+    [a-z]*          )         do_direct_pkgin        ;;
+    *               )  usage;                 exit 1 ;;
 esac
 
 exit 0;
